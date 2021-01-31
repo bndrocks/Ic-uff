@@ -30,9 +30,11 @@ select {
   background-color: snow;
   font-size: large;
   border-radius: 5px;
+  outline: none;
 }
 
 .button {
+  outline: none;
   border-radius: 50% !important;
   font-size: 1.5em;
   background-color: lightgray;
