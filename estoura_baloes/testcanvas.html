@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Estoura balões</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@700&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    <div class="container">
+            <div>
+                <b>Nível: </b>
+                <select id="nivel_jogo" onchange="escolheNivel()">
+                    <option value="1">Fácil</option>
+                    <option value="2">Normal</option>
+                    <option value="3">Difícil</option>
+                </select>
+            </div>
+            <div>
+            <b>Matéria:</b>
+            <select id="materia" onchange="escolheMateria()">
+                <option value="1">Português</option>
+                <option value="2">Matemática</option>
+                <!--option value="3">Quimica</option-->
+            </select>
+            </div>
+            <div>
+            <b id="operacaoBold" class="operacao display-none">Operação:</b>
+            <select id="operacao" class="operacao display-none" onchange="escolheOperacao()">
+                <option value="1">Adição</option>
+                <option value="2">Subtração</option>
+                <option value="3">Multiplicacao 1</option>
+                <option value="4">Multiplicacao 2</option>
+                <option value="5">Divisão</option>
+            </select>
+            <script>
+                let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
+                if(selectNivel !== null){
+                    document.getElementById('nivel_jogo').value = selectNivel
+                }
+                let selectMateria = localStorage.getItem('materia') ? localStorage.getItem('materia') : null
+                if(selectMateria !== null){
+                    document.getElementById('materia').value = selectMateria
+                    if(selectMateria == 2){
+                        document.getElementById('operacaoBold').style.display = 'inline';
+                        document.getElementById('operacao').style.display = 'inline';
+                    }
+                }
+                let selectOperacao = localStorage.getItem('operacao') ? localStorage.getItem('operacao') : null
+                if(selectOperacao !== null){
+                    document.getElementById('operacao').value = selectOperacao
+                }
+            </script>
+            </div>   
+    </div>
+    <div>
+        <img id = "iniciar" src="imagens/iniciar.png" onclick="GerenciaJogo()"/>
+        <img id = "reinicia" src="imagens/iniciar.png" onclick="ReiniciaJogo()" style="display: none;"/>
+    </div>
+    <div>
+        <h1 id="info"></h1>
+        <div id="clique" class="clique"></div>
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <img style='display:none;' id='balao' src='imagens/balao_pequeno.png'>
+        <img style='display:none;' id='cenario' src='imagens/cenario.png'>
+        <img style='display:none;' id='balaoEstourado' src='imagens/balao_pequeno_estourado.png'>
+        <div class="flex justify-center"><h2 id="feedback"></h2><h2 id="erro"></h2></div>
+    </div>
+    <script type="text/javascript" src="desenhar_canvas.js"></script>
+</body>
+</html>

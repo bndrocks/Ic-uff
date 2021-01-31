@@ -1,0 +1,49 @@
+body {
+    background-color: steelblue;
+    font-family: 'Quantico';
+    text-align: center;
+}
+.container{
+    display: flex;
+    margin: 20px;
+    justify-content: center;
+}
+b {
+    color: snow;
+    font-size: larger;
+    margin-left: 30px;
+}
+select {
+    color: steelblue;
+    background-color: snow;
+    font-size: large;
+    border-radius: 5px;
+}
+h1 {
+    color: snow;
+}
+h2 {
+    color: snow;
+}
+.operacao {
+    display: none;
+}
+.clique{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.display-none{
+    display: none;
+}
+.flex{
+    display: flex;
+}
+.justify-center{
+    justify-content: center;
+}
+
+#info > img{
+    top: 5px;
+    position: relative;
+}
