@@ -17,7 +17,6 @@ const numeros = ['1','2','3','4','5','6','7','8','9','10'];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
 
 /*
-    Adicionar instruções iniciais ao jogo
     BUG: baloes ainda printam em cima de baloes ja existentes na tela e clique em baloes na msm area
     Ter baloes de varias cores, so pegar a imagem sendo svg e programar as cores(ver se dá pra botar uma cor pra cada numero dif)
     otimizar Portugues, pode demorar mt a aparecer as letras necessarias p preencher a palavra corretamente

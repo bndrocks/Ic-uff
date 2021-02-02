@@ -1,5 +1,5 @@
-let sequenciaCPU = [], sequenciaClicada = [];
-let turnoAux, ganhou, perdeu, turnoAtual, correto, vezCPU, nivel_jogo, intervaloId,qtdTurnos,qtdVidasInicial,qtdVidasAtual, totalPontos = 0, i = 0, maxPontosPorTurno = 100;
+let sequenciaCPU = [];
+let turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100;
 let som = true;
 let vezJogador = false;
 
@@ -16,112 +16,53 @@ JOGO BUGA QD CLICA MT RAPIDO
 
 start.addEventListener('click',play,false);
 
-/*function clicouVerde(){ tentativa frustrada q buga igual o listener(lembra de botar o onclick nela no html)
+verde.addEventListener('click', (event) => {
   if (vezJogador){
-    sequenciaClicada.push(1);
-    checa();
-    cor(1);
-    if(!ganhou){
-      setTimeout(() => {//tempo para apagar a cor após ter sido clicada
-        clearColor();
-      }, 300);
-    }
-  }
-}*/
-
-verde.addEventListener('click', (event) => {//tem como juntar todos esses Listeners em um só? 
-  //Pensei em tirar o click e botar de volta dps p tirar o click rapido
-  //verde.removeEventListener('click', (event) => {
-  //})
-  if (vezJogador){
-    sequenciaClicada.push(1);
-    checa();
-    cor(1);
-    if(!ganhou){
-      setTimeout(() => {//tempo para apagar a cor após ter sido clicada
-        clearColor();
-      }, 300);
-    }
+    checaCor(1);
   }
 })
 
 vermelho.addEventListener('click', (event) => {
   if (vezJogador){
-    sequenciaClicada.push(2);
-    checa();
-    cor(2);
-    if(!ganhou){
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
+    checaCor(2);
   }
 })
 
 amarelo.addEventListener('click', (event) => {
-  if (vezJogador) {
-    sequenciaClicada.push(3);
-    checa();
-    cor(3);
-    if(!ganhou){
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
+  if (vezJogador){
+    checaCor(3);
   }
 })
 
 azul.addEventListener('click', (event) => {
   if (vezJogador){
-    sequenciaClicada.push(4);
-    checa();
-    cor(4);
-    if(!ganhou) {
-      setTimeout(() => {
-        clearColor();
-      }, 300);
-    }
+    checaCor(4);
   }
 })
-
 
 function escolheNivel(){
   nivel_jogo = document.getElementById('nivel_jogo').value;
   localStorage.setItem('nivel_jogo', document.getElementById('nivel_jogo').value);
-}
-
-function velocidade(){//fiz esta e as 2 proximas funções separadas. acha melhor juntar ao menos as 2 proximas?
-  if(nivel_jogo == 1)
-    intervaloId = setInterval(gameTurno, 1100);
-  else if(nivel_jogo == 2)
-    intervaloId = setInterval(gameTurno, 900);
-  else if(nivel_jogo == 3)
-    intervaloId = setInterval(gameTurno, 650);
-}
-
-function turnos(){
-  if(nivel_jogo == 1)
-    qtdTurnos = 1
-  else if(nivel_jogo == 2)
-    qtdTurnos = 10
-  else if(nivel_jogo == 3)
-    qtdTurnos = 15
-}
-
-function vidas(){
-  if(nivel_jogo == 1)
+  if(nivel_jogo == 1){
+    velocidadeNivel = 1100
+    qtdTurnos = 5
     qtdVidasInicial = 5
+  }
   else if(nivel_jogo == 2)
+  {
+    velocidadeNivel = 900
+    qtdTurnos = 10
     qtdVidasInicial = 3
-  else if(nivel_jogo == 3)
+  }
+  else if(nivel_jogo == 3){
+    velocidadeNivel = 700
+    qtdTurnos = 15
     qtdVidasInicial = 2
-  qtdVidasAtual = qtdVidasInicial;
-    document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasInicial;
+  }
 }
 
 function pontuacao(){
-  console.log("pontuacao(): " + sequenciaClicada.length)
-  if(sequenciaClicada.length == 0){
+  if(turnoAtual == 1){
     totalPontos = 0;
   }
   else
@@ -133,51 +74,21 @@ function play(){
   turnoContador.innerHTML = 1;
   limpaVar();
   escolheNivel();
+  document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasInicial;
   for (var i = 0; i < 20; i++){
     sequenciaCPU.push(Math.floor(Math.random() * 4) + 1);//criando a sequencia a ser clicada
 //sequenciaCPU.push(1)
   }
-  vezCPU = true;
-  velocidade();
-  turnos();
-  vidas();
   pontuacao();
+  iniciaTurno();
 }
 
 function limpaVar(){
-  perdeu = false;
-  ganhou = false;
   sequenciaCPU = [];
-  sequenciaClicada = [];
   turnoAux = 0;
   turnoAtual = 1;
-  correto = true;
   maxPontosPorTurno = 100;
   totalPontos = 0;
-}
-
-function gameTurno(){
-  vezJogador = false;
-  if(turnoAux == turnoAtual){
-    clearInterval(intervaloId);
-    vezCPU = false;
-    clearColor();
-    vezJogador = true;
-    start.addEventListener('click', play, false);
-  }
-  if(vezCPU){
-    if(qtdVidasAtual != 0){
-      start.removeEventListener('click', play, false);
-      clearColor();
-      setTimeout(() => {
-      cor(sequenciaCPU[turnoAux]);//começa mandando a posição [0] do array sequenciaCPU
-      turnoAux++;
-      }, 200);
-    }
-    /*else{
-      clearInterval(intervaloId);
-    }*/
-  }
 }
 
 function clearColor(){
@@ -217,57 +128,74 @@ function cor(numero){
   som = true;
 }
 
-function checa(){
-  if (sequenciaClicada.length == qtdTurnos && correto){
-    ganhouGame();
-  }
-  
-  if (sequenciaClicada[sequenciaClicada.length - 1] !== sequenciaCPU[sequenciaClicada.length - 1] && !perdeu){
-    correto = false;
-    qtdVidasAtual--;
-    maxPontosPorTurno = maxPontosPorTurno - 15;
-    if(qtdVidasAtual == 0)
-      perdeuGame();
-    else{
-      piscaCores();
-      turnoContador.innerHTML = "NAO!";
-      setTimeout(() => {
-        turnoContador.innerHTML = turnoAtual;
-        clearColor();
-        vezCPU = true;
-        turnoAux = 0;//está na função limpaVar. 
-        sequenciaClicada = [];//está na função limpaVar
-        correto = true;//está na função limpaVar
-        velocidade();
-      }, 800);
+function esperaCor(numeroCor){//mudar o nome da função
+  clearColor();
+    console.log('acertou cor ' + numeroCor + ': ' + turnoAux + ': ' + sequenciaCPU[turnoAux])
+    turnoAux++;
+    if(turnoAux == turnoAtual){
+      console.log('aumentando sequencia')
+      if (turnoAtual > qtdTurnos) 
+        ganhouGame();
+      else{
+        turnoAtual++;
+        iniciaTurno(); 
+      }
     }
-  }
-  
-  if (turnoAtual == sequenciaClicada.length && correto && !ganhou){
-    pontuacao();
-    turnoAtual++;
-    sequenciaClicada = [];//está na função limpaVar
-    turnoAux = 0;//está na função limpaVar. Deveria fazer outra função só c essas 2 já q elas repetem? pra diminuir codigo
-    vezCPU = true;
-    turnoContador.innerHTML = turnoAtual;
-    velocidade();
-  }
+    vezJogador = true;
+}
 
-  document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasAtual;
+function checaCor(numeroCor){
+  vezJogador = false;//bloqueia outro clique do jogador, já que o listenar não vai chamar a função checaCor enquanto não desbloquear
+  if (numeroCor != sequenciaCPU[turnoAux]){
+    qtdVidasAtual--;
+    maxPontosPorTurno = maxPontosPorTurno -15;
+    if(qtdVidasAtual == 0)
+      Game();
+    else{
+      turnoContador.innerHTML = "NAO!";
+      piscaCores();
+      console.log('pisca')
+      setTimeout(() => {
+        iniciaTurno();
+        vezJogador = true;
+      }, 800);
+     }
+  }
+  else{
+    cor(numeroCor);
+    setTimeout(esperaCor, 500, numeroCor);
+  }
+}
+
+function iniciaTurno(){
+  turnoAux = 0;
+  turnoContador.innerHTML = turnoAtual;
+  setTimeout(mostraCor, 800, 0); //nao lembro qual variável tinha o tempo entre uma cor e outra da sequencia
+  clearColor();
+}
+
+function mostraCor(indice){
+  clearColor();
+  setTimeout(() => {
+    if (indice==turnoAtual){
+      vezJogador=true;
+    }
+    else {
+      console.log('mostrando cor ' + sequenciaCPU[indice])
+       cor(sequenciaCPU[indice]);
+       setTimeout(mostraCor, velocidadeNivel, (indice+1)); //chamada recursiva num futuro próximo??!! kkkk
+    }
+  }, 300);
 }
 
 function ganhouGame(){
   piscaCores();
   turnoContador.innerHTML = "WIN!";//botar em portugues, para isso vai ter que aumentar visor
   vezJogador = false;
-  ganhou = true;
 }
 
-function perdeuGame(){//qd vence o jogo limpa as cores, mas qd perde não
+function Game(){//qd vence o jogo limpa as cores, mas qd perde não
   piscaCores();
   turnoContador.innerHTML = "LOSE!";//botar em portugues, para isso vai ter que aumentar visor
   vezJogador = false;
-  perdeu = true;
-  //limpaVar();
-  //start.addEventListener('click',play,false);
 }
