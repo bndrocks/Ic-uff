@@ -9,10 +9,10 @@ const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
 var i = 0, k = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno;
-const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-const palavras = [['C','A','S','A'],['O','V','O'],['B','O','L','A']];
-//const alfabeto = ['O','V'];
-//const palavras = [['O','V','O']];
+//const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+//const palavras = [['C','A','S','A'],['O','V','O'],['B','O','L','A']];
+const alfabeto = ['O','V'];
+const palavras = [['O','V','O']];
 const numeros = ['1','2','3','4','5','6','7','8','9','10'];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
 
@@ -114,7 +114,9 @@ function limpaVar(){
     letrasCertas.length = 0;
     i = 0;
     document.getElementById("clique").innerHTML =  null
+    document.getElementById("clique-erros").innerHTML =  null
     document.getElementById("feedback").innerHTML =  null
+    document.getElementById("erro").innerHTML = null
 }
 
 function PausaJogo(){
@@ -231,7 +233,7 @@ function imprimeInicial(){
         if(operacao == 4 || operacao == 5){
             let str1  = m + simbolo + n + " = <img src = 'imagens/balao_pequeno_interrogacao.png'>";
             let str2  = n + simbolo + m + " = <img src = 'imagens/balao_pequeno_interrogacao.png'>";
-            if(m > n)
+            if(m >= n)
                 document.getElementById("info").insertAdjacentHTML('beforeend', str1);
             else
                 document.getElementById("info").insertAdjacentHTML('beforeend', str2);
@@ -244,21 +246,32 @@ function imprimeInicial(){
 }
 
 function imprimeClique(balaoclicado, cor){
-    clique.push(balaoclicado)
-    if(erro == 3)
-        gameOver();
+    clique.push(balaoclicado);    
     if(materia == 1){
     let h = document.createElement("h2"); 
-    let letra = document.createTextNode(balaoclicado); 
+    let letra, divClique;
+    if(cor == 'red'){
+        if(erro > 1 || erro == 0)
+            balaoclicado = `-${balaoclicado}`;
+        divClique = document.getElementById("clique-erros");
+    }
+    else{
+       divClique = document.getElementById("clique");
+    }
+    letra = document.createTextNode(balaoclicado); 
     h.appendChild(letra);
     h.style.color = cor;
-    var divClique = document.getElementById("clique");
     divClique.insertAdjacentElement("beforeend", h);
     }
     else{
-        console.log(clique)
-        if(operacao == 4 || operacao == 5)
-            document.getElementById("info").innerHTML = m + simbolo + n + ' = ' + balaoclicado;
+        if(operacao == 4 || operacao == 5){
+            let str1  = m + simbolo + n + ' = ' + balaoclicado;
+            let str2  = n + simbolo + m + ' = ' + balaoclicado;
+            if(m >= n)
+                document.getElementById("info").innerHTML = str1;
+            else
+                document.getElementById("info").innerHTML = str2;
+        }
         else{
             if(clique.length < 2)    
                 document.getElementById("info").innerHTML = clique[0] + simbolo + ' _ ' + ' =  ' + resultado;
@@ -266,6 +279,8 @@ function imprimeClique(balaoclicado, cor){
                 document.getElementById("info").innerHTML = clique[0] + simbolo + clique[1] + ' =  ' + resultado;
         }
     }
+    if(erro == 3)
+        gameOver();
 }
 
 function imprimeAcerto(){
@@ -375,37 +390,31 @@ function ComparaNumero(numero){
             setTimeout(ReiniciaJogo,3000)
         }
         else{
-            erro++;
-            imprimeErros()
-            if(erro == 3)
-                gameOver()
+            gameOver();
+            document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
         }
     }
     else if(operacao == 5){
-        if(n > m){//otimizar aqui
+        if(n >= m){//otimizar aqui
             if((n / m) == numero){
                 imprimeAcerto()
                 gameOver()
                 setTimeout(ReiniciaJogo,3000);
             }
             else{
-                erro++;
-                imprimeErros()
-                if(erro == 3)
-                    gameOver()
+                gameOver();
+                document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
             }
         }
-        else if(m > n){
+        else if(m >= n){
             if((m / n) == numero){
-                imprimeAcerto()
+                imprimeAcerto();
                 gameOver()
                 setTimeout(ReiniciaJogo,3000);
             }
             else{
-                erro++;
-                imprimeErros()
-                if(erro == 3)
-                    gameOver()
+                gameOver();
+                document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
             }
         }
     }
@@ -420,14 +429,13 @@ function ComparaNumero(numero){
             else if(operacao == 3)
                 ok = ((numerosClicados[0] * numerosClicados[1]) == resultado);
             if(ok){
-                imprimeAcerto()
+                imprimeAcerto();
                 numerosClicados.length = 0;
-                gameOver()
+                gameOver();
                 setTimeout(ReiniciaJogo,3000);
                 }
             else{
-                erro = 3;
-                imprimeErros();
+                document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
                 numerosClicados.length = 0;
                 gameOver();
             }

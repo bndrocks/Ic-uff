@@ -29,12 +29,15 @@ h2 {
 .operacao {
     display: none;
 }
-.clique{
+.clique, .clique-erros{
     font-size: larger;
     display: flex;
     justify-content: center;
     margin-top: -20px;
     margin-bottom: 10px;
+}
+.clique{
+    margin-left: 30px;
 }
 .display-none{
     display: none;
@@ -49,4 +52,8 @@ h2 {
 #info > img{
     top: 5px;
     position: relative;
+}
+
+.float-left{
+    float: left;
 }

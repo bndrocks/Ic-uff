@@ -9,8 +9,13 @@ body {
 .flex{
   display: flex;
 }
+
 .justify-center{
   justify-content: center;
+}
+
+.float-left{
+  float: left;
 }
 
 .container{
