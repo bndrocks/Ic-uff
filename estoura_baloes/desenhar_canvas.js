@@ -2,7 +2,6 @@ var canvas;//o elemento canvas sobre o qual desenharemos
 var ctx;//o "contexto" da canvas que será utilizado (2D ou 3D)
 const WIDTH = 500;//largura da área retangular
 const HEIGHT = 500;//altura da área retangular
-const balaoOperacao = document.getElementById("balaoOperacao");
 const imagemBalao = document.getElementById('balao');
 const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
@@ -42,68 +41,65 @@ function escolheOperacao(){
     localStorage.setItem('operacao', document.getElementById('operacao').value)
 }
 
-function GerenciaJogo(){
-    IniciarCanvas();
+function gerenciaJogo(){
+    iniciaCanvas();
     canvas.addEventListener('click',estoura,false);
     document.getElementById('reinicia').style.display = 'inline';
     document.getElementById('iniciar').style.display = 'none';
 }
 
-function IniciarCanvas(){
+function iniciaCanvas(){
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     materia = document.getElementById('materia').value;
-    CriarTela();
-    IniciarJogo();
+    criaTela();
+    iniciaJogo();
 }
 
-function CriarTela(){
+function criaTela(){
     ctx.rect(0, 0, WIDTH, HEIGHT);
-    ctx.strokeStyle = "black";
-    ctx.stroke();
-    if(materia == 1)
+    ctx.drawImage(imagemCenario,0,0);
+    /*if(materia == 1)//usar esses ifs caso a imagem mude de uma materia para outra
         ctx.drawImage(imagemCenario,0,0);
     else if(materia == 2)
         ctx.drawImage(imagemCenario,0,0);//imagem de quadro negro
-    /*else if(materia == 3)
+    else if(materia == 3)
         ctx.drawImage(imagemCenario,0,0);//imagem de laboratorio ou quadro negro msm, e ao inves de baloes podem ser erlenmeyers*/
 }
 
-function IniciarJogo(){
-    console.log('inicia');
+function iniciaJogo(){
     let nivel_jogo = document.getElementById('nivel_jogo').value;
     if(materia == 1)
-        EscolhePalavra();
+        escolhePalavra();
     else if(materia == 2){
         operacao = document.getElementById('operacao').value;
         geraResultado();
     }
-    imprimeInicial()
+    imprimeInicial();
     if(nivel_jogo == 1) { //1 fácil 
-        timerBalao = setInterval(DesenharBalao, 1500); 
-        timerTela = setInterval(LimparTela, 16999);
+        timerBalao = setInterval(desenhaBaloes, 1500); 
+        timerTela = setInterval(limpaTela, 16999);
 	}
     
 	if(nivel_jogo == 2) { //2 normal
-        timerBalao = setInterval(DesenharBalao, 1000);
-        timerTela = setInterval(LimparTela, 4999);
+        timerBalao = setInterval(desenhaBaloes, 1000);
+        timerTela = setInterval(limpaTela, 4999);
 	}
 	
 	if(nivel_jogo == 3) { //3 difícil
-        timerBalao = setInterval(DesenharBalao, 400);
-        timerTela = setInterval(LimparTela, 2999);
+        timerBalao = setInterval(desenhaBaloes, 400);
+        timerTela = setInterval(limpaTela, 2999);
     }
 }
 
-function ReiniciaJogo(){
+function reiniciaJogo(){
     document.getElementById('info').innerHTML = null;
-    console.log('reinicia');
     clearInterval(timerBalao);
     clearInterval(timerTela);
     limpaVar()
-    LimparTela();
+    limpaTela();
     materia = document.getElementById('materia').value;
-    IniciarJogo();
+    iniciaJogo();
     canvas.addEventListener('click',estoura,false);
 }
 
@@ -119,41 +115,32 @@ function limpaVar(){
     document.getElementById("erro").innerHTML = null
 }
 
-function PausaJogo(){
-    clearInterval(timerBalao);
-    clearInterval(timerTela);
-}
-
-function LimparTela(){
-    //console.log(k)
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
-    CriarTela();
-    /*for(let a = 0; a < k; a++){
-        baloes[a].coordenadas = null
-    }*/
+function limpaTela(){
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);//remove a tela do canvas
+    criaTela();
     if(i == 50)
         i = 0;//qd limpar a tela gerar um vetor com 50 numeros garantindo que as parcelas estejam dentro do vetor, na função de mostrar balao basta pegar o proximo numero do vetor(i)
 }
 
 function gameOver(){
-    erro = 0
+    erro = 0;
     canvas.removeEventListener('click', estoura,false);
-    PausaJogo()
+    clearInterval(timerBalao);
+    clearInterval(timerTela);
 }
 
-function RandomCoord(){ //Gera coordenadas aleatórias para os balões
-    let x = Math.floor(Math.random() * (WIDTH - 36));
+function randomCoord(){//Gera coordenadas aleatórias para os balões
+    let x = Math.floor(Math.random() * (WIDTH - 36));//o 36 é para a imagem não ser desenhada fora do canvas
     let y = Math.floor(Math.random() * (HEIGHT - 36));
     let res = {x:x, y:y};
     return res;
 }
 
-function DesenharBalao(){
-    //console.log('balao: ' + i)
+function desenhaBaloes(){
     if(materia == 1)
-        baloes[i] = {letra: InsereLetra(), coordenadas: RandomCoord()};
+        baloes[i] = {letra: insereLetra(), coordenadas: randomCoord()};
     else if(materia == 2){
-        baloes[i] = {numero: InsereNumero(), coordenadas: RandomCoord()};
+        baloes[i] = {numero: insereNumero(), coordenadas: randomCoord()};
     }
     ctx.drawImage(imagemBalao,baloes[i].coordenadas.x,baloes[i].coordenadas.y);
     ctx.font = "20px Comic Sans MS";
@@ -203,7 +190,7 @@ function DesenharBalao(){
     k++;
 }
 
-var estoura = function EstouraBalao(event){//Cuida dos cliques nos balões
+var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
     let xVal = event.pageX;
     let yVal = event.pageY;
     let canvasX = document.getElementById('canvas').offsetLeft;
@@ -212,11 +199,11 @@ var estoura = function EstouraBalao(event){//Cuida dos cliques nos balões
         if((xVal > (baloes[j].coordenadas.x + canvasX) && xVal < (baloes[j].coordenadas.x + canvasX + 28)) && (yVal > (baloes[j].coordenadas.y + canvasY) && yVal < (baloes[j].coordenadas.y + canvasY + 36))){
             ctx.drawImage(imagemBalaoEstourado,baloes[j].coordenadas.x,baloes[j].coordenadas.y);
             if(materia == 1){
-                let cor = ComparaLetra(baloes[j].letra)
+                let cor = comparaLetra(baloes[j].letra)
                 imprimeClique(baloes[j].letra, cor)
             }
             else if(materia == 2){
-                ComparaNumero(baloes[j].numero)
+                comparaNumero(baloes[j].numero)
                 imprimeClique(baloes[j].numero, null)
             }
         }   
@@ -229,7 +216,6 @@ function imprimeInicial(){
         document.getElementById("info").innerHTML =  'A palavra escolhida é: ' + palavraescolhida;   //`A palavra escolhida é: ${palavraescolhida}`
     }
     else if(materia == 2){
-        //document.getElementById("balaoOperacao").innerHTML = '?';
         if(operacao == 4 || operacao == 5){
             let str1  = m + simbolo + n + " = <img src = 'imagens/balao_pequeno_interrogacao.png'>";
             let str2  = n + simbolo + m + " = <img src = 'imagens/balao_pequeno_interrogacao.png'>";
@@ -307,18 +293,18 @@ function imprimeErros(){
 
 //Funções da matéria Português
 
-function InsereLetra(){
+function insereLetra(){
     let z = Math.floor(Math.random() * (alfabeto.length));
     return alfabeto[z];
 }
 
-function EscolhePalavra(){
+function escolhePalavra(){
     let z = Math.floor(Math.random() * (palavras.length));
     respostaCerta = palavras[z];
 }
 
 //retornando a cor, imprime acerto ou erro, preenche letras acertadas
-function ComparaLetra(letra){
+function comparaLetra(letra){
     let indice = letrasCertas.length
     let cor
     if(respostaCerta[indice] == letra){
@@ -327,7 +313,7 @@ function ComparaLetra(letra){
         if(letrasCertas.length == respostaCerta.length){
             imprimeAcerto()
             gameOver()
-            setTimeout(ReiniciaJogo,3000)            
+            setTimeout(reiniciaJogo,3000)            
         }
     }
     else{
@@ -342,7 +328,7 @@ function ComparaLetra(letra){
 
 //Funções da matéria Matemática
 
-function InsereNumero(){ //Insere numero de 1 a 10 ou de 1 a 100 nos balões
+function insereNumero(){ //Insere numero de 1 a 10 ou de 1 a 100 nos balões
     if(operacao == 4 || operacao == 5)
         var o = Math.floor(Math.random() * 100)+1;
     else
@@ -382,12 +368,12 @@ function geraResultado(){//olhar essa função, ta bugada
     }
 }
 
-function ComparaNumero(numero){
+function comparaNumero(numero){
     if(operacao == 4){
         if((n*m)==numero){
             imprimeAcerto()
             gameOver()
-            setTimeout(ReiniciaJogo,3000)
+            setTimeout(reiniciaJogo,3000)
         }
         else{
             gameOver();
@@ -399,7 +385,7 @@ function ComparaNumero(numero){
             if((n / m) == numero){
                 imprimeAcerto()
                 gameOver()
-                setTimeout(ReiniciaJogo,3000);
+                setTimeout(reiniciaJogo,3000);
             }
             else{
                 gameOver();
@@ -410,7 +396,7 @@ function ComparaNumero(numero){
             if((m / n) == numero){
                 imprimeAcerto();
                 gameOver()
-                setTimeout(ReiniciaJogo,3000);
+                setTimeout(reiniciaJogo,3000);
             }
             else{
                 gameOver();
@@ -432,7 +418,7 @@ function ComparaNumero(numero){
                 imprimeAcerto();
                 numerosClicados.length = 0;
                 gameOver();
-                setTimeout(ReiniciaJogo,3000);
+                setTimeout(reiniciaJogo,3000);
                 }
             else{
                 document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
