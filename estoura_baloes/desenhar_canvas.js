@@ -7,7 +7,7 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var i = 0, k = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno;
+var i = 0, k = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno, res = {}, listaCoord = [];
 //const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 //const palavras = [['C','A','S','A'],['O','V','O'],['B','O','L','A']];
 const alfabeto = ['O','V'];
@@ -118,8 +118,12 @@ function limpaVar(){
 function limpaTela(){
     ctx.clearRect(0, 0, WIDTH, HEIGHT);//remove a tela do canvas
     criaTela();
-    if(i == 50)
-        i = 0;//qd limpar a tela gerar um vetor com 50 numeros garantindo que as parcelas estejam dentro do vetor, na função de mostrar balao basta pegar o proximo numero do vetor(i)
+    for(let j=0; j<i; j++){
+        delete listaCoord[j].x;
+        delete listaCoord[j].y;
+    }
+    console.log(listaCoord)
+    console.log(i)
 }
 
 function gameOver(){
@@ -132,11 +136,17 @@ function gameOver(){
 function randomCoord(){//Gera coordenadas aleatórias para os balões
     let x = Math.floor(Math.random() * (WIDTH - 36));//o 36 é para a imagem não ser desenhada fora do canvas
     let y = Math.floor(Math.random() * (HEIGHT - 36));
-    let res = {x:x, y:y};
+    res = {x:x, y:y};
+    listaCoord[i] = res;
     return res;
 }
 
-function desenhaBaloes(){
+function desenhaBaloes(){//criar função de forçar resultado
+    if(i == 20){//serve para forçar que o resultado apareça em algum momento
+        i = 0;
+        listaCoord.length = 0;
+    }
+    
     if(materia == 1)
         baloes[i] = {letra: insereLetra(), coordenadas: randomCoord()};
     else if(materia == 2){
