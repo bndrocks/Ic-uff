@@ -7,19 +7,13 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var i = 0, k = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno, res = {}, listaCoord = [];
-//const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+var maxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno, listaCoord = [];
+//const alfabeto = ['A','B','C','D','E','F','G','H','maxBaloes','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 //const palavras = [['C','A','S','A'],['O','V','O'],['B','O','L','A']];
 const alfabeto = ['O','V'];
 const palavras = [['O','V','O']];
 const numeros = ['1','2','3','4','5','6','7','8','9','10'];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
-
-/*
-    BUG: baloes ainda printam em cima de baloes ja existentes na tela e clique em baloes na msm area
-    Ter baloes de varias cores, so pegar a imagem sendo svg e programar as cores(ver se dá pra botar uma cor pra cada numero dif)
-    otimizar Portugues, pode demorar mt a aparecer as letras necessarias p preencher a palavra corretamente
-*/
 
 function escolheMateria() {
     if (document.getElementById('materia').value == 2){
@@ -68,6 +62,7 @@ function criaTela(){
 }
 
 function iniciaJogo(){
+    randomCoord(11);
     let nivel_jogo = document.getElementById('nivel_jogo').value;
     if(materia == 1)
         escolhePalavra();
@@ -108,7 +103,7 @@ function limpaVar(){
     erro = 0
     retorno = 1
     letrasCertas.length = 0;
-    i = 0;
+    maxBaloes = 0;
     document.getElementById("clique").innerHTML =  null
     document.getElementById("clique-erros").innerHTML =  null
     document.getElementById("feedback").innerHTML =  null
@@ -118,12 +113,12 @@ function limpaVar(){
 function limpaTela(){
     ctx.clearRect(0, 0, WIDTH, HEIGHT);//remove a tela do canvas
     criaTela();
-    for(let j=0; j<i; j++){
+    for(let j=0; j<maxBaloes; j++){
         delete listaCoord[j].x;
         delete listaCoord[j].y;
     }
-    console.log(listaCoord)
-    console.log(i)
+    randomCoord(11);
+    maxBaloes = 0;
 }
 
 function gameOver(){
@@ -133,71 +128,74 @@ function gameOver(){
     clearInterval(timerTela);
 }
 
-function randomCoord(){//Gera coordenadas aleatórias para os balões
-    let x = Math.floor(Math.random() * (WIDTH - 36));//o 36 é para a imagem não ser desenhada fora do canvas
-    let y = Math.floor(Math.random() * (HEIGHT - 36));
-    res = {x:x, y:y};
-    listaCoord[i] = res;
-    return res;
+function randomCoord(n){//Gera coordenadas aleatórias para os balões
+    let x = 10, y = 10, res = {}, vetor = [0,1,2,3,4,5,6,7,8,9,10];
+    for(let j=0;j<n;j++){
+        indice = Math.floor(Math.random() * vetor.length);
+        y = vetor[indice] * 45;
+        vetor.splice(indice, 1);
+        x = Math.floor(Math.random() * (WIDTH - 36));
+        res = {x:x, y:y};
+        listaCoord[j] = res;
+    }
+    listaCoord.sort(() => 0.5 - Math.random());
 }
 
 function desenhaBaloes(){//criar função de forçar resultado
-    if(i == 20){//serve para forçar que o resultado apareça em algum momento
-        i = 0;
-        listaCoord.length = 0;
-    }
-    
+    /*if(maxBaloes == 50){//serve para forçar que o resultado apareça em algum momento
+        maxBaloes = 0;
+    }*/
+    maxBaloes = maxBaloes % 11;
     if(materia == 1)
-        baloes[i] = {letra: insereLetra(), coordenadas: randomCoord()};
+        baloes[maxBaloes] = {letra: insereLetra(), coordenadas: listaCoord[maxBaloes]};
     else if(materia == 2){
-        baloes[i] = {numero: insereNumero(), coordenadas: randomCoord()};
+        baloes[maxBaloes] = {numero: insereNumero(), coordenadas: listaCoord[maxBaloes]};
     }
-    ctx.drawImage(imagemBalao,baloes[i].coordenadas.x,baloes[i].coordenadas.y);
+    ctx.drawImage(imagemBalao,baloes[maxBaloes].coordenadas.x,baloes[maxBaloes].coordenadas.y);
     ctx.font = "20px Comic Sans MS";
     ctx.fillStyle = "white";
     if(materia == 1)
-        ctx.fillText(baloes[i].letra,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].letra).width/2,baloes[i].coordenadas.y + 22);
+        ctx.fillText(baloes[maxBaloes].letra,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].letra).width/2,baloes[maxBaloes].coordenadas.y + 22);
     else if(materia == 2){
         if(operacao == 4){
-            if(i == 10 || i == 30){
+            if(maxBaloes == 10 || maxBaloes == 30){
                 let resultado = n * m;
-                baloes[i].numero = resultado;
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+                baloes[maxBaloes].numero = resultado;
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
             }
             else
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
         }
         else if(operacao == 5){
-            if(i == 10 || i == 30){
+            if(maxBaloes == 10 || maxBaloes == 30){
                 if(n > m){
                 let resultado = n / m;
-                baloes[i].numero = resultado;
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+                baloes[maxBaloes].numero = resultado;
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
                 }
                 else{
                     let resultado = m / n;
-                    baloes[i].numero = resultado;
-                    ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+                    baloes[maxBaloes].numero = resultado;
+                    ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
                 }
             }
             else
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
         }
         else{
-            if(i == 20 || i == 40){ //Força a inserção do primeiro número envolvido na operação matemática
-                baloes[i].numero = n;
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+            if(maxBaloes == 20 || maxBaloes == 40){ //Força a inserção do primeiro número envolvido na operação matemática
+                baloes[maxBaloes].numero = n;
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
             }
-            else if(i == 30 || i == 45){//Força a inserção do segundo número envolvido na operação matemática
-                baloes[i].numero = m;
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+            else if(maxBaloes == 30 || maxBaloes == 45){//Força a inserção do segundo número envolvido na operação matemática
+                baloes[maxBaloes].numero = m;
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
             }
             else
-                ctx.fillText(baloes[i].numero,baloes[i].coordenadas.x + 14 - ctx.measureText(baloes[i].numero).width/2,baloes[i].coordenadas.y + 22);
+                ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
         }
     }
-    i++;
-    k++;
+    maxBaloes++;
 }
 
 var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
@@ -205,7 +203,9 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
     let yVal = event.pageY;
     let canvasX = document.getElementById('canvas').offsetLeft;
     let canvasY = document.getElementById('canvas').offsetTop;
-    for(let j = 0; j < k; j++){
+    console.log('cliquei em:' + maxBaloes);
+    let j = 0;
+    for( j = 0; j < maxBaloes; j++){
         if((xVal > (baloes[j].coordenadas.x + canvasX) && xVal < (baloes[j].coordenadas.x + canvasX + 28)) && (yVal > (baloes[j].coordenadas.y + canvasY) && yVal < (baloes[j].coordenadas.y + canvasY + 36))){
             ctx.drawImage(imagemBalaoEstourado,baloes[j].coordenadas.x,baloes[j].coordenadas.y);
             if(materia == 1){
@@ -216,8 +216,10 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
                 comparaNumero(baloes[j].numero)
                 imprimeClique(baloes[j].numero, null)
             }
+            return 0;
         }   
     }
+    console.log('j / maxBaloes:' + j + ' ' + maxBaloes);
 }
 
 function imprimeInicial(){
@@ -275,7 +277,7 @@ function imprimeClique(balaoclicado, cor){
                 document.getElementById("info").innerHTML = clique[0] + simbolo + clique[1] + ' =  ' + resultado;
         }
     }
-    if(erro == 3)
+    if(erro == 33)
         gameOver();
 }
 
@@ -330,7 +332,7 @@ function comparaLetra(letra){
         cor = 'red'
         erro++;
         imprimeErros()
-        if(erro == 3)
+        if(erro == 33)
             gameOver()
     }
     return cor;

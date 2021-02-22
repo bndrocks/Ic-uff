@@ -10,32 +10,32 @@ const amarelo = document.getElementById("amarelo");
 const azul = document.getElementById("azul");
 const start = document.getElementById("jogar");
 
-/*
-JOGO BUGA QD CLICA MT RAPIDO
-*/
-
 start.addEventListener('click',play,false);
 
 verde.addEventListener('click', (event) => {
   if (vezJogador){
+    vezJogador = false;
     checaCor(1);
   }
 })
 
 vermelho.addEventListener('click', (event) => {
   if (vezJogador){
+    vezJogador = false;
     checaCor(2);
   }
 })
 
 amarelo.addEventListener('click', (event) => {
   if (vezJogador){
+    vezJogador = false;
     checaCor(3);
   }
 })
 
 azul.addEventListener('click', (event) => {
   if (vezJogador){
+    vezJogador = false;
     checaCor(4);
   }
 })
@@ -148,16 +148,16 @@ function checaCor(numeroCor){
   vezJogador = false;//bloqueia outro clique do jogador, já que o listenar não vai chamar a função checaCor enquanto não desbloquear
   if (numeroCor != sequenciaCPU[turnoAux]){
     qtdVidasAtual--;
-    maxPontosPorTurno = maxPontosPorTurno -15;
+    maxPontosPorTurno = maxPontosPorTurno - 15;
     if(qtdVidasAtual == 0)
-      Game();
+      perdeuGame();
     else{
       turnoContador.innerHTML = "NAO!";
       piscaCores();
       console.log('pisca')
       setTimeout(() => {
         iniciaTurno();
-        vezJogador = true;
+        //vezJogador = true;
       }, 800);
      }
   }
@@ -165,12 +165,13 @@ function checaCor(numeroCor){
     cor(numeroCor);
     setTimeout(esperaCor, 500, numeroCor);
   }
+  pontuacao();
 }
 
 function iniciaTurno(){
   turnoAux = 0;
   turnoContador.innerHTML = turnoAtual;
-  setTimeout(mostraCor, 800, 0); //nao lembro qual variável tinha o tempo entre uma cor e outra da sequencia
+  setTimeout(mostraCor, 800, 0);
   clearColor();
 }
 
@@ -183,7 +184,7 @@ function mostraCor(indice){
     else {
       console.log('mostrando cor ' + sequenciaCPU[indice])
        cor(sequenciaCPU[indice]);
-       setTimeout(mostraCor, velocidadeNivel, (indice+1)); //chamada recursiva num futuro próximo??!! kkkk
+       setTimeout(mostraCor, velocidadeNivel, (indice+1));
     }
   }, 300);
 }
@@ -194,7 +195,7 @@ function ganhouGame(){
   vezJogador = false;
 }
 
-function Game(){//qd vence o jogo limpa as cores, mas qd perde não
+function perdeuGame(){//qd vence o jogo limpa as cores, mas qd perde não
   piscaCores();
   turnoContador.innerHTML = "LOSE!";//botar em portugues, para isso vai ter que aumentar visor
   vezJogador = false;
