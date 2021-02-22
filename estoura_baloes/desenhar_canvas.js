@@ -99,15 +99,15 @@ function reiniciaJogo(){
 }
 
 function limpaVar(){
-    clique.length = 0
-    erro = 0
-    retorno = 1
+    clique.length = 0;
+    erro = 0;
+    retorno = 1;
     letrasCertas.length = 0;
     maxBaloes = 0;
-    document.getElementById("clique").innerHTML =  null
-    document.getElementById("clique-erros").innerHTML =  null
-    document.getElementById("feedback").innerHTML =  null
-    document.getElementById("erro").innerHTML = null
+    document.getElementById("clique").innerHTML =  null;
+    document.getElementById("clique-erros").innerHTML =  null;
+    document.getElementById("feedback").innerHTML =  null;
+    document.getElementById("erro").innerHTML = null;
 }
 
 function limpaTela(){
@@ -209,12 +209,12 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
         if((xVal > (baloes[j].coordenadas.x + canvasX) && xVal < (baloes[j].coordenadas.x + canvasX + 28)) && (yVal > (baloes[j].coordenadas.y + canvasY) && yVal < (baloes[j].coordenadas.y + canvasY + 36))){
             ctx.drawImage(imagemBalaoEstourado,baloes[j].coordenadas.x,baloes[j].coordenadas.y);
             if(materia == 1){
-                let cor = comparaLetra(baloes[j].letra)
-                imprimeClique(baloes[j].letra, cor)
+                let cor = comparaLetra(baloes[j].letra);
+                imprimeClique(baloes[j].letra, cor);
             }
             else if(materia == 2){
-                comparaNumero(baloes[j].numero)
-                imprimeClique(baloes[j].numero, null)
+                comparaNumero(baloes[j].numero);
+                imprimeClique(baloes[j].numero, null);
             }
             return 0;
         }   
@@ -277,29 +277,29 @@ function imprimeClique(balaoclicado, cor){
                 document.getElementById("info").innerHTML = clique[0] + simbolo + clique[1] + ' =  ' + resultado;
         }
     }
-    if(erro == 33)
+    if(erro == 3)
         gameOver();
 }
 
 function imprimeAcerto(){
-    document.getElementById("feedback").style.color = 'snow'
-    document.getElementById("feedback").style.textAlign = 'center'
-    document.getElementById("feedback").innerHTML =  'Parabéns!!! Você acertou!'
-    document.getElementById("erro").innerHTML = null
+    document.getElementById("feedback").style.color = 'snow';
+    document.getElementById("feedback").style.textAlign = 'center';
+    document.getElementById("feedback").innerHTML =  'Parabéns!!! Você acertou! Clique no botão de PLAY para jogar novamente';
+    document.getElementById("erro").innerHTML = null;
 }
 
 function imprimeErros(){
-    document.getElementById("feedback").style.color = 'snow'
+    document.getElementById("feedback").style.color = 'snow';
     if(erro > 2){
-        document.getElementById("feedback").style.textAlign = 'center'
-        document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
-        document.getElementById("erro").innerHTML = null
+        document.getElementById("feedback").style.textAlign = 'center';
+        document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.';
+        document.getElementById("erro").innerHTML = null;
     }
     else{
-        document.getElementById("erro").style.color = 'red'
-        document.getElementById("feedback").style.textAlign = 'left'
-        document.getElementById("feedback").innerHTML = 'Quantidade de erros: &nbsp;'
-        document.getElementById("erro").innerHTML = erro
+        document.getElementById("erro").style.color = 'red';
+        document.getElementById("feedback").style.textAlign = 'left';
+        document.getElementById("feedback").innerHTML = 'Quantidade de erros: &nbsp;';
+        document.getElementById("erro").innerHTML = erro;
     }
 }
 
@@ -317,22 +317,22 @@ function escolhePalavra(){
 
 //retornando a cor, imprime acerto ou erro, preenche letras acertadas
 function comparaLetra(letra){
-    let indice = letrasCertas.length
-    let cor
+    let indice = letrasCertas.length;
+    let cor;
     if(respostaCerta[indice] == letra){
-        letrasCertas.push(letra)
-        cor = 'snow'
+        letrasCertas.push(letra);
+        cor = 'snow';
         if(letrasCertas.length == respostaCerta.length){
-            imprimeAcerto()
-            gameOver()
-            setTimeout(reiniciaJogo,3000)            
+            imprimeAcerto();
+            gameOver();
+            reiniciaJogo();
         }
     }
     else{
         cor = 'red'
         erro++;
         imprimeErros()
-        if(erro == 33)
+        if(erro == 3)
             gameOver()
     }
     return cor;
@@ -385,7 +385,7 @@ function comparaNumero(numero){
         if((n*m)==numero){
             imprimeAcerto()
             gameOver()
-            setTimeout(reiniciaJogo,3000)
+            reiniciaJogo();
         }
         else{
             gameOver();
@@ -397,7 +397,7 @@ function comparaNumero(numero){
             if((n / m) == numero){
                 imprimeAcerto()
                 gameOver()
-                setTimeout(reiniciaJogo,3000);
+                reiniciaJogo();
             }
             else{
                 gameOver();
@@ -408,7 +408,7 @@ function comparaNumero(numero){
             if((m / n) == numero){
                 imprimeAcerto();
                 gameOver()
-                setTimeout(reiniciaJogo,3000);
+                reiniciaJogo();
             }
             else{
                 gameOver();
@@ -430,7 +430,7 @@ function comparaNumero(numero){
                 imprimeAcerto();
                 numerosClicados.length = 0;
                 gameOver();
-                setTimeout(reiniciaJogo,3000);
+                reiniciaJogo();
                 }
             else{
                 document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
