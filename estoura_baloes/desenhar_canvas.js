@@ -325,15 +325,14 @@ function comparaLetra(letra){
         if(letrasCertas.length == respostaCerta.length){
             imprimeAcerto();
             gameOver();
-            reiniciaJogo();
         }
     }
     else{
-        cor = 'red'
+        cor = 'red';
         erro++;
-        imprimeErros()
+        imprimeErros();
         if(erro == 3)
-            gameOver()
+            gameOver();
     }
     return cor;
 }
@@ -383,9 +382,8 @@ function geraResultado(){//olhar essa função, ta bugada
 function comparaNumero(numero){
     if(operacao == 4){
         if((n*m)==numero){
-            imprimeAcerto()
-            gameOver()
-            reiniciaJogo();
+            imprimeAcerto();
+            gameOver();
         }
         else{
             gameOver();
@@ -395,9 +393,8 @@ function comparaNumero(numero){
     else if(operacao == 5){
         if(n >= m){//otimizar aqui
             if((n / m) == numero){
-                imprimeAcerto()
-                gameOver()
-                reiniciaJogo();
+                imprimeAcerto();
+                gameOver();
             }
             else{
                 gameOver();
@@ -407,8 +404,7 @@ function comparaNumero(numero){
         else if(m >= n){
             if((m / n) == numero){
                 imprimeAcerto();
-                gameOver()
-                reiniciaJogo();
+                gameOver();
             }
             else{
                 gameOver();
@@ -430,7 +426,6 @@ function comparaNumero(numero){
                 imprimeAcerto();
                 numerosClicados.length = 0;
                 gameOver();
-                reiniciaJogo();
                 }
             else{
                 document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
