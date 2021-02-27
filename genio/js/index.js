@@ -1,8 +1,7 @@
 let sequenciaCPU = [];
-let turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100;
+let turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100; //indice = 0;
 let som = true;
 let vezJogador = false;
-
 const turnoContador = document.getElementById("turno");
 const verde = document.getElementById("verde");
 const vermelho = document.getElementById("vermelho");
@@ -56,9 +55,10 @@ function escolheNivel(){
   }
   else if(nivel_jogo == 3){
     velocidadeNivel = 700
-    qtdTurnos = 15
+    qtdTurnos = 5 //mudar pra 15 de volta
     qtdVidasInicial = 2
   }
+  qtdVidasAtual = qtdVidasInicial;
 }
 
 function pontuacao(){
@@ -77,9 +77,10 @@ function play(){
   document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasInicial;
   for (var i = 0; i < 20; i++){
     sequenciaCPU.push(Math.floor(Math.random() * 4) + 1);//criando a sequencia a ser clicada
-//sequenciaCPU.push(1)
+//sequenciaCPU.push(1) //só pra agilizar testes com uma cor somente
   }
   pontuacao();
+  vezJogador = false
   iniciaTurno();
 }
 
@@ -128,48 +129,51 @@ function cor(numero){
   som = true;
 }
 
+
+function checaCor(numeroCor){
+  vezJogador = false;//bloqueia outro clique do jogador, já que o listenar não vai chamar a função checaCor enquanto não desbloquear
+  if (numeroCor != sequenciaCPU[turnoAux]){
+    qtdVidasAtual--;
+    document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasAtual;
+    maxPontosPorTurno = maxPontosPorTurno - 15;
+    if(qtdVidasAtual == 0){
+      perdeuGame();
+      limpaVar();
+    }
+    else{
+      turnoContador.innerHTML = "NAO!";
+      piscaCores();
+      setTimeout(() => {
+        iniciaTurno();
+        //vezJogador = true;
+      }, 800);
+    }
+  }
+  else{
+    cor(numeroCor);
+    setTimeout(esperaCor, 200, numeroCor);
+  }
+}
+
 function esperaCor(numeroCor){//mudar o nome da função
   clearColor();
-    console.log('acertou cor ' + numeroCor + ': ' + turnoAux + ': ' + sequenciaCPU[turnoAux])
+    //console.log('acertou cor ' + numeroCor + ': ' + turnoAux + ': ' + sequenciaCPU[turnoAux])
     turnoAux++;
     if(turnoAux == turnoAtual){
-      console.log('aumentando sequencia')
-      if (turnoAtual > qtdTurnos) 
+      if (turnoAtual == qtdTurnos) 
         ganhouGame();
       else{
         turnoAtual++;
+        pontuacao();
         iniciaTurno(); 
       }
     }
     vezJogador = true;
 }
 
-function checaCor(numeroCor){
-  vezJogador = false;//bloqueia outro clique do jogador, já que o listenar não vai chamar a função checaCor enquanto não desbloquear
-  if (numeroCor != sequenciaCPU[turnoAux]){
-    qtdVidasAtual--;
-    maxPontosPorTurno = maxPontosPorTurno - 15;
-    if(qtdVidasAtual == 0)
-      perdeuGame();
-    else{
-      turnoContador.innerHTML = "NAO!";
-      piscaCores();
-      console.log('pisca')
-      setTimeout(() => {
-        iniciaTurno();
-        //vezJogador = true;
-      }, 800);
-     }
-  }
-  else{
-    cor(numeroCor);
-    setTimeout(esperaCor, 500, numeroCor);
-  }
-  pontuacao();
-}
-
 function iniciaTurno(){
   turnoAux = 0;
+  vezJogador = false;
   turnoContador.innerHTML = turnoAtual;
   setTimeout(mostraCor, 800, 0);
   clearColor();
@@ -177,26 +181,30 @@ function iniciaTurno(){
 
 function mostraCor(indice){
   clearColor();
+  vezJogador = false;
   setTimeout(() => {
-    if (indice==turnoAtual){
+    if (indice == turnoAtual){
       vezJogador=true;
     }
     else {
-      console.log('mostrando cor ' + sequenciaCPU[indice])
-       cor(sequenciaCPU[indice]);
-       setTimeout(mostraCor, velocidadeNivel, (indice+1));
+      cor(sequenciaCPU[indice]);
+      setTimeout(mostraCor, velocidadeNivel, (indice+1));
     }
   }, 300);
 }
 
 function ganhouGame(){
+  vezJogador = false;
+  pontuacao();
   piscaCores();
   turnoContador.innerHTML = "WIN!";//botar em portugues, para isso vai ter que aumentar visor
-  vezJogador = false;
+  setTimeout(clearColor, 600, 0);
 }
 
-function perdeuGame(){//qd vence o jogo limpa as cores, mas qd perde não
+function perdeuGame(){
+  vezJogador = false;
+  pontuacao();
   piscaCores();
   turnoContador.innerHTML = "LOSE!";//botar em portugues, para isso vai ter que aumentar visor
-  vezJogador = false;
+  setTimeout(clearColor, 600, 0);
 }

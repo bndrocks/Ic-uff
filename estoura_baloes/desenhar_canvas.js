@@ -7,7 +7,7 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var maxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno, listaCoord = [];
+var maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno, listaCoord = [];
 //const alfabeto = ['A','B','C','D','E','F','G','H','maxBaloes','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 //const palavras = [['C','A','S','A'],['O','V','O'],['B','O','L','A']];
 const alfabeto = ['O','V'];
@@ -142,10 +142,11 @@ function randomCoord(n){//Gera coordenadas aleatórias para os balões
 }
 
 function desenhaBaloes(){//criar função de forçar resultado
-    /*if(maxBaloes == 50){//serve para forçar que o resultado apareça em algum momento
-        maxBaloes = 0;
-    }*/
-    maxBaloes = maxBaloes % 11;
+    console.log(auxBaloes)
+    auxBaloes ++;
+    if(auxBaloes == 50){//serve para forçar que o resultado apareça em algum momento
+        auxBaloes = 0;
+    }
     if(materia == 1)
         baloes[maxBaloes] = {letra: insereLetra(), coordenadas: listaCoord[maxBaloes]};
     else if(materia == 2){
@@ -158,7 +159,7 @@ function desenhaBaloes(){//criar função de forçar resultado
         ctx.fillText(baloes[maxBaloes].letra,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].letra).width/2,baloes[maxBaloes].coordenadas.y + 22);
     else if(materia == 2){
         if(operacao == 4){
-            if(maxBaloes == 10 || maxBaloes == 30){
+            if(auxBaloes == 10 || auxBaloes == 30){
                 let resultado = n * m;
                 baloes[maxBaloes].numero = resultado;
                 ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
@@ -167,7 +168,7 @@ function desenhaBaloes(){//criar função de forçar resultado
                 ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
         }
         else if(operacao == 5){
-            if(maxBaloes == 10 || maxBaloes == 30){
+            if(auxBaloes == 10 || auxBaloes == 30){
                 if(n > m){
                 let resultado = n / m;
                 baloes[maxBaloes].numero = resultado;
@@ -183,11 +184,11 @@ function desenhaBaloes(){//criar função de forçar resultado
                 ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
         }
         else{
-            if(maxBaloes == 20 || maxBaloes == 40){ //Força a inserção do primeiro número envolvido na operação matemática
+            if(auxBaloes == 20 || auxBaloes == 40){ //Força a inserção do primeiro número envolvido na operação matemática
                 baloes[maxBaloes].numero = n;
                 ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
             }
-            else if(maxBaloes == 30 || maxBaloes == 45){//Força a inserção do segundo número envolvido na operação matemática
+            else if(auxBaloes == 30 || auxBaloes == 45){//Força a inserção do segundo número envolvido na operação matemática
                 baloes[maxBaloes].numero = m;
                 ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
             }
@@ -203,7 +204,6 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
     let yVal = event.pageY;
     let canvasX = document.getElementById('canvas').offsetLeft;
     let canvasY = document.getElementById('canvas').offsetTop;
-    console.log('cliquei em:' + maxBaloes);
     let j = 0;
     for( j = 0; j < maxBaloes; j++){
         if((xVal > (baloes[j].coordenadas.x + canvasX) && xVal < (baloes[j].coordenadas.x + canvasX + 28)) && (yVal > (baloes[j].coordenadas.y + canvasY) && yVal < (baloes[j].coordenadas.y + canvasY + 36))){
@@ -219,7 +219,6 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
             return 0;
         }   
     }
-    console.log('j / maxBaloes:' + j + ' ' + maxBaloes);
 }
 
 function imprimeInicial(){
@@ -249,7 +248,7 @@ function imprimeClique(balaoclicado, cor){
     let h = document.createElement("h2"); 
     let letra, divClique;
     if(cor == 'red'){
-        if(erro > 1 || erro == 0)
+        if(erro > 1 || erro == 0)//so não coloca o hífen quando o erro = 1
             balaoclicado = `-${balaoclicado}`;
         divClique = document.getElementById("clique-erros");
     }
