@@ -1,5 +1,5 @@
 let sequenciaCPU = [];
-let turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100; //indice = 0;
+let turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100;
 let som = true;
 let vezJogador = false;
 const turnoContador = document.getElementById("turno");
@@ -12,29 +12,25 @@ const start = document.getElementById("jogar");
 start.addEventListener('click',play,false);
 
 verde.addEventListener('click', (event) => {
-  if (vezJogador){
-    vezJogador = false;
+  if (vezJogador == true){
     checaCor(1);
   }
 })
 
 vermelho.addEventListener('click', (event) => {
-  if (vezJogador){
-    vezJogador = false;
+  if (vezJogador == true){
     checaCor(2);
   }
 })
 
 amarelo.addEventListener('click', (event) => {
-  if (vezJogador){
-    vezJogador = false;
+  if (vezJogador == true){
     checaCor(3);
   }
 })
 
 azul.addEventListener('click', (event) => {
-  if (vezJogador){
-    vezJogador = false;
+  if (vezJogador == true){
     checaCor(4);
   }
 })
@@ -55,7 +51,7 @@ function escolheNivel(){
   }
   else if(nivel_jogo == 3){
     velocidadeNivel = 700
-    qtdTurnos = 5 //mudar pra 15 de volta
+    qtdTurnos = 4 //mudar pra 15 de volta
     qtdVidasInicial = 2
   }
   qtdVidasAtual = qtdVidasInicial;
@@ -80,7 +76,7 @@ function play(){
 //sequenciaCPU.push(1) //só pra agilizar testes com uma cor somente
   }
   pontuacao();
-  vezJogador = false
+  vezJogador = false;
   iniciaTurno();
 }
 
@@ -89,7 +85,6 @@ function limpaVar(){
   turnoAux = 0;
   turnoAtual = 1;
   maxPontosPorTurno = 100;
-  totalPontos = 0;
 }
 
 function clearColor(){
@@ -107,68 +102,68 @@ function piscaCores(){
 }
 
 function cor(numero){
-  if (som){
-    if(numero == 1){
-      var audio = document.getElementById("clipe1");
-      verde.style.backgroundColor = "lightgreen";
+    if (som){
+      if(numero == 1){
+        var audio = document.getElementById("clipe1");
+        verde.style.backgroundColor = "lightgreen";
+      }
+      else if(numero == 2){
+        var audio = document.getElementById("clipe2");
+        vermelho.style.backgroundColor = "tomato";
+      }
+      else if(numero == 3){
+        var audio = document.getElementById("clipe3");
+        amarelo.style.backgroundColor = "yellow";
+      }
+      else if(numero == 4){
+        var audio = document.getElementById("clipe4");
+        azul.style.backgroundColor = "lightskyblue";
+      }
+      audio.play();
     }
-    else if(numero == 2){
-      var audio = document.getElementById("clipe2");
-      vermelho.style.backgroundColor = "tomato";
-    }
-    else if(numero == 3){
-      var audio = document.getElementById("clipe3");
-      amarelo.style.backgroundColor = "yellow";
-    }
-    else if(numero == 4){
-      var audio = document.getElementById("clipe4");
-      azul.style.backgroundColor = "lightskyblue";
-    }
-    audio.play();
-  }
-  som = true;
+    som = true;
 }
 
 
 function checaCor(numeroCor){
-  vezJogador = false;//bloqueia outro clique do jogador, já que o listenar não vai chamar a função checaCor enquanto não desbloquear
-  if (numeroCor != sequenciaCPU[turnoAux]){
+  vezJogador = false;//bloqueia outro clique do jogador, já que o listener não vai chamar a função checaCor enquanto não desbloquear
+
+  if(numeroCor != sequenciaCPU[turnoAux]){
     qtdVidasAtual--;
     document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasAtual;
     maxPontosPorTurno = maxPontosPorTurno - 15;
     if(qtdVidasAtual == 0){
       perdeuGame();
-      limpaVar();
     }
     else{
+      //cor(0);
       turnoContador.innerHTML = "NAO!";
       piscaCores();
       setTimeout(() => {
         iniciaTurno();
-        //vezJogador = true;
       }, 800);
     }
   }
   else{
-    cor(numeroCor);
-    setTimeout(esperaCor, 200, numeroCor);
+    cor(numeroCor);//(sequenciaCPU[turnoAux]) conserta um bug e dá outro
+    setTimeout(esperaCor, 200);
   }
 }
 
-function esperaCor(numeroCor){//mudar o nome da função
+function esperaCor(){//mudar o nome da função
   clearColor();
-    //console.log('acertou cor ' + numeroCor + ': ' + turnoAux + ': ' + sequenciaCPU[turnoAux])
-    turnoAux++;
+  turnoAux++;
+    vezJogador = true;
     if(turnoAux == turnoAtual){
+      vezJogador = false;
       if (turnoAtual == qtdTurnos) 
         ganhouGame();
       else{
         turnoAtual++;
         pontuacao();
-        iniciaTurno(); 
+        iniciaTurno();
       }
     }
-    vezJogador = true;
 }
 
 function iniciaTurno(){
@@ -184,9 +179,10 @@ function mostraCor(indice){
   vezJogador = false;
   setTimeout(() => {
     if (indice == turnoAtual){
-      vezJogador=true;
+      vezJogador = true;
     }
     else {
+      vezJogador = false;
       cor(sequenciaCPU[indice]);
       setTimeout(mostraCor, velocidadeNivel, (indice+1));
     }
@@ -199,6 +195,7 @@ function ganhouGame(){
   piscaCores();
   turnoContador.innerHTML = "WIN!";//botar em portugues, para isso vai ter que aumentar visor
   setTimeout(clearColor, 600, 0);
+  limpaVar();
 }
 
 function perdeuGame(){
@@ -207,4 +204,5 @@ function perdeuGame(){
   piscaCores();
   turnoContador.innerHTML = "LOSE!";//botar em portugues, para isso vai ter que aumentar visor
   setTimeout(clearColor, 600, 0);
+  limpaVar();
 }
