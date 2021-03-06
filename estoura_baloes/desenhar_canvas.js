@@ -68,6 +68,8 @@ function iniciaJogo(){
         escolhePalavra();
     else if(materia == 2){
         operacao = document.getElementById('operacao').value;
+        if(operacao == 6)
+            operacaoAleatoria();
         geraResultado();
     }
     imprimeInicial();
@@ -85,6 +87,10 @@ function iniciaJogo(){
         timerBalao = setInterval(desenhaBaloes, 400);
         timerTela = setInterval(limpaTela, 2999);
     }
+}
+
+function operacaoAleatoria(){
+    operacao = Math.floor(Math.random() * 5);
 }
 
 function reiniciaJogo(){

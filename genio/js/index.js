@@ -144,12 +144,12 @@ function checaCor(numeroCor){
     }
   }
   else{
-    cor(numeroCor);//(sequenciaCPU[turnoAux]) conserta um bug e dá outro
+    cor(numeroCor);
     setTimeout(esperaCor, 200);
   }
 }
 
-function esperaCor(){//mudar o nome da função
+function esperaCor(){
   clearColor();
   turnoAux++;
     vezJogador = true;
