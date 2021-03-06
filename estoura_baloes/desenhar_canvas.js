@@ -129,7 +129,7 @@ function gameOver(){
 }
 
 function randomCoord(n){//Gera coordenadas aleatórias para os balões
-    let x = 10, y = 10, res = {}, vetor = [0,1,2,3,4,5,6,7,8,9,10];
+    let x = 10, y = 10, res = {}, vetor = [0.2,1,2,3,4,5,6,7,8,9,10];
     for(let j=0;j<n;j++){
         indice = Math.floor(Math.random() * vetor.length);
         y = vetor[indice] * 45;
@@ -142,7 +142,6 @@ function randomCoord(n){//Gera coordenadas aleatórias para os balões
 }
 
 function desenhaBaloes(){//criar função de forçar resultado
-    console.log(auxBaloes)
     auxBaloes ++;
     if(auxBaloes == 50){//serve para forçar que o resultado apareça em algum momento
         auxBaloes = 0;
@@ -155,6 +154,11 @@ function desenhaBaloes(){//criar função de forçar resultado
     ctx.drawImage(imagemBalao,baloes[maxBaloes].coordenadas.x,baloes[maxBaloes].coordenadas.y);
     ctx.font = "20px Comic Sans MS";
     ctx.fillStyle = "white";
+    forçaResultado();
+    maxBaloes++;
+}
+
+function forçaResultado(){
     if(materia == 1)
         ctx.fillText(baloes[maxBaloes].letra,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].letra).width/2,baloes[maxBaloes].coordenadas.y + 22);
     else if(materia == 2){
@@ -196,7 +200,6 @@ function desenhaBaloes(){//criar função de forçar resultado
                 ctx.fillText(baloes[maxBaloes].numero,baloes[maxBaloes].coordenadas.x + 14 - ctx.measureText(baloes[maxBaloes].numero).width/2,baloes[maxBaloes].coordenadas.y + 22);
         }
     }
-    maxBaloes++;
 }
 
 var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
@@ -224,7 +227,7 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
 function imprimeInicial(){
     if(materia == 1){
         let palavraescolhida = respostaCerta.join('')
-        document.getElementById("info").innerHTML =  'A palavra escolhida é: ' + palavraescolhida;   //`A palavra escolhida é: ${palavraescolhida}`
+        document.getElementById("info").innerHTML =  'A palavra escolhida é: ' + palavraescolhida;
     }
     else if(materia == 2){
         if(operacao == 4 || operacao == 5){

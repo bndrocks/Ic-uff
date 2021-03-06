@@ -51,7 +51,7 @@ function escolheNivel(){
   }
   else if(nivel_jogo == 3){
     velocidadeNivel = 700
-    qtdTurnos = 4 //mudar pra 15 de volta
+    qtdTurnos = 15
     qtdVidasInicial = 2
   }
   qtdVidasAtual = qtdVidasInicial;
@@ -127,7 +127,6 @@ function cor(numero){
 
 function checaCor(numeroCor){
   vezJogador = false;//bloqueia outro clique do jogador, já que o listener não vai chamar a função checaCor enquanto não desbloquear
-
   if(numeroCor != sequenciaCPU[turnoAux]){
     qtdVidasAtual--;
     document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasAtual;
@@ -193,7 +192,7 @@ function ganhouGame(){
   vezJogador = false;
   pontuacao();
   piscaCores();
-  turnoContador.innerHTML = "WIN!";//botar em portugues, para isso vai ter que aumentar visor
+  turnoContador.innerHTML = "GANHOU!";
   setTimeout(clearColor, 600, 0);
   limpaVar();
 }
@@ -202,7 +201,7 @@ function perdeuGame(){
   vezJogador = false;
   pontuacao();
   piscaCores();
-  turnoContador.innerHTML = "LOSE!";//botar em portugues, para isso vai ter que aumentar visor
+  turnoContador.innerHTML = "PERDEU!";
   setTimeout(clearColor, 600, 0);
   limpaVar();
 }
