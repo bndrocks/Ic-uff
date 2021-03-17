@@ -1,4 +1,4 @@
-body {
+body{
     background-color: steelblue;
     font-family: 'Quantico';
     text-align: center;
@@ -8,25 +8,25 @@ body {
     margin: 20px;
     justify-content: center;
 }
-b {
+b{
     color: snow;
     font-size: larger;
     margin-left: 30px;
 }
-select {
+select{
     outline: none;
     color: steelblue;
     background-color: snow;
     font-size: large;
     border-radius: 5px;
 }
-h1 {
+h1{
     color: snow;
 }
-h2 {
+h2{
     color: snow;
 }
-.operacao {
+.operacao{
     display: none;
 }
 .clique, .clique-erros{
