@@ -1,35 +1,35 @@
 body{
   background-color: steelblue;
 }
-
 .fonte{
   font-family: 'Original Surfer', cursive;
 }
-
 .flex{
   display: flex;
 }
-
 .justify-center{
   justify-content: center;
 }
-
 .float-left{
   float: left;
 }
-
+.voltar{
+  position: absolute;
+  left: 20px;
+}
+h1, h2{
+  color: snow;
+}
 .container{
   display: flex;
   margin: 20px;
   justify-content: center;
 }
-
 b{
   color: snow;
   font-size: larger;
   margin-left: 30px;
 }
-
 select{
   color: steelblue;
   background-color: snow;
@@ -37,27 +37,29 @@ select{
   border-radius: 5px;
   outline: none;
 }
-
+#instruçoes{
+  margin-top: 40px;
+  max-width: 350px;
+  position: absolute;
+  left: 20px;
+}
 .button{
   outline: none;
   border-radius: 50% !important;
   font-size: 1.5em;
   background-color: lightgray;
 }
-
 #switches{
   position: absolute;
   margin-left: 66px;
   margin-top: 100px;
 }
-
 .contador{
   position: absolute;
   margin-left: 87px;
   margin-top: 195px;
   color: white;
 }
-
 #titulo{
   color: white;
   position: absolute;
@@ -65,7 +67,6 @@ select{
   margin-left: 40px;
   margin-top: 30px;
 }
-
 #turno{
   position: absolute;
   background: #330000;
@@ -80,7 +81,6 @@ select{
   vertical-align: middle;
   line-height: 30px;
 }
-
 #circuloFora{
   border-radius: 50%;
   height: 500px;
@@ -91,7 +91,6 @@ select{
   margin: auto;
   margin-top: 80px;
 }
-
 #verde{
   position: absolute;
   height: 250px;
@@ -109,7 +108,6 @@ select{
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
 #vermelho{
   position: absolute;
   height: 250px;
@@ -127,7 +125,6 @@ select{
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
 #amarelo{
   position: absolute;
   height: 250px;
@@ -145,7 +142,6 @@ select{
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
 #azul{
   position: absolute;
   height: 250px;
@@ -163,7 +159,6 @@ select{
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
 #circuloDentro{
   position: absolute;
   background: grey;
@@ -179,11 +174,9 @@ select{
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
 h2{
   color: snow;
 }
-
 #vidas{
   margin-left: 150px;
 }

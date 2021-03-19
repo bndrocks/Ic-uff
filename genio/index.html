@@ -23,7 +23,7 @@
 
 <body class="fonte">
   <div>
-    <a href="../index.html"> <img src="../voltar.png" class="float-left"/></a>
+    <a href="../index.html"> <img src="../voltar.png" class="voltar"/></a>
   </div>
   <div class="container">
     <b>Nível: </b>
@@ -39,23 +39,35 @@
       document.getElementById('nivel_jogo').value = selectNivel
   }
   </script>
-  <div id="circuloFora">
-    <div id="verde"></div>
-    <div id="vermelho"></div>
-    <div id="amarelo"></div>
-    <div id="azul"></div>
-    <div id="circuloDentro">
-      <div id="titulo">GÊNIO!</div>
-      <div id="switches">
-        <button class="button" id="jogar">JOGAR</button>
-      </div>
-      <div id="turno"></div>
-      <div class="contador">TURNO</div>
+  <div>
+    <div class="flex justify-center " style="width: 100%;">
+        <div id="instruçoes">
+            <h1>Instruções:</h1>
+            <h2>O jogo será organizado em turnos. A cada turno a máquina vai te mostrar a sequência de cores
+              a ser apertada. Em seguida você deve reproduzir a sequência correta dada pela máquina.
+              Se você acertar a sequência dada, passará ao próximo turno e a sequência irá aumentar.
+              O jogo acaba caso suas vidas acabem ou se acerte a sequência do último turno.
+            </h2>
+        </div>
     </div>
-  </div>
-  <div class="flex justify-center">
-    <h2 id="pontuacao"></h2>
-    <h2 id="vidas"></h2>
+    <div id="circuloFora">
+      <div id="verde"></div>
+      <div id="vermelho"></div>
+      <div id="amarelo"></div>
+      <div id="azul"></div>
+      <div id="circuloDentro">
+        <div id="titulo">GÊNIO!</div>
+        <div id="switches">
+          <button class="button" id="jogar">JOGAR</button>
+        </div>
+        <div id="turno"></div>
+        <div class="contador">TURNO</div>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <h2 id="pontuacao"></h2>
+      <h2 id="vidas"></h2>
+    </div>
   </div>
   <script  src="js/index.js"></script>
 </body>

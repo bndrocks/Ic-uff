@@ -13,6 +13,15 @@ b{
     font-size: larger;
     margin-left: 30px;
 }
+#voltar{
+    position: absolute;
+    left: 20px;
+}
+#instruçoes{
+    max-width: 350px;
+    position: absolute;
+    left: 0;
+}
 select{
     outline: none;
     color: steelblue;
@@ -20,10 +29,7 @@ select{
     font-size: large;
     border-radius: 5px;
 }
-h1{
-    color: snow;
-}
-h2{
+h1, h2{
     color: snow;
 }
 .operacao{
@@ -48,12 +54,19 @@ h2{
 .justify-center{
     justify-content: center;
 }
-
+.align-center{
+    align-items: center;
+}
+.justify-left{
+    justify-content: left;
+}
+.justify-self-center{
+    justify-self: center;
+}
 #info > img{
     top: 5px;
     position: relative;
 }
-
 .float-left{
     float: left;
 }

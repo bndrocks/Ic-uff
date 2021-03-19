@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@700&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <div>
+    <div id="voltar">
         <a href="../index.html"> <img class="float-left" src="../voltar.png"/></a>
     </div>
     <div class="container">
@@ -62,12 +62,23 @@
         <img id = "reinicia" src="imagens/iniciar.png" onclick="reiniciaJogo()" style="display: none;"/>
     </div>
     <div>
-        <h1 id="info"></h1>
+        <h1 id="info" class="flex justify-center"></h1>
         <div class="flex justify-center">
             <div id="clique-erros" class="clique-erros"></div>
             <div id="clique" class="clique"></div>
         </div>
-        <canvas id="canvas" width="500" height="500"></canvas>
+        <div class="flex">
+            <div class="flex justify-center" style="width: 100%;">
+                <div id="instruçoes">
+                    <h1>Instruções:</h1>
+                    <h2>O jogo se baseia em balões que vão aparecendo na tela. Na matéria Português você deve formar a palavra dada
+                        clicando nas letras desta palavra na ordem certa. Em Matemática você deverá completar os números que faltam
+                        para dar sentido à operação que foi escolhida.
+                    </h2>
+                </div>
+                <canvas id="canvas" width="500" height="500"></canvas>
+            </div>
+        </div>
         <img style='display:none;' id='balao' src='imagens/balao_pequeno.png'>
         <img style='display:none;' id='cenario' src='imagens/cenario.png'>
         <img style='display:none;' id='balaoEstourado' src='imagens/balao_pequeno_estourado.png'>
