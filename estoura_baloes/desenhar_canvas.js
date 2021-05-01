@@ -7,11 +7,11 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, retorno, listaCoord = [];
-//const alfabeto = ['A','B','C','D','E','F','G','H','maxBaloes','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-//const palavras = [['C','A','S','A'],['O','V','O'],['B','O','L','A']];
-const alfabeto = ['O','V'];
-const palavras = [['O','V','O']];
+var maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
+//const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+const palavras = [];
+const alfabeto = ['O','I','o','i'];
+//const palavras = [['O','V','O']];
 const numeros = ['1','2','3','4','5','6','7','8','9','10'];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
 
@@ -107,7 +107,6 @@ function reiniciaJogo(){
 function limpaVar(){
     clique.length = 0;
     erro = 0;
-    retorno = 1;
     letrasCertas.length = 0;
     maxBaloes = 0;
     document.getElementById("clique").innerHTML =  null;
@@ -232,8 +231,8 @@ var estoura = function estouraBalao(event){//Cuida dos cliques nos balões
 
 function imprimeInicial(){
     if(materia == 1){
-        let palavraescolhida = respostaCerta.join('')
-        document.getElementById("info").innerHTML =  'A palavra escolhida é: ' + palavraescolhida;
+        //let palavraescolhida = respostaCerta.join('')
+        document.getElementById("info").innerHTML =  'A palavra escolhida é: ' + respostaCerta;
     }
     else if(materia == 2){
         if(operacao == 4 || operacao == 5){
@@ -314,23 +313,29 @@ function imprimeErros(){
 //Funções da matéria Português
 
 function insereLetra(){
-    let z = Math.floor(Math.random() * (alfabeto.length));
+    let prob = Math.random();
+    let z = Math.floor(Math.random() * (alfabeto.length/2));
+    if(prob >= 0.2)
+        z = z + alfabeto.length/2;
     return alfabeto[z];
 }
 
 function escolhePalavra(){
     let z = Math.floor(Math.random() * (palavras.length));
     respostaCerta = palavras[z];
+    console.log(respostaCerta)
+    separaResposta = respostaCerta.split('');
+    console.log(separaResposta)
 }
 
 //retornando a cor, imprime acerto ou erro, preenche letras acertadas
 function comparaLetra(letra){
     let indice = letrasCertas.length;
     let cor;
-    if(respostaCerta[indice] == letra){
+    if(separaResposta[indice] == letra){
         letrasCertas.push(letra);
         cor = 'snow';
-        if(letrasCertas.length == respostaCerta.length){
+        if(letrasCertas.length == separaResposta.length){
             imprimeAcerto();
             gameOver();
         }
@@ -443,3 +448,22 @@ function comparaNumero(numero){
         }
     }
 }
+
+let input = document.querySelector('input');
+ 
+input.addEventListener('change', () => {
+    let files = input.files;
+    if(files.length == 0) return;
+    const file = files[0];
+    let reader = new FileReader();
+    reader.onload = (e) => {
+        const file = e.target.result;
+        const lines = file.split(/\r\n|\n|, | /);
+        //console.log(lines)
+        for(let i = 0; i < lines.length; i++)
+            palavras[i] = lines[i];
+        console.log(palavras)
+    };
+    reader.onerror = (e) => alert(e.target.error.name);
+    reader.readAsText(file); 
+});

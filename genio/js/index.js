@@ -132,6 +132,7 @@ function checaCor(numeroCor){
     document.getElementById("vidas").innerHTML = "Vidas: " + qtdVidasAtual;
     maxPontosPorTurno = maxPontosPorTurno - 15;
     if(qtdVidasAtual == 0){
+      maxPontosPorTurno = 0;
       perdeuGame();
     }
     else{
