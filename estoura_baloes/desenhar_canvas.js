@@ -7,7 +7,7 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
+var bool = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
 //const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 const palavras = [];
 const alfabeto = ['O','I','o','i'];
@@ -15,12 +15,14 @@ const alfabeto = ['O','I','o','i'];
 const numeros = ['1','2','3','4','5','6','7','8','9','10'];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
 
-function escolheMateria() {
+function escolheMateria(){
     if (document.getElementById('materia').value == 2){
+        materia = 2;
         document.getElementById('operacaoBold').style.display = 'inline';
         document.getElementById('operacao').style.display = 'inline';
     }
     if (document.getElementById('materia').value == 1){
+        materia = 1;
         document.getElementById('operacaoBold').style.display = 'none';
         document.getElementById('operacao').style.display = 'none';
     }
@@ -36,18 +38,24 @@ function escolheOperacao(){
 }
 
 function gerenciaJogo(){
-    iniciaCanvas();
-    canvas.addEventListener('click',estoura,false);
-    document.getElementById('reinicia').style.display = 'inline';
-    document.getElementById('iniciar').style.display = 'none';
+        iniciaCanvas();
+        canvas.addEventListener('click',estoura,false);
+        document.getElementById('reinicia').style.display = 'inline';
+        document.getElementById('iniciar').style.display = 'none';
 }
 
 function iniciaCanvas(){
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     materia = document.getElementById('materia').value;
-    criaTela();
-    iniciaJogo();
+    if(materia == 2 || bool == 1){
+        criaTela();
+        iniciaJogo();
+    }
+    else{
+        canvas.style.display = 'hidden';
+        console.log("bota um arquivo ae")
+    }
 }
 
 function criaTela(){
@@ -64,8 +72,9 @@ function criaTela(){
 function iniciaJogo(){
     randomCoord(11);
     let nivel_jogo = document.getElementById('nivel_jogo').value;
-    if(materia == 1)
+    if(materia == 1){
         escolhePalavra();
+    }
     else if(materia == 2){
         operacao = document.getElementById('operacao').value;
         if(operacao == 6)
@@ -100,11 +109,17 @@ function reiniciaJogo(){
     limpaVar()
     limpaTela();
     materia = document.getElementById('materia').value;
-    iniciaJogo();
+    if(materia == 2 || bool == 1)
+        iniciaJogo();
+    else{
+        canvas.style.display = 'hidden';
+        console.log("bota um arquivo ae")
+    }
     canvas.addEventListener('click',estoura,false);
 }
 
 function limpaVar(){
+    bool = 0;
     clique.length = 0;
     erro = 0;
     letrasCertas.length = 0;
@@ -453,7 +468,10 @@ let input = document.querySelector('input');
  
 input.addEventListener('change', () => {
     let files = input.files;
-    if(files.length == 0) return;
+    if(files.length == 0) 
+        return;
+    else
+        bool = true;
     const file = files[0];
     let reader = new FileReader();
     reader.onload = (e) => {
