@@ -37,25 +37,38 @@ function escolheOperacao(){
     localStorage.setItem('operacao', document.getElementById('operacao').value)
 }
 
-function gerenciaJogo(){
+function checaArquivo(){
+    if(materia == 1 && bool == 0)
+        return false;
+    else
+        return true;
+}
+
+/*function gerenciaJogo(){
         iniciaCanvas();
         canvas.addEventListener('click',estoura,false);
         document.getElementById('reinicia').style.display = 'inline';
         document.getElementById('iniciar').style.display = 'none';
-}
+}*/
 
 function iniciaCanvas(){
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
     materia = document.getElementById('materia').value;
-    if(materia == 2 || bool == 1){
-        criaTela();
-        iniciaJogo();
+    if(checaArquivo() == true){
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        if(materia == 2 || bool){
+            criaTela();
+            iniciaJogo();
+        }
+        else{
+            canvas.style.display = 'none';
+            console.log("bota um arquivo ae")
+        }
+        canvas.addEventListener('click',estoura,false);
+        document.getElementById('reinicia').style.display = 'inline';
+        document.getElementById('iniciar').style.display = 'none';
     }
-    else{
-        canvas.style.display = 'none';
-        console.log("bota um arquivo ae")
-    }
+
 }
 
 function criaTela(){
@@ -99,7 +112,7 @@ function iniciaJogo(){
 }
 
 function operacaoAleatoria(){
-    operacao = Math.floor(Math.random() * 5);
+    operacao = Math.floor(Math.random() * 5) + 1;
 }
 
 function reiniciaJogo(){
@@ -109,8 +122,8 @@ function reiniciaJogo(){
     limpaVar()
     limpaTela();
     materia = document.getElementById('materia').value;
-    if(materia == 2 || bool == 1){
-        canvas.style.display = 'inline';
+    if(materia == 2 || bool){
+        canvas.style.display = 'block';
         iniciaJogo();
     }
     else{
@@ -121,7 +134,7 @@ function reiniciaJogo(){
 }
 
 function limpaVar(){
-    bool = 0;
+    //bool = 0;
     clique.length = 0;
     erro = 0;
     letrasCertas.length = 0;
@@ -400,7 +413,7 @@ function geraResultado(){//olhar essa função, ta bugada
     else if(operacao == 4){
         simbolo = ' * ';
     }
-    else{
+    else if(operacao == 5){
         simbolo = ' / ';
         n = Math.floor(Math.random() * 100)+1;
         m = Math.floor(Math.random() * 100)+1;
@@ -485,5 +498,5 @@ input.addEventListener('change', () => {
         console.log(palavras)
     };
     reader.onerror = (e) => alert(e.target.error.name);
-    reader.readAsText(file); 
+    reader.readAsText(file);
 });
