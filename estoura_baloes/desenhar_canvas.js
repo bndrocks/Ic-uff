@@ -53,7 +53,7 @@ function iniciaCanvas(){
         iniciaJogo();
     }
     else{
-        canvas.style.display = 'hidden';
+        canvas.style.display = 'none';
         console.log("bota um arquivo ae")
     }
 }
@@ -109,10 +109,12 @@ function reiniciaJogo(){
     limpaVar()
     limpaTela();
     materia = document.getElementById('materia').value;
-    if(materia == 2 || bool == 1)
+    if(materia == 2 || bool == 1){
+        canvas.style.display = 'inline';
         iniciaJogo();
+    }
     else{
-        canvas.style.display = 'hidden';
+        canvas.style.display = 'none';
         console.log("bota um arquivo ae")
     }
     canvas.addEventListener('click',estoura,false);

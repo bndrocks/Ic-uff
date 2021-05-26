@@ -55,8 +55,11 @@
                     document.getElementById('operacao').value = selectOperacao
                 }
             </script>
-            </div>   
-    </div>
+            </div>
+        </div>
+        <div class="arquivo">
+            <input type="file">
+        </div>
     <div>
         <img id = "iniciar" src="imagens/iniciar.png" onclick="gerenciaJogo()"/>
         <img id = "reinicia" src="imagens/iniciar.png" onclick="reiniciaJogo()" style="display: none;"/>
@@ -83,9 +86,6 @@
         <img style='display:none;' id='cenario' src='imagens/cenario.png'>
         <img style='display:none;' id='balaoEstourado' src='imagens/balao_pequeno_estourado.png'>
         <div class="flex justify-center"><h2 id="feedback"></h2><h2 id="erro"></h2></div>
-    </div>
-    <div class="arquivo">
-        <input type="file">
     </div>
     <script type="text/javascript" src="desenhar_canvas.js"></script>
 </body>
