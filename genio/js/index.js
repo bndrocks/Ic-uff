@@ -1,5 +1,5 @@
 let sequenciaCPU = [];
-let turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100;
+let click = 0, turnoAux, velocidadeNivel, turnoAtual, nivel_jogo, qtdTurnos, qtdVidasInicial, qtdVidasAtual, totalPontos = 0, maxPontosPorTurno = 100;
 let som = true;
 let vezJogador = false;
 const turnoContador = document.getElementById("turno");
@@ -8,6 +8,18 @@ const vermelho = document.getElementById("vermelho");
 const amarelo = document.getElementById("amarelo");
 const azul = document.getElementById("azul");
 const start = document.getElementById("jogar");
+
+function instrucao(){
+  click++;
+  console.log(click)
+  if(click % 2 == 1){
+      document.getElementById('h2').style.display = 'inline';
+  }
+  else
+  {
+      document.getElementById('h2').style.display = 'none';
+  }
+}
 
 start.addEventListener('click',play,false);
 

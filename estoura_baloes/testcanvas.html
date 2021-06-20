@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Estoura balões</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div id="voltar">
-        <a href="../index.html"> <img class="float-left" src="../voltar.png"/></a>
+        <a href="../index.html"> <img class="float-left" src="../voltar.png" /></a>
     </div>
     <div class="container">
-            <div>
-                <b>Nível: </b>
-                <select id="nivel_jogo" onchange="escolheNivel()">
-                    <option value="1">Fácil</option>
-                    <option value="2">Normal</option>
-                    <option value="3">Difícil</option>
-                </select>
-            </div>
-            <div>
+        <div>
+            <b>Nível: </b>
+            <select id="nivel_jogo" onchange="escolheNivel()">
+                <option value="1">Fácil</option>
+                <option value="2">Normal</option>
+                <option value="3">Difícil</option>
+            </select>
+        </div>
+        <div>
             <b>Matéria:</b>
             <select id="materia" onchange="escolheMateria()">
                 <option value="1">Português</option>
                 <option value="2">Matemática</option>
                 <!--option value="3">Quimica</option-->
             </select>
-            </div>
-            <div>
+        </div>
+        <div>
             <b id="operacaoBold" class="operacao display-none">Operação:</b>
             <select id="operacao" class="operacao display-none" onchange="escolheOperacao()">
                 <option value="1">Adição</option>
@@ -37,56 +39,69 @@
                 <option value="5">Divisão</option>
                 <option value="6">Aleatória</option>
             </select>
-            <script>
-                let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
-                if(selectNivel !== null){
-                    document.getElementById('nivel_jogo').value = selectNivel
-                }
-                let selectMateria = localStorage.getItem('materia') ? localStorage.getItem('materia') : null
-                if(selectMateria !== null){
-                    document.getElementById('materia').value = selectMateria
-                    if(selectMateria == 2){
-                        document.getElementById('operacaoBold').style.display = 'inline';
-                        document.getElementById('operacao').style.display = 'inline';
-                    }
-                }
-                let selectOperacao = localStorage.getItem('operacao') ? localStorage.getItem('operacao') : null
-                if(selectOperacao !== null){
-                    document.getElementById('operacao').value = selectOperacao
-                }
-            </script>
+        </div>
+    </div>
+    <div id="arquivo" class="arquivo" style="visibility: hidden;">
+        <input type="file">
+    </div>
+    <div class="flex justify-center" style="width: 100%;">
+        <div id="instruçoes">
+            <div style="width: 100%; display: flex; justify-content: flex-start; flex-wrap: wrap;">
+                <button onclick="instrucao()"><img src="../book.png" height="30px" width="30px"/>Instruções</button>
+                <h2 id="h2" style="display: none; text-align:left;">O jogo se baseia em balões que vão aparecendo na tela. Na matéria
+                    Português você deve formar a palavra dada clicando nas letras desta palavra na ordem certa. 
+                    Em Matemática você deverá completar os números que faltam para dar sentido à operação que foi escolhida.
+                </h2>
             </div>
         </div>
-        <div class="arquivo">
-            <input type="file">
-        </div>
-    <div>
-        <img id = "iniciar" src="imagens/iniciar.png" onclick="iniciaCanvas()"/>
-        <img id = "reinicia" src="imagens/iniciar.png" onclick="reiniciaJogo()" style="display: none;"/>
+    </div>
+    <script>
+        console.log(materia)
+        let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
+        if (selectNivel !== null) {
+            document.getElementById('nivel_jogo').value = selectNivel
+        }
+        let selectMateria = localStorage.getItem('materia') ? localStorage.getItem('materia') : null
+        if (selectMateria !== null) {
+            document.getElementById('materia').value = selectMateria
+            if (selectMateria == 2) {
+                document.getElementById('operacaoBold').style.display = 'inline';
+                document.getElementById('operacao').style.display = 'inline';
+                document.getElementById('arquivo').style.visibility = 'hidden';
+            }
+            if(selectMateria == 1) {
+                document.getElementById('operacaoBold').style.display = 'none';
+                document.getElementById('operacao').style.display = 'none';
+                document.getElementById('arquivo').style.visibility = 'visible';
+            }
+        }
+        let selectOperacao = localStorage.getItem('operacao') ? localStorage.getItem('operacao') : null
+        if (selectOperacao !== null) {
+            document.getElementById('operacao').value = selectOperacao
+        }
+    </script>
+    <div style="margin-bottom: -5px;">
+        <img id="iniciar" src="imagens/iniciar.png" onclick="iniciaCanvas()"/>
+        <img id="reinicia" src="imagens/iniciar.png" onclick="reiniciaJogo()" style="display: none;"/>
     </div>
     <div>
-        <h1 id="info" ></h1>
+        <h1 id="info"></h1>
         <div class="flex justify-center">
             <div id="clique-erros" class="clique-erros"></div>
             <div id="clique" class="clique"></div>
         </div>
-        <div class="flex">
-            <div class="flex justify-center" style="width: 100%;">
-                <div id="instruçoes">
-                    <h1>Instruções:</h1>
-                    <h2>O jogo se baseia em balões que vão aparecendo na tela. Na matéria Português você deve formar a palavra dada
-                        clicando nas letras desta palavra na ordem certa. Em Matemática você deverá completar os números que faltam
-                        para dar sentido à operação que foi escolhida.
-                    </h2>
-                </div>
-                <canvas id="canvas" width="500" height="500"></canvas>
-            </div>
+        <div class="flex justify-center" style="width: 100%;">
+            <canvas id="canvas" width="500" height="500"></canvas>
         </div>
         <img style='display:none;' id='balao' src='imagens/balao_pequeno.png'>
         <img style='display:none;' id='cenario' src='imagens/cenario.png'>
         <img style='display:none;' id='balaoEstourado' src='imagens/balao_pequeno_estourado.png'>
-        <div class="flex justify-center"><h2 id="feedback"></h2><h2 id="erro"></h2></div>
+        <div class="flex justify-center">
+            <h2 id="feedback"></h2>
+            <h2 id="erro"></h2>
+        </div>
     </div>
     <script type="text/javascript" src="desenhar_canvas.js"></script>
 </body>
+
 </html>

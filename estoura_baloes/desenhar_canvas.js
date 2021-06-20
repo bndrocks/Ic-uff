@@ -7,7 +7,7 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var bool = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
+var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
 //const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 const palavras = [];
 const alfabeto = ['O','I','o','i'];
@@ -15,16 +15,33 @@ const alfabeto = ['O','I','o','i'];
 const numeros = ['1','2','3','4','5','6','7','8','9','10'];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
 
+function instrucao(){
+    click++;
+    console.log(click)
+    if(click % 2 == 1){
+        document.getElementById('h2').style.display = 'inline';
+    }
+    else
+    {
+        document.getElementById('h2').style.display = 'none';
+    }
+}
+
 function escolheMateria(){
+    console.log(materia)
     if (document.getElementById('materia').value == 2){
+        console.log('ok')
         materia = 2;
         document.getElementById('operacaoBold').style.display = 'inline';
         document.getElementById('operacao').style.display = 'inline';
+        document.getElementById('arquivo').style.visibility = 'hidden';
     }
     if (document.getElementById('materia').value == 1){
+        console.log('ok2')
         materia = 1;
         document.getElementById('operacaoBold').style.display = 'none';
         document.getElementById('operacao').style.display = 'none';
+        document.getElementById('arquivo').style.visibility = 'visible';
     }
     localStorage.setItem('materia', document.getElementById('materia').value)
 }
@@ -44,31 +61,22 @@ function checaArquivo(){
         return true;
 }
 
-/*function gerenciaJogo(){
-        iniciaCanvas();
-        canvas.addEventListener('click',estoura,false);
-        document.getElementById('reinicia').style.display = 'inline';
-        document.getElementById('iniciar').style.display = 'none';
-}*/
-
 function iniciaCanvas(){
     materia = document.getElementById('materia').value;
+    console.log(materia, bool)
     if(checaArquivo() == true){
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
-        if(materia == 2 || bool){
-            criaTela();
-            iniciaJogo();
-        }
-        else{
-            canvas.style.display = 'none';
-            console.log("bota um arquivo ae")
-        }
+        criaTela();
+        iniciaJogo();
         canvas.addEventListener('click',estoura,false);
         document.getElementById('reinicia').style.display = 'inline';
         document.getElementById('iniciar').style.display = 'none';
     }
-
+    else{
+        canvas.style.display = 'none';
+        console.log("bota um arquivo ae")
+    }
 }
 
 function criaTela(){
@@ -134,7 +142,6 @@ function reiniciaJogo(){
 }
 
 function limpaVar(){
-    //bool = 0;
     clique.length = 0;
     erro = 0;
     letrasCertas.length = 0;
@@ -283,7 +290,7 @@ function imprimeInicial(){
 function imprimeClique(balaoclicado, cor){
     clique.push(balaoclicado);    
     if(materia == 1){
-    let h = document.createElement("h2"); 
+    let h = document.createElement("h2");
     let letra, divClique;
     if(cor == 'red'){
         if(erro > 1 || erro == 0)//so não coloca o hífen quando o erro = 1
@@ -483,7 +490,7 @@ let input = document.querySelector('input');
  
 input.addEventListener('change', () => {
     let files = input.files;
-    if(files.length == 0) 
+    if(files.length == 0)
         return;
     else
         bool = true;
