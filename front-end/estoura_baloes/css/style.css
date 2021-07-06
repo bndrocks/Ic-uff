@@ -1,0 +1,111 @@
+body {
+    background-color: steelblue;
+    font-family: 'Quantico';
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    margin: 20px;
+    justify-content: center;
+}
+
+b {
+    color: snow;
+    font-size: larger;
+    margin-left: 30px;
+}
+
+button {
+    font-family: 'Original Surfer', cursive;
+    color: steelblue;
+    font-size: larger;
+    outline: none;
+    line-height: 2.5em;
+}
+
+#voltar {
+    position: absolute;
+    left: 20px;
+}
+
+#instruçoes {
+    max-width: 350px;
+    position: absolute;
+    left: 20px;
+    top: 120px;
+}
+
+select {
+    outline: none;
+    color: steelblue;
+    background-color: snow;
+    font-size: large;
+    border-radius: 5px;
+}
+
+h1, h2 {
+    color: snow;
+}
+
+.operacao {
+    display: none;
+}
+
+.clique, .clique-erros {
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    margin-top: -20px;
+    margin-bottom: 10px;
+}
+
+.clique {
+    margin-left: 30px;
+}
+
+.display-none {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-left {
+    justify-content: left;
+}
+
+.justify-self-center {
+    justify-self: center;
+}
+
+#info>img {
+    top: 5px;
+    position: relative;
+}
+
+button>img {
+    top: 8px;
+    right: 3px;
+    position: relative;
+}
+
+.float-left {
+    float: left;
+}
+
+.arquivo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Gênio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+
+  <audio id="clipe1"> 
+    <source src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3">
+    </source>
+  </audio>
+  <audio id="clipe2">
+    <source src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3">
+    </source>
+  </audio>
+  <audio id="clipe3">
+    <source src="https://s3.amazonaws.com/freecodecamp/simonSound3.mp3">
+    </source>
+  </audio>
+  <audio id="clipe4">
+    <source src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3">
+    </source>
+  </audio>
+</head>
+
+<body class="fonte">
+  <div>
+    <a href="../index.html"><img src="../voltar.png" class="voltar"/></a>
+  </div>
+  <div class="container">
+    <b>Nível: </b>
+    <select id="nivel_jogo" onchange="escolheNivel()">
+      <option value="1">Fácil</option>
+      <option value="2">Normal</option>
+      <option value="3">Difícil</option>
+    </select>
+  </div>
+  <script>
+    let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
+    if (selectNivel !== null) {
+      document.getElementById('nivel_jogo').value = selectNivel
+    }
+  </script>
+  <div>
+    <div class="flex justify-center" style="width: 100%;">
+      <div id="instruçoes">
+        <div>
+          <button onclick="instrucao()" class="instrucao"><img src="../book.png" height="30px" width="30px"/>Instruções</button>
+          <h2 id="h2" style="display: none; text-align:left;">O jogo será organizado em turnos. A cada turno a máquina vai te mostrar a sequência de cores
+            a ser apertada. Em seguida você deve reproduzir a sequência correta dada pela máquina.
+            Se você acertar a sequência dada, passará ao próximo turno e a sequência irá aumentar.
+            O jogo acaba caso suas vidas acabem ou se acerte a sequência do último turno.
+          </h2>
+        </div>
+      </div>
+    </div>
+    <div id="circuloFora">
+      <div id="verde"></div>
+      <div id="vermelho"></div>
+      <div id="amarelo"></div>
+      <div id="azul"></div>
+      <div id="circuloDentro">
+        <div id="titulo">GÊNIO!</div>
+        <div id="switches">
+          <button class="button" id="jogar">JOGAR</button>
+        </div>
+        <div id="turno"></div>
+        <div class="contador">TURNO</div>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <h2 id="pontuacao"></h2>
+      <h2 id="vidas"></h2>
+    </div>
+  </div>
+  <script src="js/index.js"></script>
+</body>
+
+</html>

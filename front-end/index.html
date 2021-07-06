@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="fonte">
+  <div id="usuario" class="usuario" onclick="mostrarUsuario(1,0)">
+    <img src="usuario.png" style="height: 40px; margin-right: 0;"/>
+  </div>
+  <div id="caixaUsuario">
+    <div id="formularioInicial" class="formulario">
+      <div class="triangulo"></div>
+      <button class="btn-cadastrar" onclick="mostrarUsuario(2,0)">Cadastrar</button>
+      <button class="btn-entrar" onclick="mostrarUsuario(3,0)">Entrar</button>
+    </div>
+    <div id="formularioCadastro" class="formulario">
+      <div class="triangulo"></div>
+      <label><small>Nome</small></label><br>
+      <input type="text" id="nome-cadastro"><br>
+      <label><small>Email</small></label><br>
+      <input type="email" placeholder="exemplo@email.com" id="email-cadastro"><br>
+      <label><small>Aluno ou Professor</small></label><br>
+      <select name="tipo" id="tipo-cadastro">
+        <option value="Aluno">Aluno</option>
+        <option value="Professor">Professor</option>
+      </select><br>
+      <label><small>Senha</small></label><br>
+      <input type="password" id="senha-cadastro"><br>
+      <button class="btn-cadastrar" onclick="cadastrarUsuario()">Cadastrar</button>
+      <button class="btn-voltar" onclick="mostrarUsuario(2, 1)">Voltar</button>
+    </div>
+    <div id="formularioLogin" class="formulario">
+      <div class="triangulo"></div>
+      <label><small>Email</small></label><br>
+      <input type="email" placeholder="exemplo@email.com" id="email-login"><br>
+      <label><small>Senha</small></label><br>
+      <input type="password" id="senha-login"><br>
+      <button class="btn-entrar" onclick="loginUsuario()">Entrar</button>
+      <button class="btn-voltar" onclick="mostrarUsuario(3, 1)">Voltar</button>
+    </div>
+  </div>
+  <script>
+    let clique = false;
+    function mostrarUsuario(n, volta){
+      if(n == 1){
+        clique = !clique;
+        if(clique){
+          document.getElementById("caixaUsuario").style.display = "inline";
+          document.getElementById("formularioInicial").style.display = "inline";
+        }
+        else{
+          document.getElementById("formularioInicial").style.display = "none";
+          document.getElementById("caixaUsuario").style.display = "none";
+        }
+      }
+      if(n == 2){
+        if(!volta)
+          document.getElementById("formularioCadastro").style.display = "inline";
+        else{
+          document.getElementById("formularioInicial").style.display = "inline";
+          document.getElementById("formularioCadastro").style.display = "none";
+        }
+      }
+      if(n == 3){
+        if(!volta)
+          document.getElementById("formularioLogin").style.display = "inline";
+        else{
+          document.getElementById("formularioInicial").style.display = "inline";
+          document.getElementById("formularioLogin").style.display = "none";
+        }
+      }
+    }  
+    function cadastrarUsuario(){
+      let data = {};
+      data.nome = document.getElementById("nome-cadastro").value;
+      data.email = document.getElementById("email-cadastro").value;
+      data.tipo = document.getElementById("tipo-cadastro").value;
+      data.senha = document.getElementById("senha-cadastro").value;
+      axios.post('http://localhost:3003/cadastro', data)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    function loginUsuario(){
+      let data = {};
+      data.email = document.getElementById("email-cadastro").value;
+      data.senha = document.getElementById("senha-cadastro").value;
+      axios.post('http://localhost:3003/login', data)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  </script>
+  <div class="container">
+    <b>Escolha o seu jogo: </b>
+    <a href="estoura_baloes/testcanvas.html"><button><img src="balao_Pequeno.png"/>Estoura Balões</button></a>
+    <a href="genio/index.html"><button><img src="genio_Icone.png" height="30px" width="30px"/>Gênio</button></a>
+  </div>
+</body>
+</html>
