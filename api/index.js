@@ -6,6 +6,8 @@ const {app} = require('./server');
 */
   app.listen(3003, () => {
     console.log('🚀 Server is running!');
-  
   });
+  app.get('/', (req, res) => {
+    res.send('Hello World')
+  })
 //}).catch(err => console.log(err));
