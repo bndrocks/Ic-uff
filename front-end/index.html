@@ -6,151 +6,74 @@
   <title>Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
+  <link href="assets/css/uicons-regular-rounded.css" rel="stylesheet">
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body class="fonte">
-  <div id="usuario" class="usuario" onclick="mostrarUsuario(1,0)">
-    <img src="usuario.png" style="height: 40px; margin-right: 0;" />
-  </div>
-  <div id="caixaUsuario">
-    <div class="triangulo"></div>
-    <div id="menuLogado" class="formulario">
-      <button onclick="">Perfil</button>
-      <button onclick="sair()">Sair</button>
-    </div>
+  <!--div id="caixaUsuario">
     <div id="formularioInicial" class="formulario">
       <button class="btn-cadastrar" onclick="mostrarUsuario(2,0)">Cadastrar</button>
       <button class="btn-entrar" onclick="mostrarUsuario(3,0)">Entrar</button>
     </div>
-    <div id="formularioCadastro" class="formulario">
-      <label><small>Nome</small></label><br>
-      <input type="text" id="nome-cadastro"><br>
-      <label><small>Email</small></label><br>
-      <input type="email" placeholder="exemplo@email.com" id="email-cadastro"><br>
-      <label><small>Aluno ou Professor</small></label><br>
-      <select name="tipo" id="tipo-cadastro">
-        <option value="Aluno">Aluno</option>
-        <option value="Professor">Professor</option>
-      </select><br>
-      <label><small>Senha</small></label><br>
-      <input type="password" id="senha-cadastro"><br>
-      <button class="btn-cadastrar" onclick="cadastrarUsuario()">Cadastrar</button>
-      <button class="btn-voltar" onclick="mostrarUsuario(2, 1)">Voltar</button>
-    </div>
-    <div id="formularioLogin" class="formulario">
-      <label><small>Email</small></label><br>
-      <input type="email" placeholder="exemplo@email.com" id="email-login"><br>
-      <label><small>Senha</small></label><br>
-      <input type="password" id="senha-login"><br>
-      <button id="btn-login" class="btn-entrar" onclick="loginUsuario()">Entrar</button>
-      <button class="btn-voltar" onclick="mostrarUsuario(3, 1)">Voltar</button>
-    </div>
-  </div>
+  </div-->
   <script>
-    var clique = false;
-    var contErroLogin = 0;
-    function mostrarUsuario(n, volta) {
-      var logado = localStorage.getItem('logado');
-      console.log(logado, clique);
-      if (n == 1) {
-        clique = !clique;
-        console.log(clique, n, volta);
-        if (clique) {
-          document.getElementById("caixaUsuario").style.display = "inline";
-          logado ? document.getElementById("menuLogado").style.display = "inline" : document.getElementById("formularioInicial").style.display = "inline";
-        }
-        else {
-          logado ? document.getElementById("menuLogado").style.display = "none" : document.getElementById("formularioInicial").style.display = "none";
-          document.getElementById("caixaUsuario").style.display = "none";
-        }
-      }
-      if (n == 2) {
-        if (!volta)
-          document.getElementById("formularioCadastro").style.display = "inline";
-        else {
-          document.getElementById("formularioInicial").style.display = "inline";
-          document.getElementById("formularioCadastro").style.display = "none";
-        }
-      }
-      if (n == 3) {
-        if (!volta)
-          document.getElementById("formularioLogin").style.display = "inline";
-        else {
-          document.getElementById("formularioInicial").style.display = "inline";
-          document.getElementById("formularioLogin").style.display = "none";
-        }
-      }
+    function mostraLogin(){
+      document.getElementById("formLogin").style.display = "inline";
+      document.getElementById("formInicial").style.display = "none";
     }
-    function cadastrarUsuario() {
-      let data = {};
-      data.nome = document.getElementById("nome-cadastro").value;
-      data.email = document.getElementById("email-cadastro").value;
-      data.tipo = document.getElementById("tipo-cadastro").value;
-      data.senha = document.getElementById("senha-cadastro").value;
-      axios.post('http://localhost:3003/usuario/cadastro', data)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    function mostraCadastro(){
+      document.getElementById("formLogin").style.display = "none";
+      document.getElementById("formCadastro").style.display = "inline";
+      document.getElementById("formInicial").style.display = "none";
     }
-    function loginUsuario() {
-      let data = {};
-      data.email = document.getElementById("email-login").value;
-      data.senha = document.getElementById("senha-login").value;
-      axios.post('http://localhost:3003/usuario/login', data)
-        .then(function (response) {
-          console.log(response);
-          if (response.statusText == 'Logado') {
-            if(contErroLogin > 0)
-              removerElemento('erro-login');
-            localStorage.setItem('logado', true);
-            document.getElementById("formularioInicial").style.display = "none";
-            document.getElementById("formularioLogin").style.display = "none";
-            document.getElementById("caixaUsuario").style.display = "none";
-            clique = false;
-          }
-          else {
-            contErroLogin++;
-            if (contErroLogin > 1) {
-              removerElemento('erro-login');
-              criarElementoErroLogin(response.data.data);
-            }
-            else
-              criarElementoErroLogin(response.data.data);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    function volta(){
+      document.getElementById("formLogin").style.display = "none";
+      document.getElementById("formCadastro").style.display = "none";
+      document.getElementById("formInicial").style.display = "inline";
     }
-    function removerElemento(elemento){
-      let elem =  document.getElementById(elemento);
-      elem.remove();
-    }
-    function criarElementoErroLogin(mensagemErro) {
-      let elem = document.getElementById("btn-login");
-      let refElem = elem.parentNode;
-      let erro = document.createElement('span');
-      erro.innerText = mensagemErro;
-      erro.className = 'erroLogin';
-      erro.setAttribute('id', 'erro-login');
-      refElem.insertBefore(erro, elem);
-    }
-    function sair() {
-      localStorage.removeItem('logado');
-      document.getElementById("menuLogado").style.display = "none";
-      document.getElementById("caixaUsuario").style.display = "none";
-      clique = false;
-    }
+
   </script>
-  <div class="container">
-    <b>Escolha o seu jogo: </b>
-    <a href="estoura_baloes/testcanvas.html"><button><img src="balao_Pequeno.png" />Estoura Balões</button></a>
-    <a href="genio/index.html"><button><img src="genio_Icone.png" height="30px" width="30px" />Gênio</button></a>
+  <div class="container-login">
+    <img src="imagens/usuario.png">
+    <div id = "formInicial">
+      <div><button class="button" onclick="mostraLogin()">Logar</button></div>
+      <div><button class="button" onclick="mostraCadastro()">Cadastrar</button></div>
+    </div>
+    <div id = "formLogin" style="display: none;">
+      <div><input class="email" type="text" name="email" id="email" placeholder="Digite seu e-mail"></div>
+      <div><input class="senha" type="password" name="senha" id="senha" placeholder="Digite sua senha"></div>
+      <div><button class="button" onclick="login()">Logar</button></div>
+      <div class="container-links">
+        <a class="links" onclick="esqueciSenha()">Esqueceu sua senha?</a>
+        <a class="links" onclick="mostraCadastro()">Criar uma conta</a>
+        <!--img src="../imagens/criar-conta.png"-->
+      </div>
+      <div><button class="button" onclick="volta()">Voltar</button></div>
+    </div>
+    <div id = "formCadastro" style="display: none;">
+      <div><input class="nome" type="text" name="nome" id="nome" placeholder="Digite seu nome"></div>
+      <div><input class="email" type="text" name="email" id="email" placeholder="Digite seu e-mail"></div>
+      <small>Aluno ou Professor</small>
+      <div class="flex flex-wrap justify-center">
+        <div>
+          <input class="tipo" type="radio" name="tipo" id="tipo-aluno">
+          <label for="aluno">Aluno</label>
+        </div>
+        <div>
+          <input class="tipo" type="radio" name="tipo" id="tipo-prof">
+          <label for="professor">Professor</label>
+        </div>
+      </div>
+      <div><input class="senha" type="password" name="senha" id="senha" placeholder="Digite sua senha"></div>
+      <div><button class="button" onclick="cadastro()">Cadastrar</button></div>
+      <div><button class="button" onclick="volta()">Voltar</button></div>
+    </div>
+    <!--ul class="opcoes">
+      <li><a onclick="formSenha()">Esqueceu sua senha?</a></li>
+      <li><a onclick="formCadastro()">Criar uma conta</a></li>
+      <img src="../imagens/criar-conta.png">
+    </ul-->
   </div>
 </body>
-
 </html>

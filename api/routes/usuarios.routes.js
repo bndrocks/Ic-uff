@@ -19,7 +19,7 @@ usersRoutes.post('/login', (request, response) => {
     let res = {};
     if(usuario.length > 0){
       console.log(senha, usuario[0].senha, bcrypt.compareSync(senha, usuario[0].senha));
-      (bcrypt.compareSync(senha, usuario[0].senha)) ? (res.data = `Bem vindo ${usuario[0].nome}`, response.statusMessage = "Logado") : (res.data = 'Senha inválida', response.statusMessage = "Falha no login");
+      (bcrypt.compareSync(senha, usuario[0].senha)) ? ((res.data = `Bem vindo ${usuario[0].nome}`, res.user = usuario[0]), response.statusMessage = "Logado") : (res.data = 'Senha inválida', response.statusMessage = "Falha no login");
     }
     else{
       res.data = 'Usuário não cadastrado';

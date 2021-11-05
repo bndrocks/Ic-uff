@@ -12,6 +12,105 @@ body {
   display: flex;
 }
 
+.flex-wrap{
+  flex-wrap: wrap;
+}
+.container-links{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.links{
+  width: 100%;
+  font-size: 0.9em;
+  margin: 0.5rem;
+}
+.links:hover{
+  cursor: pointer;
+  color: steelblue;
+}
+.container-login{
+	width: 400px;
+	height: 500px;
+	background-color: rgba(255,255,255,0.8);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	margin: 0 auto;
+	margin-top: 120px;
+	text-align: center;
+}
+
+.container-login img{
+	width: 120px;
+	height: 120px;
+	margin-top: -60px;
+	margin-bottom: 30px;
+}
+
+.container-login .opcoes img{
+	width: 20px;
+	height: 20px;
+	margin: -30px 0 50px 140px;
+}
+
+.container-login ul{
+	margin-top: 30px;
+  padding: 0;
+	float: center;
+  list-style-type: none;
+}
+
+.container-login li a{
+  width: fit-content;
+	font-size: 0.9em;
+	display: block;
+	padding: 0.5em;
+	line-height: 2.1em;
+	text-decoration: none;
+	color: #000;
+  cursor: pointer;
+  text-align: center;
+}
+
+.container-login ul a:hover{
+	color: steelblue;
+}
+
+input {
+	height: 40px;
+	width: 80%;
+	font-size: 18px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding-left: 40px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: none;
+	background-repeat: no-repeat;
+	background-position: 10px;
+}
+
+.button {
+	color: #fff;
+	background-color: steelblue;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	padding: 5px 20px;
+	height: 45px;
+	width: 90%;
+	font-size: 1.5em;
+	border: none;
+	margin-top: 30px;
+	background: -webkit-linear-gradient(to bottom, steelblue, #ec77dc);
+	background: -moz-linear-gradient(to bottom, steelblue, #ec77dc);
+	background: -o-linear-gradient(to bottom, steelblue, #ec77dc);
+	background: linear-gradient(to bottom, steelblue, #ec77dc);
+}
+
 .erroLogin {
   display: flex;
   width: 100%;
@@ -30,19 +129,13 @@ body {
   cursor:pointer;
 }
 
-#caixaUsuario{
-  display: none;
+.tipo {
+  height: 20px;
+  width: 20px;
 }
 
-.triangulo {
-  position: absolute;
-  right: 25px;
-  top: 60px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 15px 30px 15px;
-  border-color: transparent transparent white transparent;  
+/*#caixaUsuario {
+  display: none;
 }
 
 .formulario {
@@ -95,3 +188,10 @@ img {
 a {
   text-decoration: none;
 }
+
+.perfil {
+  display: none;
+  background-color: whitesmoke;
+  padding: 1em;
+}
+/*

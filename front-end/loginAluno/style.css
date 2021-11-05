@@ -1,0 +1,103 @@
+body {
+  background-color: steelblue;
+  margin: 20px;
+  overflow: hidden
+}
+
+.fonte {
+  font-family: 'Original Surfer', cursive;
+}
+
+.flex {
+  display: flex;
+}
+
+.erroLogin {
+  display: flex;
+  width: 100%;
+  color: red;
+  font-style: italic;
+  margin-bottom: .5rem;
+  font-size: small;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.usuario {
+  float: right;
+  cursor:pointer;
+}
+
+#caixaUsuario{
+  display: none;
+}
+
+.triangulo {
+  position: absolute;
+  right: 25px;
+  top: 60px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 15px 30px 15px;
+  border-color: transparent transparent white transparent;  
+}
+
+.formulario {
+  display: none;
+  margin-top: 10px;
+  background-color: white;
+  padding: 1rem;
+  position: absolute;
+  right: 1.3rem;
+  top: 4rem;
+}
+
+#senha-login {
+  margin-bottom: .5rem;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+b {
+  color: snow;
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+a > button {
+  height: 100px;
+  width: 500px;
+  border-radius: 5px;
+  color: steelblue;
+  font-size: 30px;
+  font-weight: bold;
+  background-color: lightgray;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+img {
+  margin-right: 10px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.perfil{
+  display: none;
+  background-color: whitesmoke;
+  padding: 1em;
+}
