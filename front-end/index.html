@@ -11,12 +11,42 @@
 </head>
 
 <body class="fonte">
-  <!--div id="caixaUsuario">
-    <div id="formularioInicial" class="formulario">
-      <button class="btn-cadastrar" onclick="mostrarUsuario(2,0)">Cadastrar</button>
-      <button class="btn-entrar" onclick="mostrarUsuario(3,0)">Entrar</button>
+  <div class="container-login">
+    <img src="imagens/usuario.png">
+    <div id = "formInicial">
+      <div><button class="button" onclick="mostraLogin()">Logar</button></div>
+      <div><button class="button" onclick="mostraCadastro()">Cadastrar</button></div>
     </div>
-  </div-->
+    <div id = "formLogin" style="display: none;">
+      <div><input class="email" type="text" name="email" id="email-login" placeholder="Digite seu e-mail"></div>
+      <div><input class="senha" type="password" name="senha" id="senha-login" placeholder="Digite sua senha"></div>
+      <div><button class="button" onclick="login()">Logar</button></div>
+      <div class="container-links">
+        <a class="links" onclick="esqueciSenha()">Esqueceu sua senha?</a>
+        <a class="links" onclick="mostraCadastro()">Criar uma conta</a>
+        <!--img src="../imagens/criar-conta.png"-->
+      </div>
+      <div><button class="button" onclick="volta()">Voltar</button></div>
+    </div>
+    <div id = "formCadastro" style="display: none;">
+      <div><input class="nome" type="text" name="nome" id="nome-cadastro" placeholder="Digite seu nome"></div>
+      <div><input class="email" type="text" name="email" id="email-cadastro" placeholder="Digite seu e-mail"></div>
+      <div><input class="senha" type="password" name="senha" id="senha-cadastro" placeholder="Digite sua senha"></div>
+      <small>Aluno ou Professor</small>
+      <div class="flex flex-wrap justify-center">
+        <div>
+          <input class="tipo" type="radio" name="tipo" id="tipo-aluno">
+          <label for="aluno">Aluno</label>
+        </div>
+        <div>
+          <input class="tipo" type="radio" name="tipo" id="tipo-prof">
+          <label for="professor">Professor</label>
+        </div>
+      </div>
+      <div><button class="button" onclick="cadastro()">Cadastrar</button></div>
+      <div><button class="button" onclick="volta()">Voltar</button></div>
+    </div>
+  </div>
   <script>
     function mostraLogin(){
       document.getElementById("formLogin").style.display = "inline";
@@ -32,48 +62,51 @@
       document.getElementById("formCadastro").style.display = "none";
       document.getElementById("formInicial").style.display = "inline";
     }
+    function cadastro(){
+      let data = {};
+      data.nome = document.getElementById("nome-cadastro").value;
+      data.email = document.getElementById("email-cadastro").value;
+      //data.tipo = document.getElementById("tipo-cadastro").value;
+      data.senha = document.getElementById("senha-cadastro").value;
+      axios.post('http://localhost:3003/usuario/cadastro', data)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    function login(){
+      let data = {};
+      data.email = document.getElementById("email-login").value;
+      data.senha = document.getElementById("senha-login").value;
+      axios.post('http://localhost:3003/usuario/login', data)
+        .then(function (response) {
+          console.log(response);
+          if (response.statusText == 'Logado') {
+            if(contErroLogin > 0)
+              removerElemento('erro-login');
+            localStorage.setItem('logado', true);
+            //salvar dados do usuario
+            localStorage.setItem('nome', response.data.user.nome);
+            localStorage.setItem('email', response.data.user.email);
+            //localStorage.setItem('tipo', response.data.user.tipo);
+          }
+          else {
+            contErroLogin++;
+            if (contErroLogin > 1) {
+              removerElemento('erro-login');
+              criarElementoErroLogin(response.data.data);
+            }
+            else
+              criarElementoErroLogin(response.data.data);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
 
   </script>
-  <div class="container-login">
-    <img src="imagens/usuario.png">
-    <div id = "formInicial">
-      <div><button class="button" onclick="mostraLogin()">Logar</button></div>
-      <div><button class="button" onclick="mostraCadastro()">Cadastrar</button></div>
-    </div>
-    <div id = "formLogin" style="display: none;">
-      <div><input class="email" type="text" name="email" id="email" placeholder="Digite seu e-mail"></div>
-      <div><input class="senha" type="password" name="senha" id="senha" placeholder="Digite sua senha"></div>
-      <div><button class="button" onclick="login()">Logar</button></div>
-      <div class="container-links">
-        <a class="links" onclick="esqueciSenha()">Esqueceu sua senha?</a>
-        <a class="links" onclick="mostraCadastro()">Criar uma conta</a>
-        <!--img src="../imagens/criar-conta.png"-->
-      </div>
-      <div><button class="button" onclick="volta()">Voltar</button></div>
-    </div>
-    <div id = "formCadastro" style="display: none;">
-      <div><input class="nome" type="text" name="nome" id="nome" placeholder="Digite seu nome"></div>
-      <div><input class="email" type="text" name="email" id="email" placeholder="Digite seu e-mail"></div>
-      <small>Aluno ou Professor</small>
-      <div class="flex flex-wrap justify-center">
-        <div>
-          <input class="tipo" type="radio" name="tipo" id="tipo-aluno">
-          <label for="aluno">Aluno</label>
-        </div>
-        <div>
-          <input class="tipo" type="radio" name="tipo" id="tipo-prof">
-          <label for="professor">Professor</label>
-        </div>
-      </div>
-      <div><input class="senha" type="password" name="senha" id="senha" placeholder="Digite sua senha"></div>
-      <div><button class="button" onclick="cadastro()">Cadastrar</button></div>
-      <div><button class="button" onclick="volta()">Voltar</button></div>
-    </div>
-    <!--ul class="opcoes">
-      <li><a onclick="formSenha()">Esqueceu sua senha?</a></li>
-      <li><a onclick="formCadastro()">Criar uma conta</a></li>
-      <img src="../imagens/criar-conta.png">
-    </ul-->
-  </div>
 </body>
 </html>
