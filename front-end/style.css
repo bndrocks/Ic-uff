@@ -4,10 +4,6 @@ body {
   overflow: hidden
 }
 
-.fonte {
-  font-family: 'Original Surfer', cursive;
-}
-
 .flex {
   display: flex;
 }
@@ -32,7 +28,6 @@ body {
 }
 .container-login{
 	width: 400px;
-	height: 500px;
 	background-color: rgba(255,255,255,0.8);
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -40,13 +35,14 @@ body {
 	margin: 0 auto;
 	margin-top: 120px;
 	text-align: center;
+  padding: 0px 30px 30px 30px;
 }
 
 .container-login img{
-	width: 120px;
-	height: 120px;
-	margin-top: -60px;
-	margin-bottom: 30px;
+	width: 70px;
+  margin-top: 23px;
+  margin-left: 14px;
+  color: #fff;
 }
 
 .container-login .opcoes img{
@@ -93,9 +89,7 @@ input {
 	background-position: 10px;
 }
 
-.button {
-	color: #fff;
-	background-color: steelblue;
+button{
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
@@ -103,15 +97,39 @@ input {
 	height: 45px;
 	width: 90%;
 	font-size: 1.5em;
+  margin-top: 30px;
+  cursor: pointer;
+}
+.button {
+  color: #fff;
 	border: none;
-	margin-top: 30px;
-	background: -webkit-linear-gradient(to bottom, steelblue, #ec77dc);
-	background: -moz-linear-gradient(to bottom, steelblue, #ec77dc);
-	background: -o-linear-gradient(to bottom, steelblue, #ec77dc);
-	background: linear-gradient(to bottom, steelblue, #ec77dc);
+	background: -webkit-linear-gradient(to bottom, #3e6f98, #6ccce4);
+	background: -moz-linear-gradient(to bottom, #3e6f98, #6ccce4);
+	background: -o-linear-gradient(to bottom, #3e6f98, #6ccce4);
+	background: linear-gradient(to bottom, #3e6f98, #6ccce4);
 }
 
+.button:hover{
+  background: -webkit-linear-gradient(to bottom, #3e6f98d7, #6ccce4e1);
+	background: -moz-linear-gradient(to bottom, #3e6f98d7, #6ccce4e1);
+	background: -o-linear-gradient(to bottom, #3e6f98d7, #6ccce4e1);
+	background: linear-gradient(to bottom, #3e6f98d7, #6ccce4e1);
+}
 
+.button-light{
+  border: solid 1px #3e6f98;
+  color: #3e6f98;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.button-light:hover{
+  background: -webkit-linear-gradient(to bottom, #3e6f98, #6ccce4);
+	background: -moz-linear-gradient(to bottom, #3e6f98, #6ccce4);
+	background: -o-linear-gradient(to bottom, #3e6f98, #6ccce4);
+	background: linear-gradient(to bottom, #3e6f98, #6ccce4);
+  color: #fff;
+  border: none;
+}
 
 .erroLogin {
   display: flex;
@@ -126,6 +144,10 @@ input {
   justify-content: center;
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .usuario {
   float: right;
   cursor:pointer;
@@ -134,6 +156,24 @@ input {
 .tipo {
   height: 20px;
   width: 20px;
+}
+
+.tipo-usuario{
+  font-size: 18px;
+}
+
+.fundo-usuario{
+  background: linear-gradient(to bottom, #3e6f98, #6ccce4);
+  border-radius: 50%;
+  height: 120px;
+  width: 120px;
+  position: relative;
+  top: -60px;
+  margin: auto;
+}
+
+#formInicial{
+  margin-top: -40px;
 }
 
 /*#caixaUsuario {
