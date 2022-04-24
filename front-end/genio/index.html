@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
 
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
   <audio id="clipe1"> 
     <source src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3">
     </source>
@@ -26,6 +28,10 @@
 </head>
 
 <body class="fonte">
+  <div id="usuario" class="usuario" onclick="">
+    <img src="../imagens/usuario.png" style="height: 32px;"/>
+    <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+  </div>
   <div>
     <a href="../loginAluno/loginAluno.html"><img src="../imagens/voltar.png" class="voltar"/></a>
   </div>
@@ -41,6 +47,10 @@
     let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
     if (selectNivel !== null) {
       document.getElementById('nivel_jogo').value = selectNivel
+    }
+    function sair(){
+      localStorage.clear();
+      window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
     }
   </script>
   <div>
@@ -63,6 +73,7 @@
       <div id="azul"></div>
       <div id="circuloDentro">
         <div id="titulo">GÊNIO!</div>
+        <div onclick="salvarPontuacao()">SALVAR PONTUACAO</div>
         <div id="switches">
           <button class="button" id="jogar">JOGAR</button>
         </div>

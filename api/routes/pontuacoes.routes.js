@@ -1,18 +1,19 @@
 const { Router } = require('express');
-const bcrypt = require('bcryptjs');
 // Model Usuário
 const usuario = require("../models/User.js");
-const usersRoutes = Router();
+// Model Pontuação
+const score = require("../models/Score.js");
 
-usersRoutes.post('/cadastro', (request, response) => {
-  const { nome, email, tipo, senha } = request.body;
-  const hash = bcrypt.hashSync(senha, bcrypt.genSaltSync(10));
-  var cadastro = new usuario({ nome, email, tipo, senha: hash });
-  cadastro.save();
-  return response.status(201).json({ nome, email, tipo });
+const scoresRoutes = Router();
+
+scoresRoutes.post('/usuario', (request, response) => {
+  const { pontuacao, jogo, usuario_id } = request.body;
+  var novaPontuacao = new score({ pontuacao, jogo, usuario_id });
+  novaPontuacao.save();
+  return response.status(201).json({ pontuacao, jogo, usuario_id });
 });
 
-usersRoutes.post('/login', (request, response) => {
+/*scoresRoutes.post('/login', (request, response) => {
   const { email, senha } = request.body;
   usuario.find({'email': email}).then(usuario => {
     let res = {};
@@ -29,6 +30,6 @@ usersRoutes.post('/login', (request, response) => {
     console.log(error);
   });
 
-});
+});*/
 
-module.exports = { usersRoutes };
+module.exports = { scoresRoutes };

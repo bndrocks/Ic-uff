@@ -29,6 +29,11 @@ button {
     left: 20px;
 }
 
+.voltar {
+    width: 32px;
+    height: 24px;
+}
+
 #instruçoes {
     max-width: 350px;
     position: absolute;
@@ -108,4 +113,9 @@ button>img {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+}
+
+.usuario {
+    float: right;
+    cursor:pointer;
 }

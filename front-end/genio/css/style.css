@@ -16,6 +16,8 @@ body{
 .voltar{
   position: absolute;
   left: 20px;
+  width: 32px;
+  height: 24px;
 }
 h1, h2{
   color: snow;
@@ -190,4 +192,8 @@ h2{
 }
 #vidas{
   margin-left: 150px;
+}
+.usuario {
+  float: right;
+  cursor:pointer;
 }

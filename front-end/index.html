@@ -13,10 +13,10 @@
 <body class="fonte">
   <div class="container-login">
     <div class="fundo-usuario">
-      <img src="imagens/usuario.png">
+      <img class="img-login" src="imagens/usuario.png">
     </div>
     <div id = "formInicial">
-      <div><button class="button" onclick="mostraLogin()">Logar</button></div>
+      <div><button class="button" onclick="mostraLogin()" style="margin-top: 0px;">Logar</button></div>
       <div><button class="button" onclick="mostraCadastro()">Cadastrar</button></div>
     </div>
     <div id = "formLogin" style="display: none;">
@@ -44,11 +44,20 @@
           <label for="professor">Professor</label>
         </div>
       </div>
+      <div class="flex justify-center items-center" id="colegio-turma">
+        <input class="colegio" type="text" name="colegio" id="colegio-cadastro" placeholder="Digite o nome do seu colegio" minlength="1">
+        <img src="imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addColegio()">
+      </div>
+      <!--div>
+        <input class="nome" type="text" name="turma" id="turma-cadastro" placeholder="Digite o numero da sua turma">
+      </div-->
       <div><button class="button" onclick="cadastro()">Cadastrar</button></div>
       <div><button class="button-light" onclick="volta()">Voltar</button></div>
     </div>
   </div>
   <script>
+    var idContainerColegio = 0
+    var idElementoTurma = 0
     function mostraLogin(){
       document.getElementById("formLogin").style.display = "inline";
       document.getElementById("formInicial").style.display = "none";
@@ -65,10 +74,10 @@
     }
     function cadastro(){
       let data = {};
-      data.nome = document.getElementById("nome-cadastro").value;
-      data.email = document.getElementById("email-cadastro").value;
+      data.nome = getElementValue('nome-cadastro');
+      data.email = getElementValue('email-cadastro');
       //data.tipo = document.getElementById("tipo-cadastro").value;
-      data.senha = document.getElementById("senha-cadastro").value;
+      data.senha = getElementValue('senha-cadastro');
       axios.post('http://localhost:3003/usuario/cadastro', data)
         .then(function (response) {
           console.log(response);
@@ -79,11 +88,11 @@
     }
     function login(){
       let data = {};
-      data.email = document.getElementById("email-login").value;
-      data.senha = document.getElementById("senha-login").value;
+      let contErroLogin = 0;
+      data.email = getElementValue('email-login');
+      data.senha = getElementValue('senha-login');
       axios.post('http://localhost:3003/usuario/login', data)
         .then(function (response) {
-          console.log(response);
           if (response.statusText == 'Logado') {
             if(contErroLogin > 0)
               removerElemento('erro-login');
@@ -91,6 +100,7 @@
             //salvar dados do usuario
             localStorage.setItem('nome', response.data.user.nome);
             localStorage.setItem('email', response.data.user.email);
+            localStorage.setItem('id', response.data.user._id);
             //localStorage.setItem('tipo', response.data.user.tipo);
           }
           else {
@@ -106,6 +116,76 @@
         .catch(function (error) {
           console.log(error);
         });
+    }
+
+    function getElementValue(element){
+      return document.getElementById(element).value;
+    }
+
+    function limparElementValue(element){
+      document.getElementById(element).value = '';
+    }
+    
+    function removerElemento(element){
+      let elem =  document.getElementById(element);
+      elem.remove();
+    }
+    function criarElementoErroLogin(mensagemErro) {
+      let elem = document.getElementById('btn-login');
+      let refElem = elem.parentNode;
+      let erro = document.createElement('span');
+      erro.innerText = mensagemErro;
+      erro.className = 'erroLogin';
+      erro.setAttribute('id', 'erro-login');
+      refElem.insertBefore(erro, elem);
+    }
+
+    function criarElementoColegio(){
+      let div = document.createElement('div')
+      let id = idContainerColegio++
+      div.id = `container-colegio-${id}`
+      div.innerHTML = `
+                        <h3>${getElementValue('colegio-cadastro')}
+                          <img src="imagens/delete.png" style="width: 18px; cursor: pointer; margin-left: 10px" onclick="removerColegio(${id})">  
+                        </h3>
+                        <div class="turma-lista" id="turma-${id}"></div>
+                        <div class="flex justify-center items-center" id="colegio-${id}">
+                          <input class="colegio" type="text" name="turma" id="turma-cadastro-${id}" placeholder="Digite o numero da sua turma">
+                          <img src="imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addTurma(${id})">
+                        </div>
+                      `
+      div.className = 'container-colegio'
+      let elem = document.getElementById('colegio-turma');
+      let refElem = elem.parentNode;
+      elem.insertAdjacentElement('afterEnd', div);
+      limparElementValue('colegio-cadastro')
+    }
+
+    function criarElementoTurma(id){
+      let div = document.getElementById(`turma-${id}`)
+      let idElemento = idElementoTurma++
+      div.innerHTML = div.innerHTML + `
+                        <span class="elemento-turma" id="elemento-turma-${idElemento}">${getElementValue('turma-cadastro-'+ id)} 
+                          <img src="imagens/delete.png" style="width: 18px; cursor: pointer; margin-left: 10px" onclick="removerTurma(${idElemento})">
+                        </span>
+                      `
+      limparElementValue('turma-cadastro-'+id)
+    }
+
+    function addColegio(){
+      criarElementoColegio()
+    }
+
+    function addTurma(id){
+      criarElementoTurma(id)
+    }
+
+    function removerTurma(id){
+      removerElemento(`elemento-turma-${id}`)
+    }
+
+    function removerColegio(id){
+      removerElemento(`container-colegio-${id}`)
     }
 
   </script>

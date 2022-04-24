@@ -38,7 +38,7 @@ body {
   padding: 0px 30px 30px 30px;
 }
 
-.container-login img{
+.img-login{
 	width: 70px;
   margin-top: 23px;
   margin-left: 14px;
@@ -139,6 +139,9 @@ button{
   margin-bottom: .5rem;
   font-size: small;
 }
+.items-center{
+  align-items: center;
+}
 
 .justify-center {
   justify-content: center;
@@ -172,10 +175,30 @@ button{
   margin: auto;
 }
 
-#formInicial{
-  margin-top: -40px;
+.colegio{
+  width: 70%!important;
 }
 
+.container-colegio{
+  margin: 1rem;
+  border: solid 1px #3e6f98;
+  border-radius: 10px;
+}
+
+.turma-lista{
+  padding: 0 30px 30px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.elemento-turma{
+  border: solid 1px #3e6f98;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  display: flex;
+  width: fit-content;
+}
 /*#caixaUsuario {
   display: none;
 }

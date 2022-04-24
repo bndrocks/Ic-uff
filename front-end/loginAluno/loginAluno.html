@@ -11,55 +11,14 @@
 </head>
 
 <body class="fonte">
-  <div id="usuario" class="usuario" onclick="mostrarUsuario(1)">
-    <img src="../imagens/usuario.png" style="height: 40px; margin-right: 0;" />
-  </div>
-  <div id="caixaUsuario">
-    <div class="triangulo"></div>
-    <div id="menu" class="formulario">
-      <button onclick="exibeOpcoes()">opcoes</button>
-      <button onclick="sair()">Sair</button>
-    </div>
+  <div id="usuario" class="usuario" onclick="">
+    <img src="../imagens/usuario.png" style="height: 32px;"/>
+    <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
   </div>
   <script>
-    var clique = false;
-    var contErroLogin = 0;
-    function exibeOpcoes(){
-      document.getElementById('opcoes').style.display = 'inline';
-    }
-    function mostrarUsuario(n) {
-      var logado = localStorage.getItem('logado');
-      if (n == 1) {
-        clique = !clique;
-        if (clique) {
-          document.getElementById("caixaUsuario").style.display = "inline";
-  
-        }
-        else {
-        
-          document.getElementById("caixaUsuario").style.display = "none";
-        }
-      }
-      if (n == 2) {
-        if (!volta)
-          document.getElementById("formularioCadastro").style.display = "inline";
-        else {
-          document.getElementById("formularioCadastro").style.display = "none";
-        }
-      }
-      if (n == 3) {
-        if (!volta)
-          document.getElementById("formularioLogin").style.display = "inline";
-        else {
-          document.getElementById("formularioLogin").style.display = "none";
-        }
-      }
-    }
-    function sair() {
-      localStorage.removeItem('logado');
-      document.getElementById("menu").style.display = "none";
-      document.getElementById("caixaUsuario").style.display = "none";
-      clique = false;
+    function sair(){
+      localStorage.clear();
+      window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
     }
   </script>
   <div class="container">

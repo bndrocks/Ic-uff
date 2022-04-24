@@ -9,8 +9,12 @@
 </head>
 
 <body>
+    <div id="usuario" class="usuario" onclick="">
+        <img src="../imagens/usuario.png" style="height: 32px;"/>
+        <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+    </div>
     <div id="voltar">
-        <a href="../loginAluno/loginAluno.html"> <img class="float-left" src="../imagens/voltar.png" /></a>
+        <a href="../loginAluno/loginAluno.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
     </div>
     <div class="container">
         <div>
@@ -56,7 +60,10 @@
         </div>
     </div>
     <script>
-        console.log(materia)
+        function sair(){
+            localStorage.clear();
+            window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+        }
         let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
         if (selectNivel !== null) {
             document.getElementById('nivel_jogo').value = selectNivel

@@ -218,3 +218,17 @@ function perdeuGame(){
   setTimeout(clearColor, 600, 0);
   limpaVar();
 }
+
+function salvarPontuacao(){
+  let data = {};
+  data.pontuacao = '300';
+  data.jogo = 'genio';
+  data.usuario_id = localStorage.getItem('id');
+  axios.post('http://localhost:3003/pontuacao/usuario', data)
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
