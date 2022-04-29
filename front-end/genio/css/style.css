@@ -197,3 +197,7 @@ h2{
   float: right;
   cursor:pointer;
 }
+
+.usuario > img {
+  margin-right: 10px;
+}

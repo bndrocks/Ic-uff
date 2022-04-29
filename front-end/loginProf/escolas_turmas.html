@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Configurações</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <link href="assets/css/uicons-regular-rounded.css" rel="stylesheet">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="fonte">
+  <div id="usuario" class="usuario">
+    <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+  </div>
+  <div class="container">
+      <ul class="list-group list-group-horizontal-sm pt-3">
+        <li class="list-group-item w-escola"><h3>Escola</h3></li>
+        <li class="list-group-item w-turma"><h3>Turmas</h3></li>
+        <li class="list-group-item w-acoes"><h3>Ações</h3></li>
+      </ul>
+      <ul class="list-group list-group-horizontal-sm">
+        <li class="list-group-item w-escola">Escola municipal joão daut de oliveira</li>
+        <li class="list-group-item w-turma">601, 602, 603</li>
+        <li class="list-group-item w-acoes">
+            <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
+            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+        </li>
+      </ul>
+      <ul class="list-group list-group-horizontal-sm">
+        <li class="list-group-item w-escola">Escola municipal Orestes Barbosa</li>
+        <li class="list-group-item w-turma">601, 602, 603</li>
+        <li class="list-group-item w-acoes">
+            <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
+            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+        </li>
+      </ul>
+      <ul class="list-group list-group-horizontal-sm">
+        <li class="list-group-item w-escola">Colégio Miguel Couto</li>
+        <li class="list-group-item w-turma">601, 602, 603</li>
+        <li class="list-group-item w-acoes">
+            <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
+            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+        </li>
+      </ul>
+      <ul class="list-group list-group-horizontal-sm">
+        <li class="list-group-item w-add" style="text-align: center;">
+            <button>
+                Adicionar +
+            </button>
+          </li>
+      </ul>
+  </div>
+  <div>
+    <div class="flex justify-center items-center" id="colegio-turma">
+        <input class="colegio" type="text" name="colegio" id="colegio-cadastro" placeholder="Digite o nome do seu colegio" minlength="1">
+        <img src="../imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addColegio()">
+      </div>
+  </div>
+    <script>
+        function sair(){
+            localStorage.clear();
+            window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+        }
+        function criarElementoColegio(){
+            let div = document.createElement('div')
+            let id = idContainerColegio++
+            div.id = `container-colegio-${id}`
+            div.innerHTML = `
+                                <h3>${getElementValue('colegio-cadastro')}
+                                <img src="imagens/delete.png" style="width: 18px; cursor: pointer; margin-left: 10px" onclick="removerColegio(${id})">  
+                                </h3>
+                                <div class="turma-lista" id="turma-${id}"></div>
+                                <div class="flex justify-center items-center" id="colegio-${id}">
+                                <input class="colegio" type="text" name="turma" id="turma-cadastro-${id}" placeholder="Digite o numero da sua turma">
+                                <img src="imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addTurma(${id})">
+                                </div>
+                            `
+            div.className = 'container-colegio'
+            let elem = document.getElementById('colegio-turma');
+            let refElem = elem.parentNode;
+            elem.insertAdjacentElement('afterEnd', div);
+            limparElementValue('colegio-cadastro')
+        }
+
+        function criarElementoTurma(id){
+            let div = document.getElementById(`turma-${id}`)
+            let idElemento = idElementoTurma++
+            div.innerHTML = div.innerHTML + `
+                                <span class="elemento-turma" id="elemento-turma-${idElemento}">${getElementValue('turma-cadastro-'+ id)} 
+                                <img src="imagens/delete.png" style="width: 18px; cursor: pointer; margin-left: 10px" onclick="removerTurma(${idElemento})">
+                                </span>
+                            `
+            limparElementValue('turma-cadastro-'+id)
+        }
+
+        function addColegio(){
+            criarElementoColegio()
+        }
+
+        function addTurma(id){
+            criarElementoTurma(id)
+        }
+
+        function removerTurma(id){
+            removerElemento(`elemento-turma-${id}`)
+        }
+
+        function removerColegio(id){
+            removerElemento(`container-colegio-${id}`)
+        }
+  </script>
+  <style>
+      .w-escola{
+          width: 350px;
+      }
+      .w-turma{
+          width: 150px;
+      }
+      .w-acoes{
+          width: 120px;
+      }
+      .w-add{
+          width: 620px;
+      }
+  </style>
+</body>
+</html>

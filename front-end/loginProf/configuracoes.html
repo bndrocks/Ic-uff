@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Configurações</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <link href="assets/css/uicons-regular-rounded.css" rel="stylesheet">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="fonte">
+  <div id="usuario" class="usuario">
+    <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+  </div>
+  <div class="container">
+    <b>Configurações: </b>
+    <a href="escolas_turmas.html"><button>Escolas e turmas</button></a>
+    <a href="../genio/index.html"><button>Arquivo estoura balões</button></a>
+    <a href="../genio/index.html"><button>Pontuações</button></a>
+  </div>
+    <script>
+        function sair(){
+            localStorage.clear();
+            window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+        }
+  </script>
+</body>
+</html>
