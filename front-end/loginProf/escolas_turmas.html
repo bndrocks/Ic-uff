@@ -22,33 +22,33 @@
         <li class="list-group-item w-turma"><h3>Turmas</h3></li>
         <li class="list-group-item w-acoes"><h3>Ações</h3></li>
       </ul>
-      <ul class="list-group list-group-horizontal-sm">
+      <ul class="list-group list-group-horizontal-sm" id="escola-0">
         <li class="list-group-item w-escola">Escola municipal joão daut de oliveira</li>
         <li class="list-group-item w-turma">601, 602, 603</li>
         <li class="list-group-item w-acoes">
             <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
-            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+            <img onclick="removerEscola('escola-0')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
         </li>
       </ul>
-      <ul class="list-group list-group-horizontal-sm">
+      <ul class="list-group list-group-horizontal-sm" id="escola-1">
         <li class="list-group-item w-escola">Escola municipal Orestes Barbosa</li>
         <li class="list-group-item w-turma">601, 602, 603</li>
         <li class="list-group-item w-acoes">
             <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
-            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+            <img onclick="removerEscola('escola-1')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
         </li>
       </ul>
-      <ul class="list-group list-group-horizontal-sm">
+      <ul class="list-group list-group-horizontal-sm" id="escola-2">
         <li class="list-group-item w-escola">Colégio Miguel Couto</li>
         <li class="list-group-item w-turma">601, 602, 603</li>
         <li class="list-group-item w-acoes">
             <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
-            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+            <img onclick="removerEscola('escola-2')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
         </li>
       </ul>
-      <ul class="list-group list-group-horizontal-sm">
+      <ul id="add-escola" class="list-group list-group-horizontal-sm">
         <li class="list-group-item w-add" style="text-align: center;">
-            <button>
+            <button class="btn-add-escola" onclick="addEscola()">
                 Adicionar +
             </button>
           </li>
@@ -65,7 +65,7 @@
             localStorage.clear();
             window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
         }
-        function criarElementoColegio(){
+        /*function criarElementoColegio(){
             let div = document.createElement('div')
             let id = idContainerColegio++
             div.id = `container-colegio-${id}`
@@ -95,13 +95,42 @@
                                 </span>
                             `
             limparElementValue('turma-cadastro-'+id)
+        }*/
+
+        function criarLinhaTabela(){
+            let ul = document.createElement('ul');
+            ul.id = 'escola-new';
+            ul.classList.add('list-group','list-group-horizontal-sm')
+            ul.innerHTML = `
+                <li class="list-group-item w-escola">
+                    <input id="teste" class="new-escola" type="text" name="escola" placeholder="Digite o nome da escola" autofocus>
+                </li>
+                <li class="list-group-item w-turma">
+                    <input class="new-escola" type="text" name="turma" placeholder="Digite as turmas">
+                </li>
+                <li class="list-group-item w-acoes">
+                    <img src="../imagens/verifica.png" style="width: 24px; cursor: pointer;">
+                    <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerEscola('escola-new')">
+                </li>
+            `;
+            let elem = document.getElementById('add-escola');
+            let refElem = elem.parentNode;
+            elem.insertAdjacentElement("beforeBegin",ul );
+            document.getElementById('teste').autofocus;
+            document.getElementById('add-escola').style.display = 'none'
         }
 
-        function addColegio(){
-            criarElementoColegio()
+        function addEscola(){
+            criarLinhaTabela()
         }
 
-        function addTurma(id){
+        function removerEscola(id){
+            let elem = document.getElementById(id);
+            elem.parentNode.removeChild(elem);
+            document.getElementById('add-escola').style.display = 'inline';
+        }
+
+        /*function addTurma(id){
             criarElementoTurma(id)
         }
 
@@ -111,20 +140,38 @@
 
         function removerColegio(id){
             removerElemento(`container-colegio-${id}`)
-        }
+        }*/
   </script>
   <style>
+      .btn-add-escola{
+          color: #208935;
+          border: solid 1px #208935;
+          padding: 5px 20px;
+          margin: 5px;
+          border-radius: 5px;
+      }
+      .btn-add-escola:hover{
+          color: white;
+          background-color: #208935;
+      }
       .w-escola{
-          width: 350px;
+          width: 400px;
       }
       .w-turma{
-          width: 150px;
+          width: 300px;
       }
       .w-acoes{
           width: 120px;
       }
       .w-add{
-          width: 620px;
+          width: 820px;
+      }
+      input.new-escola{
+        outline: none;
+        border: none;
+      }
+      input.new-escola::placeholder{
+        color: steelblue;
       }
   </style>
 </body>
