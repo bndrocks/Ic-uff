@@ -23,26 +23,26 @@
         <li class="list-group-item w-acoes"><h3>Ações</h3></li>
       </ul>
       <ul class="list-group list-group-horizontal-sm" id="escola-0">
-        <li class="list-group-item w-escola">Escola municipal joão daut de oliveira</li>
-        <li class="list-group-item w-turma">601, 602, 603</li>
+        <li class="list-group-item w-escola" id="li-escola-0">Escola municipal joão daut de oliveira</li>
+        <li class="list-group-item w-turma" id="li-turma-0">601, 602, 603</li>
         <li class="list-group-item w-acoes">
-            <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
+            <img id="editar-0" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarEscola('0')">
             <img onclick="removerEscola('escola-0')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
         </li>
       </ul>
       <ul class="list-group list-group-horizontal-sm" id="escola-1">
-        <li class="list-group-item w-escola">Escola municipal Orestes Barbosa</li>
-        <li class="list-group-item w-turma">601, 602, 603</li>
+        <li class="list-group-item w-escola" id="li-escola-1">Escola municipal Orestes Barbosa</li>
+        <li class="list-group-item w-turma" id="li-turma-1">601, 602, 603</li>
         <li class="list-group-item w-acoes">
-            <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
+            <img id="editar-1" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarEscola('1')">
             <img onclick="removerEscola('escola-1')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
         </li>
       </ul>
       <ul class="list-group list-group-horizontal-sm" id="escola-2">
-        <li class="list-group-item w-escola">Colégio Miguel Couto</li>
-        <li class="list-group-item w-turma">601, 602, 603</li>
+        <li class="list-group-item w-escola" id="li-escola-2">Colégio Miguel Couto</li>
+        <li class="list-group-item w-turma" id="li-turma-2">601, 602, 603</li>
         <li class="list-group-item w-acoes">
-            <img src="../imagens/editar.png" style="width: 24px; cursor: pointer;">
+            <img id="editar-2" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarEscola('2')">
             <img onclick="removerEscola('escola-2')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
         </li>
       </ul>
@@ -103,10 +103,10 @@
             ul.classList.add('list-group','list-group-horizontal-sm')
             ul.innerHTML = `
                 <li class="list-group-item w-escola">
-                    <input id="teste" class="new-escola" type="text" name="escola" placeholder="Digite o nome da escola" autofocus>
+                    <input id="input-escola-new" class="new-escola" type="text" name="escola" placeholder="Digite o nome da escola">
                 </li>
                 <li class="list-group-item w-turma">
-                    <input class="new-escola" type="text" name="turma" placeholder="Digite as turmas">
+                    <input id="input-turma-new" class="new-escola" type="text" name="turma" placeholder="Digite as turmas">
                 </li>
                 <li class="list-group-item w-acoes">
                     <img src="../imagens/verifica.png" style="width: 24px; cursor: pointer;">
@@ -116,12 +116,21 @@
             let elem = document.getElementById('add-escola');
             let refElem = elem.parentNode;
             elem.insertAdjacentElement("beforeBegin",ul );
-            document.getElementById('teste').autofocus;
+            document.getElementById("input-escola-new").focus();
             document.getElementById('add-escola').style.display = 'none'
         }
 
         function addEscola(){
             criarLinhaTabela()
+        }
+
+        function editarEscola(id){
+            let escola = document.getElementById(`li-escola-${id}`);
+            let turma = document.getElementById(`li-turma-${id}`);
+            escola.innerHTML = `<input id="input-escola-${id}" class="new-escola" type="text" name="escola" placeholder="Digite o nome da escola" value="${escola.textContent}">`
+            turma.innerHTML = `<input id="input-turma-${id}" class="new-turma" type="text" name="turma" placeholder="Digite as turmas" value="${turma.textContent}">`
+            document.getElementById(`input-escola-${id}`).focus();
+            document.getElementById(`editar-${id}`).src = '../imagens/verifica.png';
         }
 
         function removerEscola(id){
@@ -169,6 +178,12 @@
       input.new-escola{
         outline: none;
         border: none;
+        width: 350px;
+      }
+      input.new-turma{
+        outline: none;
+        border: none;
+        width: 250px;
       }
       input.new-escola::placeholder{
         color: steelblue;
