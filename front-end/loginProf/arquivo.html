@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Arquivo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="assets/css/uicons-regular-rounded.css" rel="stylesheet">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="voltar">
+        <a href="./configuracoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
+    </div>
+    <div id="usuario" class="usuario">
+      <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+    </div>
+    <div class="container">
+        <ul class="list-group list-group-horizontal-sm pt-3">
+          <li class="list-group-item w-tema"><h3>Tema</h3></li>
+          <li class="list-group-item w-arquivo"><h3>Arquivo</h3></li>
+          <li class="list-group-item w-acoes"><h3>Ações</h3></li>
+        </ul>
+        <ul class="list-group list-group-horizontal-sm" id="arquivo-0">
+          <li class="list-group-item w-tema" id="li-tema-0">Verbos</li>
+          <li class="list-group-item w-arquivo" id="li-arquivo-0">verbos.txt</li>
+          <li class="list-group-item w-acoes">
+              <img id="editar-0" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarArquivo('0')">
+              <img onclick="removerArquivo('arquivo-0')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+          </li>
+        </ul>
+        <ul id="add-arquivo" class="list-group list-group-horizontal-sm">
+          <li class="list-group-item w-add" style="text-align: center;">
+              <button class="btn-add-arquivo" onclick="criarLinhaTabela()">
+                  Adicionar +
+              </button>
+            </li>
+        </ul>
+    </div>
+  <script>
+    var idNovoArquivo = 1;
+    function criarLinhaTabela(){
+      idNovoArquivo = idNovoArquivo + 1;
+      let ul = document.createElement('ul');
+      ul.id = `arquivo-${idNovoArquivo}`;
+      ul.classList.add('list-group','list-group-horizontal-sm')
+      ul.innerHTML = `
+          <li class="list-group-item w-tema" id="li-tema-${idNovoArquivo}">
+              <input id="input-tema-${idNovoArquivo}" class="new-tema" type="text" name="tema" placeholder="Digite o tema do arquivo">
+          </li>
+          <li class="list-group-item w-arquivo" id="li-arquivo-${idNovoArquivo}">
+            <input id="input-arquivo-${idNovoArquivo}" type="file"  class="form-control" name="arquivo" >
+          </li>
+          <li class="list-group-item w-acoes">
+              <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="salvarArquivo(${idNovoArquivo})">
+              <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerArquivo('arquivo-${idNovoArquivo}')">
+          </li>
+      `;
+      let elem = document.getElementById('add-arquivo');
+      let refElem = elem.parentNode;
+      elem.insertAdjacentElement("beforeBegin",ul );
+      document.getElementById(`input-tema-${idNovoArquivo}`).focus();
+      document.getElementById('add-arquivo').style.display = 'none'
+    }
+    function editarArquivo(id){
+            let arquivo = document.getElementById(`li-arquivo-${id}`);
+            let tema = document.getElementById(`li-tema-${id}`);
+            arquivo.innerHTML = `<input id="input-arquivo-${id}" class="new-arquivo" type="text" name="arquivo" placeholder="Digite o tema do arquivo" value="${arquivo.textContent}">`
+            tema.innerHTML = `<input id="input-tema-${id}" class="new-tema" type="text" name="tema" placeholder="Digite as temas" value="${tema.textContent}">`
+            document.getElementById(`input-arquivo-${id}`).focus();
+            document.getElementById(`editar-${id}`).src = '../imagens/verifica.png';
+            document.getElementById(`editar-${id}`).setAttribute( "onClick", "salvarArquivo("+id+");" );
+        }
+
+        function removerArquivo(id){
+            let elem = document.getElementById(id);
+            elem.parentNode.removeChild(elem);
+            document.getElementById('add-arquivo').style.display = 'inline';
+        }
+
+        function salvarArquivo(id){
+            let arquivoValue = document.getElementById(`input-arquivo-${id}`).value;
+            let temaValue = document.getElementById(`input-tema-${id}`).value;
+            document.getElementById(`li-arquivo-${id}`).innerHTML = arquivoValue;
+            document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
+            document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
+            document.getElementById(`editar-${id}`).setAttribute( "onClick", "editarArquivo("+id+");" );
+            document.getElementById('add-arquivo').style.display = 'inline';
+        }
+  </script>
+<style>
+    .btn-add-arquivo{
+          color: #208935;
+          border: solid 1px #208935;
+          padding: 5px 20px;
+          margin: 5px;
+          border-radius: 5px;
+      }
+      .btn-add-arquivo:hover{
+          color: white;
+          background-color: #208935;
+      }
+      .w-tema{
+          width: 250px;
+      }
+      .w-arquivo{
+          width: 450px;
+      }
+      .w-acoes{
+          width: 120px;
+      }
+      .w-add{
+          width: 820px;
+      }
+      input.new-tema{
+        outline: none;
+        border: none;
+        width: 350px;
+      }
+      input.new-arquivo{
+        outline: none;
+        border: none;
+        width: 250px;
+      }
+      input.new-tema::placeholder{
+        color: steelblue;
+      }
+</style>
+</body>
+</html>

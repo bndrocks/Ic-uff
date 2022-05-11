@@ -102,4 +102,15 @@ a {
   padding: 1em;
 }
 
-
+.arquivo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.voltar{
+  position: absolute;
+  left: 20px;
+  width: 32px;
+  height: 24px;
+}

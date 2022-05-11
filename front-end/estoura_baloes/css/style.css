@@ -108,13 +108,6 @@ button>img {
     float: left;
 }
 
-.arquivo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
 .usuario {
     float: right;
     cursor:pointer;
