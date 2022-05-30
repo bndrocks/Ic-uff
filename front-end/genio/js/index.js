@@ -76,6 +76,7 @@ function pontuacao(){
   else
     totalPontos += maxPontosPorTurno;
   document.getElementById("pontuacao").innerHTML = "Pontuação = " + totalPontos;
+  salvarPontuacao(totalPontos)
 }
 
 function play(){
@@ -135,7 +136,6 @@ function cor(numero){
     }
     som = true;
 }
-
 
 function checaCor(numeroCor){
   vezJogador = false;//bloqueia outro clique do jogador, já que o listener não vai chamar a função checaCor enquanto não desbloquear
@@ -219,11 +219,11 @@ function perdeuGame(){
   limpaVar();
 }
 
-function salvarPontuacao(){
+function salvarPontuacao(pontuacao){
   let data = {};
-  data.pontuacao = '300';
-  data.jogo = 'genio';
-  data.usuario_id = localStorage.getItem('id');
+  data.pontuacao = pontuacao;
+  //data.jogo = 'genio';
+  data.aluno = localStorage.getItem('id');//`62801aca27932c027cf94ad6`
   axios.post('http://localhost:3003/pontuacao/usuario', data)
   .then(function (response) {
     console.log(response);

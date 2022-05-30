@@ -12,21 +12,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body onload="getPontuacao()">
     <div id="voltar">
         <a href="./configuracoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
+    </div>
+    <div id="filtro" class="filtro">
+      <b>Filtrar por:</b>
+      <select id="tema" onchange="escolheTema()">
+          <option value="1">Escola</option>
+      </select>
     </div>
     <div id="usuario" class="usuario">
       <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
     </div>
     <div class="container">
-        <ul class="list-group list-group-horizontal-sm pt-3">
+        <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
           <li class="list-group-item w-nome"><h3>Nome</h3></li>
           <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
-        </ul>
-        <ul class="list-group list-group-horizontal-sm" id="pontuacao-0">
-          <li class="list-group-item w-nome" id="li-nome-0">Ben</li>
-          <li class="list-group-item w-pontuacao" id="li-pontuacao-0">300</li>
         </ul>
         <!--ul id="add-escola" class="list-group list-group-horizontal-sm">
           <li class="list-group-item w-add" style="text-align: center;">
@@ -38,25 +40,34 @@
         </ul-->
     </div>
   <script>
-    var idNovoPontuacao = 1;
-    function criarLinhaTabela(){
-      idNovoPontuacao = idNovoPontuacao + 1;
-      let ul = document.createElement('ul');
-      ul.id = `pontuacao-${idNovoPontuacao}`;
-      ul.classList.add('list-group','list-group-horizontal-sm')
-      ul.innerHTML = `
-          <li class="list-group-item w-nome" id="li-nome-${idNovoPontuacao}">
-              <input id="input-nome-${idNovoPontuacao}" class="new-nome" type="text" name="nome" placeholder="Digite o nome do pontuacao">
-          </li>
-          <li class="list-group-item w-pontuacao" id="li-pontuacao-${idNovoPontuacao}">
-            <input id="input-pontuacao-${idNovoPontuacao}" type="file"  class="form-control" name="pontuacao" >
-          </li>
-      `;
-      let elem = document.getElementById('add-escola');
-      let refElem = elem.parentNode;
-      elem.insertAdjacentElement("beforeBegin",ul );
-      document.getElementById(`input-nome-${idNovoPontuacao}`).focus();
-      document.getElementById('add-escola').style.display = 'none'
+    function getPontuacao(){
+      axios.get('http://localhost:3003/pontuacao').then((res)=>{
+        console.log(res)
+        if(res.data){
+          carregarTabela(res.data)
+        }
+      }).catch(function (error) {
+          console.log(error);
+        });
+    }
+
+    function carregarTabela(pontuacoes){
+      pontuacoes.forEach(pontuacao => {
+        let ul = document.createElement('ul');
+        ul.id = `pontuacao-${pontuacao._id}`;
+        ul.classList.add('list-group','list-group-horizontal-sm')
+        ul.innerHTML = `
+            <li class="list-group-item w-nome" id="li-nome-${pontuacao._id}">
+              ${pontuacao.aluno.nome}
+            </li>
+            <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
+              ${pontuacao.pontuacao}
+            </li>
+        `;
+        let elem = document.getElementById('tabela-pontuacao');
+            let refElem = elem.parentNode;
+            elem.insertAdjacentElement("afterEnd",ul );
+      });
     }
   </script>
 <style>
@@ -92,6 +103,18 @@
       }
       input.new-nome::placeholder{
         color: steelblue;
+      }
+      .filtro{
+        display: flex;
+        margin: 20px;
+        justify-content: center;
+      }
+      select{
+        color: steelblue;
+        background-color: snow;
+        font-size: large;
+        border-radius: 5px;
+        outline: none;
       }
 </style>
 </body>

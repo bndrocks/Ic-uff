@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body onload="getArquivos()">
     <div id="voltar">
         <a href="./configuracoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
     </div>
@@ -27,7 +27,10 @@
         </ul>
         <ul class="list-group list-group-horizontal-sm" id="arquivo-0">
           <li class="list-group-item w-tema" id="li-tema-0">Verbos</li>
-          <li class="list-group-item w-arquivo" id="li-arquivo-0">verbos.txt</li>
+          <li class="list-group-item w-arquivo" id="li-arquivo-0">
+            <a href="https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc">
+              verbos.txt</a>
+            </li>
           <li class="list-group-item w-acoes">
               <img id="editar-0" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarArquivo('0')">
               <img onclick="removerArquivo('arquivo-0')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
@@ -42,8 +45,16 @@
         </ul>
     </div>
   <script>
+  function getArquivos(){
+    axios.get('http://localhost:3003/professor/arquivos/62892d54d6f967f9529e7013').then((res)=>{
+      console.log(res)
+      criarLinhaTabela(res.data)
+    }).catch(function (error) {
+        console.log(error);
+      });
+  }
     var idNovoArquivo = 1;
-    function criarLinhaTabela(){
+    function criarLinhaTabela(arquivos){
       idNovoArquivo = idNovoArquivo + 1;
       let ul = document.createElement('ul');
       ul.id = `arquivo-${idNovoArquivo}`;

@@ -4,13 +4,15 @@ const User = require("./User.js");
 
 const scoreSchema = new Schema({
     pontuacao: String,
-    jogo: String,
-    //materia: String,
-    usuario: {
+    aluno: {
         type: Schema.Types.ObjectId,
         ref: "User"
     }
 }, { collection: 'scores' }
 );
 
-module.exports =  mongoose.model('Score', scoreSchema);
+const scoreModel =  mongoose.model('score', scoreSchema);
+module.exports = {
+    scoreSchema,
+    scoreModel
+}

@@ -30,7 +30,7 @@
       </div>
       <div><button class="button-light" onclick="volta()">Voltar</button></div>
     </div>
-    <div id = "formCadastro" style="display: none;">
+    <!--div id = "formCadastro" style="display: none;">
       <div><input class="nome" type="text" name="nome" id="nome-cadastro" placeholder="Digite seu nome"></div>
       <div><input class="email" type="text" name="email" id="email-cadastro" placeholder="Digite seu e-mail"></div>
       <div><input class="senha" type="password" name="senha" id="senha-cadastro" placeholder="Digite sua senha"></div>
@@ -48,12 +48,10 @@
         <input class="colegio" type="text" name="colegio" id="colegio-cadastro" placeholder="Digite o nome do seu colegio" minlength="1">
         <img src="imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addColegio()">
       </div>
-      <!--div>
+      <div>
         <input class="nome" type="text" name="turma" id="turma-cadastro" placeholder="Digite o numero da sua turma">
-      </div-->
-      <div><button class="button" onclick="cadastro()">Cadastrar</button></div>
-      <div><button class="button-light" onclick="volta()">Voltar</button></div>
-    </div>
+      </div>
+    </div-->
   </div>
   <script>
     var idContainerColegio = 0
@@ -101,9 +99,11 @@
             localStorage.setItem('nome', response.data.user.nome);
             localStorage.setItem('email', response.data.user.email);
             localStorage.setItem('id', response.data.user._id);
-            //localStorage.setItem('tipo', response.data.user.tipo);
+            localStorage.setItem('tipo', response.data.user.tipo);
+            window.location.href = response.data.user.tipo == 'aluno' ? "file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginAluno/loginAluno.html": "file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginProf/configuracoes.html";
           }
           else {
+            console.log(response)
             contErroLogin++;
             if (contErroLogin > 1) {
               removerElemento('erro-login');

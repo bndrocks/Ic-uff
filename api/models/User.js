@@ -1,17 +1,25 @@
 const mongoose =  require('../database/index.js');
 //const db = require('../database/index.js');
 const Schema = mongoose.Mongoose.Schema;
-const Score = require("./Score.js");
+const {alunoSchema, alunoModel} = require("./Aluno.js");
 
 const userSchema = new Schema({
     nome: String,
     email: String,
     tipo: String,
     senha: String,
-    pontuacoes: [{
+    aluno: {
+        type: Schema.Types.ObjectId,
+        ref: "alunoModel"
+    },
+    professor: {
+        type: Schema.Types.ObjectId,
+        ref: "alunoModel"
+    },
+    /*pontuacoes: [{
         type: Schema.Types.ObjectId,
         ref: "Score"
-    }]
+    }]*/
 }, { collection: 'users' }
 );
  
