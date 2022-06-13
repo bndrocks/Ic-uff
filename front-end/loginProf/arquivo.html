@@ -20,21 +20,10 @@
       <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
     </div>
     <div class="container">
-        <ul class="list-group list-group-horizontal-sm pt-3">
+        <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-arquivo">
           <li class="list-group-item w-tema"><h3>Tema</h3></li>
           <li class="list-group-item w-arquivo"><h3>Arquivo</h3></li>
           <li class="list-group-item w-acoes"><h3>Ações</h3></li>
-        </ul>
-        <ul class="list-group list-group-horizontal-sm" id="arquivo-0">
-          <li class="list-group-item w-tema" id="li-tema-0">Verbos</li>
-          <li class="list-group-item w-arquivo" id="li-arquivo-0">
-            <a href="https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc">
-              verbos.txt</a>
-            </li>
-          <li class="list-group-item w-acoes">
-              <img id="editar-0" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarArquivo('0')">
-              <img onclick="removerArquivo('arquivo-0')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
-          </li>
         </ul>
         <ul id="add-arquivo" class="list-group list-group-horizontal-sm">
           <li class="list-group-item w-add" style="text-align: center;">
@@ -45,63 +34,120 @@
         </ul>
     </div>
   <script>
+  var idNovoArquivo = 0
+  function sair(){
+    localStorage.clear();
+    window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+  }
   function getArquivos(){
-    axios.get('http://localhost:3003/professor/arquivos/62892d54d6f967f9529e7013').then((res)=>{
+    const ID = localStorage.getItem('id');
+    axios.get('http://localhost:3003/professor/'+ID).then((res)=>{
       console.log(res)
-      criarLinhaTabela(res.data)
+      idNovoArquivo = res.data.arquivos.length
+      carregarTabela(res.data.arquivos)
     }).catch(function (error) {
         console.log(error);
       });
   }
-    var idNovoArquivo = 1;
-    function criarLinhaTabela(arquivos){
-      idNovoArquivo = idNovoArquivo + 1;
-      let ul = document.createElement('ul');
-      ul.id = `arquivo-${idNovoArquivo}`;
-      ul.classList.add('list-group','list-group-horizontal-sm')
-      ul.innerHTML = `
-          <li class="list-group-item w-tema" id="li-tema-${idNovoArquivo}">
-              <input id="input-tema-${idNovoArquivo}" class="new-tema" type="text" name="tema" placeholder="Digite o tema do arquivo">
-          </li>
-          <li class="list-group-item w-arquivo" id="li-arquivo-${idNovoArquivo}">
-            <input id="input-arquivo-${idNovoArquivo}" type="file"  class="form-control" name="arquivo" >
-          </li>
-          <li class="list-group-item w-acoes">
-              <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="salvarArquivo(${idNovoArquivo})">
-              <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerArquivo('arquivo-${idNovoArquivo}')">
-          </li>
-      `;
-      let elem = document.getElementById('add-arquivo');
-      let refElem = elem.parentNode;
-      elem.insertAdjacentElement("beforeBegin",ul );
-      document.getElementById(`input-tema-${idNovoArquivo}`).focus();
-      document.getElementById('add-arquivo').style.display = 'none'
-    }
-    function editarArquivo(id){
-            let arquivo = document.getElementById(`li-arquivo-${id}`);
-            let tema = document.getElementById(`li-tema-${id}`);
-            arquivo.innerHTML = `<input id="input-arquivo-${id}" class="new-arquivo" type="text" name="arquivo" placeholder="Digite o tema do arquivo" value="${arquivo.textContent}">`
-            tema.innerHTML = `<input id="input-tema-${id}" class="new-tema" type="text" name="tema" placeholder="Digite as temas" value="${tema.textContent}">`
-            document.getElementById(`input-arquivo-${id}`).focus();
-            document.getElementById(`editar-${id}`).src = '../imagens/verifica.png';
-            document.getElementById(`editar-${id}`).setAttribute( "onClick", "salvarArquivo("+id+");" );
-        }
 
-        function removerArquivo(id){
-            let elem = document.getElementById(id);
-            elem.parentNode.removeChild(elem);
-            document.getElementById('add-arquivo').style.display = 'inline';
-        }
+function carregarTabela(arquivos){
+  arquivos.forEach(arquivo => {
+    let ul = document.createElement('ul');
+    ul.id = `arquivo-${arquivo._id}`;
+    ul.classList.add('list-group','list-group-horizontal-sm')
+    ul.innerHTML = `
+        <li class="list-group-item w-tema" id="li-tema-${arquivo._id}">
+          ${arquivo.tema}
+        </li>
+        <li class="list-group-item w-arquivo" id="li-arquivo-${arquivo._id}">
+          <a download="media4.txt" href=${arquivo.url}>${arquivo.tema}.txt</a>          
+        </li>
+        <li class="list-group-item w-acoes">
+            <img id="editar-${arquivo._id}" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarArquivo('${arquivo._id}')">
+            <img onclick="removerArquivo('${arquivo._id}')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+        </li>
+    `;
+    let elem = document.getElementById('tabela-arquivo');
+    elem.insertAdjacentElement("afterEnd",ul );
+  });
+}
+  
+  function criarLinhaTabela(arquivos){
+    idNovoArquivo = idNovoArquivo + 1;
+    let ul = document.createElement('ul');
+    ul.id = `arquivo-${idNovoArquivo}`;
+    ul.classList.add('list-group','list-group-horizontal-sm')
+    ul.innerHTML = `
+        <li class="list-group-item w-tema" id="li-tema-${idNovoArquivo}">
+            <input id="input-tema-${idNovoArquivo}" class="new-tema" type="text" name="tema" placeholder="Digite o tema do arquivo">
+        </li>
+        <li class="list-group-item w-arquivo" id="li-arquivo-${idNovoArquivo}">
+          <input id="input-arquivo-${idNovoArquivo}" type="file"  class="form-control" name="arquivo" >
+        </li>
+        <li class="list-group-item w-acoes">
+            <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="salvarArquivo(${idNovoArquivo})">
+            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerArquivo('arquivo-${idNovoArquivo}')">
+        </li>
+    `;
+    let elem = document.getElementById('add-arquivo');
+    let refElem = elem.parentNode;
+    elem.insertAdjacentElement("beforeBegin",ul );
+    document.getElementById(`input-tema-${idNovoArquivo}`).focus();
+    document.getElementById('add-arquivo').style.display = 'none'
+  }
+  function editarArquivo(id){
+    //verificar value do arquivo, esta com espaco desnecessario
+    let arquivo = document.getElementById(`li-arquivo-${id}`);
+    let tema = document.getElementById(`li-tema-${id}`);
+    arquivo.innerHTML = `<input id="input-arquivo-${id}" type="file"  class="form-control" name="arquivo" >`
+    tema.innerHTML = `<input id="input-tema-${id}" class="new-tema" type="text" name="tema" placeholder="Digite as temas" value="${tema.textContent}">`
+    document.getElementById(`input-arquivo-${id}`).focus();
+    document.getElementById(`editar-${id}`).src = '../imagens/verifica.png';
+    document.getElementById(`editar-${id}`).setAttribute( "onClick", `salvarArquivo('${id}');` );
+  }
 
-        function salvarArquivo(id){
-            let arquivoValue = document.getElementById(`input-arquivo-${id}`).value;
-            let temaValue = document.getElementById(`input-tema-${id}`).value;
-            document.getElementById(`li-arquivo-${id}`).innerHTML = arquivoValue;
-            document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
-            document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
-            document.getElementById(`editar-${id}`).setAttribute( "onClick", "editarArquivo("+id+");" );
-            document.getElementById('add-arquivo').style.display = 'inline';
-        }
+function removerArquivo(id){
+  axios.delete('http://localhost:3003/professor/'+id).then((response) => {
+    let elem = document.getElementById(id);
+    elem.parentNode.removeChild(elem);
+    document.getElementById('add-arquivo').style.display = 'inline';
+  })
+}
+
+function salvarArquivo(id){
+    let arquivoValue = 'https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc';
+    let temaValue = document.getElementById(`input-tema-${id}`).value;
+    console.log('aqqui')
+    axios.patch('http://localhost:3003/professor/'+id, {tema: temaValue, url: arquivoValue}).then((response) =>{
+
+      document.getElementById(`li-arquivo-${id}`).innerHTML = `<a download="media4.txt" href=${arquivoValue}>${temaValue}.txt</a>`;
+      document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
+      document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
+      document.getElementById(`editar-${id}`).setAttribute( "onClick", "editarArquivo("+id+");" );
+      document.getElementById('add-arquivo').style.display = 'inline';
+    })   
+}
+/*function lerArquivo(id){
+  var palavras = []
+  let input = document.getElementById(`input-arquivo-${id}`);
+  let files = input.files;
+    if(files.length == 0)
+        return;
+    else
+        bool = true;
+    const file = files[0];
+    let reader = new FileReader();
+    reader.onload = (e) => {
+        const file = e.target.result;
+        const lines = file.split(/\r\n|\n|, | /);
+        //console.log(lines)
+        for(let i = 0; i < lines.length; i++)
+            palavras[i] = lines[i];
+        console.log(palavras)
+    };
+    reader.onerror = (e) => alert(e.target.error.name);
+    reader.readAsText(file);
+}*/
   </script>
 <style>
     .btn-add-arquivo{

@@ -30,16 +30,12 @@
           <li class="list-group-item w-nome"><h3>Nome</h3></li>
           <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
         </ul>
-        <!--ul id="add-escola" class="list-group list-group-horizontal-sm">
-          <li class="list-group-item w-add" style="text-align: center;">
-              < AQUI NAO VAI SER BUTTON, TEM Q CRIAR OUTRA LOGICA PRA TD VEZ Q UMA PONTUAÇAO FOR CRIADA PUXAR ISSO DO BD
-                button class="btn-add-escola" onclick="criarLinhaTabela()">
-                  Adicionar +
-              </button>
-            </li>
-        </ul-->
     </div>
   <script>
+    function sair(){
+      localStorage.clear();
+      window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+    }
     function getPontuacao(){
       axios.get('http://localhost:3003/pontuacao').then((res)=>{
         console.log(res)
@@ -52,6 +48,7 @@
     }
 
     function carregarTabela(pontuacoes){
+      //usando o forEach pois no exemplo o array eh pequeno e sabemos que iremos percorrer todo o array, a longo prazo devemos implementar uma paginacao
       pontuacoes.forEach(pontuacao => {
         let ul = document.createElement('ul');
         ul.id = `pontuacao-${pontuacao._id}`;
@@ -65,23 +62,11 @@
             </li>
         `;
         let elem = document.getElementById('tabela-pontuacao');
-            let refElem = elem.parentNode;
-            elem.insertAdjacentElement("afterEnd",ul );
+        elem.insertAdjacentElement("afterEnd",ul );
       });
     }
   </script>
 <style>
-    .btn-add-escola{
-          color: #208935;
-          border: solid 1px #208935;
-          padding: 5px 20px;
-          margin: 5px;
-          border-radius: 5px;
-      }
-      .btn-add-escola:hover{
-          color: white;
-          background-color: #208935;
-      }
       .w-nome{
           width: 250px;
       }

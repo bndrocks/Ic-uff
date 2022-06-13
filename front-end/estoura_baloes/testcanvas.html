@@ -6,9 +6,10 @@
     <title>Estoura balões</title>
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
-<body>
+<body onload="carregaTemas()">
     <div id="usuario" class="usuario" onclick="">
         <img src="../imagens/usuario.png" style="height: 32px;"/>
         <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
@@ -63,6 +64,14 @@
         </div>
     </div>
     <script>
+        function  carregaTemas(){
+            const idAluno = localStorage.getItem('id');
+            axios.get('http://localhost:3003/aluno/' + idAluno).then((response) => {
+                consolee.log(response)
+            }).catch((error) => {
+
+            })
+        }
         function sair(){
             localStorage.clear();
             window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";

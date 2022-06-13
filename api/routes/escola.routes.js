@@ -1,13 +1,10 @@
 const { Router } = require('express');
-// Model Usuário
-const usuario = require("../models/User.js");
-// Model Pontuação
-const score = require("../models/Score.js");
+const Professor = require("../models/Professor.js");
 
 const escolaRoutes = Router();
 
-escolaRoutes.get('/:id', async (request, response)=>{
-  const res = await professor.findById(request.params.id).populate('arquivos').populate('escolas');
+escolaRoutes.get('/:id', async (request, response) => {
+  const res = await Professor.findById(request.params.id).populate('arquivos').populate('escolas');
   return response.status(200).json(res);
 })
 

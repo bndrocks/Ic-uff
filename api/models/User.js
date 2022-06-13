@@ -1,7 +1,8 @@
 const mongoose =  require('../database/index.js');
-//const db = require('../database/index.js');
 const Schema = mongoose.Mongoose.Schema;
-const {alunoSchema, alunoModel} = require("./Aluno.js");
+const {alunoModel} = require("./Aluno.js");
+const {Professor} = require("./Professor.js");
+const professorModel = mongoose.Mongoose.model('Professor', Professor);
 
 const userSchema = new Schema({
     nome: String,
@@ -14,12 +15,8 @@ const userSchema = new Schema({
     },
     professor: {
         type: Schema.Types.ObjectId,
-        ref: "alunoModel"
-    },
-    /*pontuacoes: [{
-        type: Schema.Types.ObjectId,
-        ref: "Score"
-    }]*/
+        ref: "professorModel"
+    }
 }, { collection: 'users' }
 );
  

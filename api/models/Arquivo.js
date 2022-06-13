@@ -12,4 +12,4 @@ const arquivoSchema = new Schema({
 }, { collection: 'arquivos' }
 );
 
-module.exports = mongoose.model('Arquivos', arquivoSchema);
+module.exports = mongoose.model('arquivo', arquivoSchema);

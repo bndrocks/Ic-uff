@@ -15,75 +15,16 @@
     <div class="fundo-usuario">
       <img class="img-login" src="imagens/usuario.png">
     </div>
-    <div id = "formInicial">
-      <div><button class="button" onclick="mostraLogin()" style="margin-top: 0px;">Logar</button></div>
-      <div><button class="button" onclick="mostraCadastro()">Cadastrar</button></div>
-    </div>
-    <div id = "formLogin" style="display: none;">
+    <div id = "formLogin">
       <div><input class="email" type="text" name="email" id="email-login" placeholder="Digite seu e-mail"></div>
       <div><input class="senha" type="password" name="senha" id="senha-login" placeholder="Digite sua senha"></div>
       <div><button class="button" onclick="login()" style="margin:15px 0 14px 0;">Logar</button></div>
-      <div class="container-links">
-        <a class="links" onclick="esqueciSenha()">Esqueceu sua senha?</a>
-        <a class="links" onclick="mostraCadastro()">Criar uma conta</a>
-        <!--img src="../imagens/criar-conta.png"-->
-      </div>
-      <div><button class="button-light" onclick="volta()">Voltar</button></div>
     </div>
-    <!--div id = "formCadastro" style="display: none;">
-      <div><input class="nome" type="text" name="nome" id="nome-cadastro" placeholder="Digite seu nome"></div>
-      <div><input class="email" type="text" name="email" id="email-cadastro" placeholder="Digite seu e-mail"></div>
-      <div><input class="senha" type="password" name="senha" id="senha-cadastro" placeholder="Digite sua senha"></div>
-      <div class="flex flex-wrap justify-around tipo-usuario">
-        <div>
-          <input class="tipo" type="radio" name="tipo" id="tipo-aluno">
-          <label for="aluno">Aluno</label>
-        </div>
-        <div>
-          <input class="tipo" type="radio" name="tipo" id="tipo-prof">
-          <label for="professor">Professor</label>
-        </div>
-      </div>
-      <div class="flex justify-center items-center" id="colegio-turma">
-        <input class="colegio" type="text" name="colegio" id="colegio-cadastro" placeholder="Digite o nome do seu colegio" minlength="1">
-        <img src="imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addColegio()">
-      </div>
-      <div>
-        <input class="nome" type="text" name="turma" id="turma-cadastro" placeholder="Digite o numero da sua turma">
-      </div>
-    </div-->
   </div>
   <script>
     var idContainerColegio = 0
     var idElementoTurma = 0
-    function mostraLogin(){
-      document.getElementById("formLogin").style.display = "inline";
-      document.getElementById("formInicial").style.display = "none";
-    }
-    function mostraCadastro(){
-      document.getElementById("formLogin").style.display = "none";
-      document.getElementById("formCadastro").style.display = "inline";
-      document.getElementById("formInicial").style.display = "none";
-    }
-    function volta(){
-      document.getElementById("formLogin").style.display = "none";
-      document.getElementById("formCadastro").style.display = "none";
-      document.getElementById("formInicial").style.display = "inline";
-    }
-    function cadastro(){
-      let data = {};
-      data.nome = getElementValue('nome-cadastro');
-      data.email = getElementValue('email-cadastro');
-      //data.tipo = document.getElementById("tipo-cadastro").value;
-      data.senha = getElementValue('senha-cadastro');
-      axios.post('http://localhost:3003/usuario/cadastro', data)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+
     function login(){
       let data = {};
       let contErroLogin = 0;
@@ -121,10 +62,6 @@
     function getElementValue(element){
       return document.getElementById(element).value;
     }
-
-    function limparElementValue(element){
-      document.getElementById(element).value = '';
-    }
     
     function removerElemento(element){
       let elem =  document.getElementById(element);
@@ -140,55 +77,6 @@
       erro.setAttribute('id', 'erro-login');
       refElem.insertBefore(erro, elem);
     }
-
-    function criarElementoColegio(){
-      let div = document.createElement('div')
-      let id = idContainerColegio++
-      div.id = `container-colegio-${id}`
-      div.innerHTML = `
-                        <h3>${getElementValue('colegio-cadastro')}
-                          <img src="imagens/delete.png" style="width: 18px; cursor: pointer; margin-left: 10px" onclick="removerColegio(${id})">  
-                        </h3>
-                        <div class="turma-lista" id="turma-${id}"></div>
-                        <div class="flex justify-center items-center" id="colegio-${id}">
-                          <input class="colegio" type="text" name="turma" id="turma-cadastro-${id}" placeholder="Digite o numero da sua turma">
-                          <img src="imagens/add.png" style="width: 24px; margin: 0 0 20px 10px; cursor: pointer;" onclick="addTurma(${id})">
-                        </div>
-                      `
-      div.className = 'container-colegio'
-      let elem = document.getElementById('colegio-turma');
-      let refElem = elem.parentNode;
-      elem.insertAdjacentElement('afterEnd', div);
-      limparElementValue('colegio-cadastro')
-    }
-
-    function criarElementoTurma(id){
-      let div = document.getElementById(`turma-${id}`)
-      let idElemento = idElementoTurma++
-      div.innerHTML = div.innerHTML + `
-                        <span class="elemento-turma" id="elemento-turma-${idElemento}">${getElementValue('turma-cadastro-'+ id)} 
-                          <img src="imagens/delete.png" style="width: 18px; cursor: pointer; margin-left: 10px" onclick="removerTurma(${idElemento})">
-                        </span>
-                      `
-      limparElementValue('turma-cadastro-'+id)
-    }
-
-    function addColegio(){
-      criarElementoColegio()
-    }
-
-    function addTurma(id){
-      criarElementoTurma(id)
-    }
-
-    function removerTurma(id){
-      removerElemento(`elemento-turma-${id}`)
-    }
-
-    function removerColegio(id){
-      removerElemento(`container-colegio-${id}`)
-    }
-
   </script>
 </body>
 </html>

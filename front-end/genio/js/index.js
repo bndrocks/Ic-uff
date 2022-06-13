@@ -222,9 +222,8 @@ function perdeuGame(){
 function salvarPontuacao(pontuacao){
   let data = {};
   data.pontuacao = pontuacao;
-  //data.jogo = 'genio';
-  data.aluno = localStorage.getItem('id');//`62801aca27932c027cf94ad6`
-  axios.post('http://localhost:3003/pontuacao/usuario', data)
+  data.idAluno = localStorage.getItem('id');
+  axios.put('http://localhost:3003/pontuacao/aluno', data)
   .then(function (response) {
     console.log(response);
   })
