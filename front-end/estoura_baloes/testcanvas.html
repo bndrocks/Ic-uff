@@ -48,7 +48,6 @@
         <div>
             <b>Tema:</b>
             <select id="tema" onchange="escolheTema()">
-                <option value="1">Verbos</option>
             </select>
         </div>
     </div>
@@ -64,10 +63,20 @@
         </div>
     </div>
     <script>
+        function adicionaTemas(tema){
+            let seletorTema = document.getElementById('tema');
+            let option = document.createElement('option');
+            option.id = tema._id;
+            option.value = tema.tema
+            option.innerHTML = tema.tema;
+            seletorTema.insertAdjacentElement("beforeEnd",option );
+        }
         function  carregaTemas(){
             const idAluno = localStorage.getItem('id');
             axios.get('http://localhost:3003/aluno/' + idAluno).then((response) => {
-                consolee.log(response)
+                response.data.forEach(tema => {
+                    adicionaTemas(tema)
+                });
             }).catch((error) => {
 
             })

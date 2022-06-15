@@ -8,7 +8,7 @@ const alunoSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "escola"
     },
-    turma: Number,
+    turma: String,
     usuario: {
         type: Schema.Types.ObjectId,
         ref: "User"

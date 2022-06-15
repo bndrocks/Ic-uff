@@ -16,10 +16,11 @@ alunoRoutes.get('/:id', async (request, response)=>{
   const aluno = await alunoModel.find({usuario: request.params.id}).populate('escola');
   const escola = aluno[0].escola._id
   const turma = aluno[0].turma
-  console.log(turma)
-  const professors = await professor.find( { escolas : { $elemMatch: {escola : escola, turmas: { $elemMatch: {$gte: turma}}} } } );
-  console.log(professors)
-  return response.status(200).json(professors);
+  const query = professor.find( { escolas : { $elemMatch: {escola : escola, turmas : turma} } } ).populate('arquivos','tema');
+  // verificando o filtro da consulta console.log(query.getFilter())
+  const docsArquivos = await query.exec();
+  const resArquivos = docsArquivos[0].arquivos
+  return response.status(200).json(resArquivos);
 })
 
 module.exports = { alunoRoutes };
