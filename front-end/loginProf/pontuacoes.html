@@ -16,15 +16,17 @@
     <div id="voltar">
         <a href="./configuracoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
     </div>
+      <div id="usuario" class="usuario">
+        <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+      </div>
+
     <div id="filtro" class="filtro">
       <b>Filtrar por:</b>
       <select id="tema" onchange="escolheTema()">
           <option value="1">Escola</option>
       </select>
     </div>
-    <div id="usuario" class="usuario">
-      <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
-    </div>
+
     <div class="container">
         <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
           <li class="list-group-item w-nome"><h3>Nome</h3></li>
@@ -91,8 +93,8 @@
       }
       .filtro{
         display: flex;
-        margin: 20px;
         justify-content: center;
+        align-items: center;
       }
       select{
         color: steelblue;

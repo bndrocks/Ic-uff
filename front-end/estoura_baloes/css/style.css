@@ -1,7 +1,8 @@
 body {
     background-color: steelblue;
-    font-family: 'Quantico';
     text-align: center;
+    margin: 20px;
+    overflow: hidden
 }
 
 .container {

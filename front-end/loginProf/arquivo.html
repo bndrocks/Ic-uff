@@ -85,7 +85,7 @@ function carregarTabela(arquivos){
           <input id="input-arquivo-${idNovoArquivo}" type="file"  class="form-control" name="arquivo" >
         </li>
         <li class="list-group-item w-acoes">
-            <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="salvarArquivo(${idNovoArquivo})">
+            <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="criarArquivo(${idNovoArquivo})">
             <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerArquivo('arquivo-${idNovoArquivo}')">
         </li>
     `;
@@ -117,13 +117,25 @@ function removerArquivo(id){
 function salvarArquivo(id){
     let arquivoValue = 'https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc';
     let temaValue = document.getElementById(`input-tema-${id}`).value;
-    console.log('aqqui')
     axios.patch('http://localhost:3003/professor/'+id, {tema: temaValue, url: arquivoValue}).then((response) =>{
 
       document.getElementById(`li-arquivo-${id}`).innerHTML = `<a download="media4.txt" href=${arquivoValue}>${temaValue}.txt</a>`;
       document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
       document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
-      document.getElementById(`editar-${id}`).setAttribute( "onClick", "editarArquivo("+id+");" );
+      document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarArquivo('${id}');` );
+      document.getElementById('add-arquivo').style.display = 'inline';
+    })   
+}
+function criarArquivo(id){
+    let arquivoValue = 'https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc';
+    let temaValue = document.getElementById(`input-tema-${id}`).value;
+    var idProfessor = localStorage.getItem('id')
+    axios.post('http://localhost:3003/professor', {tema: temaValue, url: arquivoValue, professor: idProfessor}).then((response) =>{
+
+      document.getElementById(`li-arquivo-${id}`).innerHTML = `<a download="media4.txt" href=${arquivoValue}>${temaValue}.txt</a>`;
+      document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
+      document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
+      document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarArquivo('${id}');` );
       document.getElementById('add-arquivo').style.display = 'inline';
     })   
 }
