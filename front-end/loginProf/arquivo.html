@@ -14,7 +14,7 @@
 
 <body onload="getArquivos()">
     <div id="voltar">
-        <a href="./configuracoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
+        <a href="./opcoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
     </div>
     <div id="usuario" class="usuario">
       <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
@@ -22,7 +22,6 @@
     <div class="container">
         <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-arquivo">
           <li class="list-group-item w-tema"><h3>Tema</h3></li>
-          <li class="list-group-item w-arquivo"><h3>Arquivo</h3></li>
           <li class="list-group-item w-acoes"><h3>Ações</h3></li>
         </ul>
         <ul id="add-arquivo" class="list-group list-group-horizontal-sm">
@@ -56,12 +55,7 @@ function carregarTabela(arquivos){
     ul.id = `arquivo-${arquivo._id}`;
     ul.classList.add('list-group','list-group-horizontal-sm')
     ul.innerHTML = `
-        <li class="list-group-item w-tema" id="li-tema-${arquivo._id}">
-          ${arquivo.tema}
-        </li>
-        <li class="list-group-item w-arquivo" id="li-arquivo-${arquivo._id}">
-          <a download="media4.txt" href=${arquivo.url}>${arquivo.tema}.txt</a>          
-        </li>
+        <li class="list-group-item w-tema" id="li-tema-${arquivo._id}">${arquivo.tema}</li>
         <li class="list-group-item w-acoes">
             <img id="editar-${arquivo._id}" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarArquivo('${arquivo._id}')">
             <img onclick="removerArquivo('${arquivo._id}')" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
@@ -78,15 +72,15 @@ function carregarTabela(arquivos){
     ul.id = `arquivo-${idNovoArquivo}`;
     ul.classList.add('list-group','list-group-horizontal-sm')
     ul.innerHTML = `
-        <li class="list-group-item w-tema" id="li-tema-${idNovoArquivo}">
+        <li class="list-group-item new-tema" id="li-tema-${idNovoArquivo}">
             <input id="input-tema-${idNovoArquivo}" class="new-tema" type="text" name="tema" placeholder="Digite o tema do arquivo">
         </li>
         <li class="list-group-item w-arquivo" id="li-arquivo-${idNovoArquivo}">
-          <input id="input-arquivo-${idNovoArquivo}" type="file"  class="form-control" name="arquivo" >
+          <input id="input-arquivo-${idNovoArquivo}" type="file"  class="form-control" name="arquivo" accept=".txt">
         </li>
         <li class="list-group-item w-acoes">
-            <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="criarArquivo(${idNovoArquivo})">
-            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerArquivo('arquivo-${idNovoArquivo}')">
+            <img id="editar-${idNovoArquivo}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="lerArquivo(${idNovoArquivo}, criarArquivo)">
+            <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerArquivo('${idNovoArquivo}', ${true})">
         </li>
     `;
     let elem = document.getElementById('add-arquivo');
@@ -96,70 +90,84 @@ function carregarTabela(arquivos){
     document.getElementById('add-arquivo').style.display = 'none'
   }
   function editarArquivo(id){
-    //verificar value do arquivo, esta com espaco desnecessario
-    let arquivo = document.getElementById(`li-arquivo-${id}`);
+    let li = document.createElement('li');
+    li.id = `li-arquivo-${id}`;
+    li.classList.add('list-group-item','w-arquivo')
     let tema = document.getElementById(`li-tema-${id}`);
-    arquivo.innerHTML = `<input id="input-arquivo-${id}" type="file"  class="form-control" name="arquivo" >`
-    tema.innerHTML = `<input id="input-tema-${id}" class="new-tema" type="text" name="tema" placeholder="Digite as temas" value="${tema.textContent}">`
+    tema.classList.add('list-group-item','new-tema')
+    li.innerHTML = `<input id="input-arquivo-${id}" type="file"  class="form-control" name="arquivo" accept=".txt">`
+    tema.insertAdjacentElement("afterEnd", li);
+    tema.innerHTML = `<input id="input-tema-${id}" class="new-tema" type="text" name="tema" placeholder="Digite o tema" value="${tema.textContent}">`
     document.getElementById(`input-arquivo-${id}`).focus();
     document.getElementById(`editar-${id}`).src = '../imagens/verifica.png';
-    document.getElementById(`editar-${id}`).setAttribute( "onClick", `salvarArquivo('${id}');` );
+    document.getElementById(`editar-${id}`).setAttribute( "onClick", `lerArquivo('${id}', salvarArquivo);` );
   }
 
-function removerArquivo(id){
-  axios.delete('http://localhost:3003/professor/'+id).then((response) => {
-    let elem = document.getElementById(id);
-    elem.parentNode.removeChild(elem);
-    document.getElementById('add-arquivo').style.display = 'inline';
-  })
+function removeLinhaTabela(id){
+  console.log(id)
+  let elem = document.getElementById(`arquivo-${id}`);
+  elem.parentNode.removeChild(elem);
+  document.getElementById('add-arquivo').style.display = 'inline';
 }
 
-function salvarArquivo(id){
-    let arquivoValue = 'https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc';
-    let temaValue = document.getElementById(`input-tema-${id}`).value;
-    axios.patch('http://localhost:3003/professor/'+id, {tema: temaValue, url: arquivoValue}).then((response) =>{
+function removerArquivo(id, novo = false){
+  if(novo){
+    removeLinhaTabela(id)
+  }
+  else{
+    axios.delete('http://localhost:3003/professor/arquivo/'+id).then((response) => {
+      removeLinhaTabela(id)
+    })
+  }
+}
 
-      document.getElementById(`li-arquivo-${id}`).innerHTML = `<a download="media4.txt" href=${arquivoValue}>${temaValue}.txt</a>`;
-      document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
+function salvarArquivo(id, conteudo){
+    let temaValue = document.getElementById(`input-tema-${id}`).value;
+    axios.patch('http://localhost:3003/professor/arquivo/'+id, {tema: temaValue, conteudo: conteudo}).then((response) =>{
+      let tema = document.getElementById(`li-tema-${id}`);
+      tema.innerHTML = temaValue;
+      tema.classList.remove('new-tema')
+      document.getElementById(`li-arquivo-${id}`).remove();
       document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
       document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarArquivo('${id}');` );
       document.getElementById('add-arquivo').style.display = 'inline';
     })   
 }
-function criarArquivo(id){
-    let arquivoValue = 'https://filedropper.com/d/s/download/38KqdkqUiW2n6Ldgx3KfiPTBfoCngc';
-    let temaValue = document.getElementById(`input-tema-${id}`).value;
-    var idProfessor = localStorage.getItem('id')
-    axios.post('http://localhost:3003/professor', {tema: temaValue, url: arquivoValue, professor: idProfessor}).then((response) =>{
-
-      document.getElementById(`li-arquivo-${id}`).innerHTML = `<a download="media4.txt" href=${arquivoValue}>${temaValue}.txt</a>`;
-      document.getElementById(`li-tema-${id}`).innerHTML = temaValue;
-      document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
-      document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarArquivo('${id}');` );
-      document.getElementById('add-arquivo').style.display = 'inline';
-    })   
-}
-/*function lerArquivo(id){
-  var palavras = []
-  let input = document.getElementById(`input-arquivo-${id}`);
-  let files = input.files;
-    if(files.length == 0)
-        return;
-    else
-        bool = true;
-    const file = files[0];
+function lerArquivo(id, call){
+  let arquivoValue = document.getElementById(`input-arquivo-${id}`);
+    let palavras = [];
+    const file = arquivoValue.files[0];
     let reader = new FileReader();
     reader.onload = (e) => {
         const file = e.target.result;
-        const lines = file.split(/\r\n|\n|, | /);
-        //console.log(lines)
-        for(let i = 0; i < lines.length; i++)
-            palavras[i] = lines[i];
-        console.log(palavras)
+        const lines = file.split(',');
+        console.log(lines)
+        var palavra = []
+        for(let i = 0; i < lines.length; i++){
+          palavra[i] = lines[i].split(',');
+          palavras[i] = palavra[i][0].split('');
+        }
+        call(id, palavras)
     };
     reader.onerror = (e) => alert(e.target.error.name);
     reader.readAsText(file);
-}*/
+}
+
+function criarArquivo(id,conteudo){
+    console.log(conteudo)
+    let temaValue = document.getElementById(`input-tema-${id}`).value;
+    var idProfessor = localStorage.getItem('id')
+    axios.post('http://localhost:3003/professor/arquivo', {tema: temaValue, conteudo: conteudo, professor: idProfessor}).then((response) =>{
+      document.getElementById(`li-arquivo-${id}`).remove();
+      let tema = document.getElementById(`li-tema-${id}`);
+      tema.innerHTML = temaValue;
+      tema.classList.remove('new-tema')
+      tema.classList.add('w-tema')
+      document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
+      document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarArquivo('${id}');` );
+      document.getElementById('add-arquivo').style.display = 'inline';
+    })
+}
   </script>
 <style>
     .btn-add-arquivo{
@@ -174,16 +182,19 @@ function criarArquivo(id){
           background-color: #208935;
       }
       .w-tema{
-          width: 250px;
+          width: 550px;
+      }
+      .new-tema{
+        width: 210px;
       }
       .w-arquivo{
-          width: 450px;
+          width: 325px;
       }
       .w-acoes{
-          width: 120px;
+          width: 220px;
       }
       .w-add{
-          width: 820px;
+          width: 720px;
       }
       input.new-tema{
         outline: none;
@@ -197,6 +208,9 @@ function criarArquivo(id){
       }
       input.new-tema::placeholder{
         color: steelblue;
+      }
+      ul {
+        width: 720px !important;
       }
 </style>
 </body>

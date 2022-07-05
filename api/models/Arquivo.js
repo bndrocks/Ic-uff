@@ -4,7 +4,7 @@ const Professor = require("./Professor.js");
 
 const arquivoSchema = new Schema({
     tema: String,
-    url: String,
+    conteudo: Array,
     professor: {
         type: Schema.Types.ObjectId,
         ref: "Professor"

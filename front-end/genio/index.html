@@ -28,7 +28,7 @@
 </head>
 
 <body class="fonte">
-  <div id="usuario" class="usuario" onclick="">
+  <div id="usuario" class="usuario" onclick="irParaConfiguracoes()">
     <img src="../imagens/usuario.png" style="height: 32px;"/>
     <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
   </div>
@@ -47,6 +47,9 @@
     let selectNivel = localStorage.getItem('nivel_jogo') ? localStorage.getItem('nivel_jogo') : null
     if (selectNivel !== null) {
       document.getElementById('nivel_jogo').value = selectNivel
+    }
+    function irParaConfiguracoes(){
+      window.location.href = 'file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginAluno/informacoes.html';
     }
     function sair(){
       localStorage.clear();

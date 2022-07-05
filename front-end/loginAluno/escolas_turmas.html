@@ -14,23 +14,16 @@
 
 <body onload="getEscolas()">
     <div id="voltar">
-        <a href="./opcoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
+        <a href="./informacoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
+        <div id="usuario" class="usuario">
+          <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
+        </div>
     </div>
-  <div id="usuario" class="usuario">
-    <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
-  </div>
   <div class="container">
       <ul class="list-group list-group-horizontal-sm pt-3"  id="tabela-escolas">
         <li class="list-group-item w-escola"><h3>Escola</h3></li>
-        <li class="list-group-item w-turma"><h3>Turmas</h3></li>
-        <li class="list-group-item w-acoes"><h3>Ações</h3></li>
-      </ul>
-      <ul id="add-escola" class="list-group list-group-horizontal-sm">
-        <li class="list-group-item w-add" style="text-align: center;">
-            <button class="btn-add-escola" onclick="criarLinhaTabela()">
-                Adicionar +
-            </button>
-          </li>
+        <li class="list-group-item w-turma"><h3>Turma</h3></li>
+        <li class="list-group-item w-acoes"><h3>Editar</h3></li>
       </ul>
   </div>
   <div>
@@ -47,100 +40,58 @@
         }
         function getEscolas(){
             const ID = localStorage.getItem('id');
-            axios.get(`http://localhost:3003/professor/`+ID).then((res)=>{
-                if(res.data.escolas){
-                    carregarTabela(res.data.escolas)
+            axios.get(`http://localhost:3003/aluno/`+ID).then((res)=>{
+                if(res.data.aluno){
+                    carregarTabela(res.data.aluno[0])
                 }
             }).catch(function (error) {
                 console.log(error);
             });
         }
-        function carregarTabela(escolas){
-            console.log(escolas)
-            let i = 0
-            escolas.forEach(escola => {
+        function carregarTabela(aluno){
+            console.log(aluno)
                 let ul = document.createElement('ul');
-                ul.id = `escola-${i}`;
+                ul.id = `escola-${aluno.escola._id}`;
                 ul.classList.add('list-group','list-group-horizontal-sm')
                 
                 ul.innerHTML = `
-                    <li class="list-group-item w-escola" id="li-escola-${escola.escola._id}">${escola.escola.nome}</li>
-                    <li class="list-group-item w-turma" id="li-turma-${escola.escola._id}">${escola.turmas}</li>
+                    <li class="list-group-item w-escola" id="li-escola-${aluno.escola._id}">${aluno.escola.nome}</li>
+                    <li class="list-group-item w-turma" id="li-turma-${aluno.escola._id}">${aluno.turma}</li>
                     <li class="list-group-item w-acoes">
-                        <img id="editar-${escola.escola._id}" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarEscola('${escola.escola._id}',${i})">
-                        <img onclick="removerEscola('${ul.id}',${i})" src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;">
+                        <img id="editar-${aluno.escola._id}" src="../imagens/editar.png" style="width: 24px; cursor: pointer;" onclick="editarEscola('${aluno.escola._id}')">
                     </li>
                 `
                 let elem = document.getElementById('tabela-escolas');
                 elem.insertAdjacentElement("afterEnd",ul );
-                i = i+1
-            });
-        }
-        function criarLinhaTabela(){
-            idNovaEscola = idNovaEscola + 1;
-            let ul = document.createElement('ul');
-            ul.id = `escola-${idNovaEscola}`;
-            ul.classList.add('list-group','list-group-horizontal-sm')
-            ul.innerHTML = `
-                <li class="list-group-item w-escola" id="li-escola-${idNovaEscola}">
-                    <input id="input-escola-${idNovaEscola}" class="new-escola" type="text" name="escola" placeholder="Digite o nome da escola">
-                </li>
-                <li class="list-group-item w-turma" id="li-turma-${idNovaEscola}">
-                    <input id="input-turma-${idNovaEscola}" class="new-escola" type="text" name="turma" placeholder="Digite as turmas">
-                </li>
-                <li class="list-group-item w-acoes">
-                    <img id="editar-${idNovaEscola}" src="../imagens/verifica.png" style="width: 24px; cursor: pointer;" onclick="salvarEscola(${idNovaEscola})">
-                    <img src="../imagens/excluir.png" style="width: 24px; margin-right:0px !important; cursor: pointer;" onclick="removerEscola('escola-${idNovaEscola}')">
-                </li>
-            `;
-            let elem = document.getElementById('add-escola');
-            let refElem = elem.parentNode;
-            elem.insertAdjacentElement("beforeBegin",ul );
-            document.getElementById(`input-escola-${idNovaEscola}`).focus();
-            document.getElementById('add-escola').style.display = 'none'
         }
 
-        function editarEscola(id, posicao){
+        function editarEscola(id){
             let escola = document.getElementById(`li-escola-${id}`);
             let turma = document.getElementById(`li-turma-${id}`);
             escola.innerHTML = `<input id="input-escola-${id}" class="new-escola" type="text" name="escola" placeholder="Digite o nome da escola" value="${escola.textContent}">`
             turma.innerHTML = `<input id="input-turma-${id}" class="new-turma" type="text" name="turma" placeholder="Digite as turmas" value="${turma.textContent}">`
             document.getElementById(`input-escola-${id}`).focus();
             document.getElementById(`editar-${id}`).src = '../imagens/verifica.png';
-            document.getElementById(`editar-${id}`).setAttribute( "onClick", `salvarEscola('${id}',${posicao});`);
+            document.getElementById(`editar-${id}`).setAttribute( "onClick", `salvarEscola('${id}');`);
         }
 
-        function removerEscola(id,posicao = null){
-            let idProfessor = localStorage.getItem("id");
-            axios.delete(`http://localhost:3003/professor/${idProfessor}/${posicao}`).then((response) => {
-                removeLinhaEscola(id)
-            })
-        }
-
-        function removeLinhaEscola(id){
+        function removerEscola(id){
             let elem = document.getElementById(id);
             elem.parentNode.removeChild(elem);
             document.getElementById('add-escola').style.display = 'inline';
         }
 
-        function salvarEscola(id, posicao){
+        function salvarEscola(id){
+            let idAluno =  localStorage.getItem('id')
             let escolaValue = document.getElementById(`input-escola-${id}`).value;
             let turmaValue = document.getElementById(`input-turma-${id}`).value;
-            let escola = {escola: escolaValue, turmas: turmaValue.split(',')}
-            let idProfessor = localStorage.getItem('id');
-            if(posicao){
-                escola.posicao = posicao
-                axios.patch('http://localhost:3003/professor/'+ idProfessor, escola)
 
-            }
-            else {
-                escola.idProfessor = idProfessor
-                axios.post('http://localhost:3003/professor/escola', escola)
-            }
+            axios.patch('http://localhost:3003/aluno/'+ idAluno, {escola: escolaValue, turma: turmaValue})
+
             document.getElementById(`li-escola-${id}`).innerHTML = escolaValue;
             document.getElementById(`li-turma-${id}`).innerHTML = turmaValue;
             document.getElementById(`editar-${id}`).src = '../imagens/editar.png';
-            document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarEscola('${id}', ${posicao});` );
+            document.getElementById(`editar-${id}`).setAttribute( "onClick", `editarEscola('${id}');` );
             document.getElementById('add-escola').style.display = 'inline';
         }
   </script>

@@ -11,11 +11,14 @@
 </head>
 
 <body class="fonte">
-  <div id="usuario" class="usuario" onclick="">
-    <img src="../imagens/usuario.png" style="height: 32px;"/>
+  <div id="usuario" class="usuario">
+    <img src="../imagens/usuario.png" style="height: 32px;" onclick="irParaConfiguracoes()">
     <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
   </div>
   <script>
+    function irParaConfiguracoes(){
+      window.location.href = 'file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginAluno/informacoes.html';
+    }
     function sair(){
       localStorage.clear();
       window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";

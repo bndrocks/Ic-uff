@@ -9,15 +9,35 @@ var timerBalao = 0;
 var timerTela = 0;
 var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
 const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-const palavras = [];
+var palavras = [];
 //const alfabeto = ['O','I','o','i'];
-//const palavras = [['O','V','O']];
+//const palavras = [['o','v','o']];
 const numeros = ['1','2','3','4','5','6','7','8','9','10'];
+var conteudo = [];
 var letrasCertas = [], numerosClicados = [], baloes = [], clique = [];
+
+function adicionaTemas(tema){
+    let seletorTema = document.getElementById('tema');
+    let option = document.createElement('option');
+    option.id = tema._id;
+    option.value = tema.tema
+    option.innerHTML = tema.tema;
+    seletorTema.insertAdjacentElement("beforeEnd",option );
+}
+function  carregaTemas(){
+    const idAluno = localStorage.getItem('id');
+    axios.get('http://localhost:3003/aluno/' + idAluno).then((response) => {
+        response.data.arquivos.forEach(arquivo => {
+            adicionaTemas(arquivo)
+            conteudo.push({tema: arquivo.tema, palavras: arquivo.conteudo})
+        });
+    }).catch((error) => {
+
+    })
+}
 
 function instrucao(){
     click++;
-    console.log(click)
     if(click % 2 == 1){
         document.getElementById('h2').style.display = 'inline';
     }
@@ -28,20 +48,19 @@ function instrucao(){
 }
 
 function escolheMateria(){
-    console.log(materia)
     if (document.getElementById('materia').value == 2){
-        console.log('ok')
         materia = 2;
         document.getElementById('operacaoBold').style.display = 'inline';
         document.getElementById('operacao').style.display = 'inline';
-        document.getElementById('arquivo').style.visibility = 'hidden';
+        //document.getElementById('arquivo').style.visibility = 'hidden';
+        document.getElementById('temaContainer').style.display = 'none';
     }
     if (document.getElementById('materia').value == 1){
-        console.log('ok2')
         materia = 1;
         document.getElementById('operacaoBold').style.display = 'none';
         document.getElementById('operacao').style.display = 'none';
-        document.getElementById('arquivo').style.visibility = 'visible';
+        //document.getElementById('arquivo').style.visibility = 'visible';
+        document.getElementById('temaContainer').style.display = 'inline';
     }
     localStorage.setItem('materia', document.getElementById('materia').value)
 }
@@ -63,8 +82,10 @@ function checaArquivo(){
 
 function iniciaCanvas(){
     materia = document.getElementById('materia').value;
-    console.log(materia, bool)
-    if(checaArquivo() == true){
+    let tema = document.getElementById('tema').value;
+    palavras = conteudo.find(elem => elem.tema == tema).palavras;
+    console.log(palavras)
+    //if(checaArquivo() == true){
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         criaTela();
@@ -72,11 +93,11 @@ function iniciaCanvas(){
         canvas.addEventListener('click',estoura,false);
         document.getElementById('reinicia').style.display = 'inline';
         document.getElementById('iniciar').style.display = 'none';
-    }
+    /*}
     else{
         canvas.style.display = 'none';
         console.log("bota um arquivo ae")
-    }
+    }*/
 }
 
 function criaTela(){
@@ -130,14 +151,15 @@ function reiniciaJogo(){
     limpaVar()
     limpaTela();
     materia = document.getElementById('materia').value;
-    if(materia == 2 || bool){
+    console.log(materia)
+    //if(materia == 2 || bool){
         canvas.style.display = 'block';
         iniciaJogo();
-    }
+    /*}
     else{
         canvas.style.display = 'none';
         console.log("bota um arquivo ae")
-    }
+    }*/
     canvas.addEventListener('click',estoura,false);
 }
 
@@ -359,10 +381,8 @@ function insereLetra(){
 
 function escolhePalavra(){
     let z = Math.floor(Math.random() * (palavras.length));
-    respostaCerta = palavras[z];
-    console.log(respostaCerta)
-    separaResposta = respostaCerta.split('');
-    console.log(separaResposta)
+    separaResposta = palavras[z];
+    respostaCerta = separaResposta.join('');
 }
 
 //retornando a cor, imprime acerto ou erro, preenche letras acertadas
@@ -485,25 +505,3 @@ function comparaNumero(numero){
         }
     }
 }
-
-let input = document.querySelector('input');
- 
-input.addEventListener('change', () => {
-    let files = input.files;
-    if(files.length == 0)
-        return;
-    else
-        bool = true;
-    const file = files[0];
-    let reader = new FileReader();
-    reader.onload = (e) => {
-        const file = e.target.result;
-        const lines = file.split(/\r\n|\n|, | /);
-        //console.log(lines)
-        for(let i = 0; i < lines.length; i++)
-            palavras[i] = lines[i];
-        console.log(palavras)
-    };
-    reader.onerror = (e) => alert(e.target.error.name);
-    reader.readAsText(file);
-});

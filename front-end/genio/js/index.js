@@ -76,7 +76,8 @@ function pontuacao(){
   else
     totalPontos += maxPontosPorTurno;
   document.getElementById("pontuacao").innerHTML = "Pontuação = " + totalPontos;
-  salvarPontuacao(totalPontos)
+  if(totalPontos > 0)
+    salvarPontuacao(totalPontos)
 }
 
 function play(){

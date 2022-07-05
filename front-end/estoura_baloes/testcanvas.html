@@ -10,8 +10,8 @@
 </head>
 
 <body onload="carregaTemas()">
-    <div id="usuario" class="usuario" onclick="">
-        <img src="../imagens/usuario.png" style="height: 32px;"/>
+    <div id="usuario" class="usuario">
+        <img src="../imagens/usuario.png" style="height: 32px;" onclick="irParaConfiguracoes()">
         <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
     </div>
     <div id="voltar">
@@ -31,7 +31,6 @@
             <select id="materia" onchange="escolheMateria()">
                 <option value="1">Português</option>
                 <option value="2">Matemática</option>
-                <!--option value="3">Quimica</option-->
             </select>
         </div>
         <div>
@@ -45,7 +44,7 @@
                 <option value="6">Aleatória</option>
             </select>
         </div>
-        <div>
+        <div id="temaContainer" class="tema">
             <b>Tema:</b>
             <select id="tema" onchange="escolheTema()">
             </select>
@@ -63,23 +62,8 @@
         </div>
     </div>
     <script>
-        function adicionaTemas(tema){
-            let seletorTema = document.getElementById('tema');
-            let option = document.createElement('option');
-            option.id = tema._id;
-            option.value = tema.tema
-            option.innerHTML = tema.tema;
-            seletorTema.insertAdjacentElement("beforeEnd",option );
-        }
-        function  carregaTemas(){
-            const idAluno = localStorage.getItem('id');
-            axios.get('http://localhost:3003/aluno/' + idAluno).then((response) => {
-                response.data.forEach(tema => {
-                    adicionaTemas(tema)
-                });
-            }).catch((error) => {
-
-            })
+        function irParaConfiguracoes(){
+            window.location.href = 'file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginAluno/informacoes.html';
         }
         function sair(){
             localStorage.clear();
@@ -95,12 +79,14 @@
             if (selectMateria == 2) {
                 document.getElementById('operacaoBold').style.display = 'inline';
                 document.getElementById('operacao').style.display = 'inline';
-                document.getElementById('arquivo').style.visibility = 'hidden';
+                //document.getElementById('arquivo').style.visibility = 'hidden';
+                document.getElementById('temaContainer').style.display = 'none';
             }
             if(selectMateria == 1) {
                 document.getElementById('operacaoBold').style.display = 'none';
                 document.getElementById('operacao').style.display = 'none';
-                document.getElementById('arquivo').style.visibility = 'visible';
+                //document.getElementById('arquivo').style.visibility = 'visible';
+                document.getElementById('temaContainer').style.display = 'inline';
             }
         }
         let selectOperacao = localStorage.getItem('operacao') ? localStorage.getItem('operacao') : null
@@ -122,7 +108,7 @@
             <canvas id="canvas" width="500" height="500"></canvas>
         </div>
         <img style='display:none;' id='balao' src='imagens/balao_pequeno.png'>
-        <img style='display:none;' id='cenario' src='imagens/cenario.png'>
+        <img style='display:none;' id='cenario' src='./imagens/cenario.png'>
         <img style='display:none;' id='balaoEstourado' src='imagens/balao_pequeno_estourado.png'>
         <div class="flex justify-center">
             <h2 id="feedback"></h2>

@@ -14,7 +14,7 @@
 
 <body onload="getPontuacao()">
     <div id="voltar">
-        <a href="./configuracoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
+        <a href="./opcoes.html"> <img class="float-left voltar" src="../imagens/voltar.png"/></a>
     </div>
       <div id="usuario" class="usuario">
         <img src="../imagens/exit.png" style="margin-right: 0;" onclick="sair()">
@@ -31,6 +31,7 @@
         <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
           <li class="list-group-item w-nome"><h3>Nome</h3></li>
           <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
+          <li class="list-group-item w-pontuacao"><h3>Data</h3></li>
         </ul>
     </div>
   <script>
@@ -52,6 +53,8 @@
     function carregarTabela(pontuacoes){
       //usando o forEach pois no exemplo o array eh pequeno e sabemos que iremos percorrer todo o array, a longo prazo devemos implementar uma paginacao
       pontuacoes.forEach(pontuacao => {
+        const dataPontuacao = new Date(pontuacao.data_atualizacao)
+        let stringData = dataPontuacao.getDate() + '/' + (dataPontuacao.getMonth()+1) + '/' + dataPontuacao.getFullYear() + ' - ' + String(dataPontuacao.getHours()).padStart(2, "0") + ':' + String(dataPontuacao.getMinutes()).padStart(2, "0");
         let ul = document.createElement('ul');
         ul.id = `pontuacao-${pontuacao._id}`;
         ul.classList.add('list-group','list-group-horizontal-sm')
@@ -61,6 +64,9 @@
             </li>
             <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
               ${pontuacao.pontuacao}
+            </li>
+            <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
+              ${stringData}
             </li>
         `;
         let elem = document.getElementById('tabela-pontuacao');
