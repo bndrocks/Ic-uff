@@ -1,7 +1,7 @@
 body{
   background-color: steelblue;
   margin: 20px;
-  overflow: hidden
+  overflow: scroll;
 }
 .fonte{
   font-family: 'Original Surfer', cursive;
