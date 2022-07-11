@@ -1,6 +1,6 @@
 const mongoose =  require('../database/index.js');
 const Schema = mongoose.Mongoose.Schema;
-const User = require("./User.js");
+const user = require("./User.js");
 const escola = require("./Escola.js");
 
 const alunoSchema = new Schema({
@@ -11,7 +11,7 @@ const alunoSchema = new Schema({
     turma: String,
     usuario: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "user"
     }
 }, { collection: 'alunos' }
 );
