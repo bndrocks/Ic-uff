@@ -76,8 +76,6 @@ function pontuacao(){
   else
     totalPontos += maxPontosPorTurno;
   document.getElementById("pontuacao").innerHTML = "Pontuação = " + totalPontos;
-  if(totalPontos > 0)
-    salvarPontuacao(totalPontos)
 }
 
 function play(){
@@ -202,18 +200,22 @@ function mostraCor(indice){
   }, 300);
 }
 
-function ganhouGame(){
+async function ganhouGame(){
   vezJogador = false;
-  pontuacao();
+  await pontuacao();
+  if(totalPontos > 0)
+    salvarPontuacao(totalPontos)
   piscaCores();
   turnoContador.innerHTML = "GANHOU!";
   setTimeout(clearColor, 600, 0);
   limpaVar();
 }
 
-function perdeuGame(){
+async function perdeuGame(){
   vezJogador = false;
-  pontuacao();
+  await pontuacao();
+  if(totalPontos > 0)
+    salvarPontuacao(totalPontos)
   piscaCores();
   turnoContador.innerHTML = "PERDEU!";
   setTimeout(clearColor, 600, 0);
@@ -222,7 +224,8 @@ function perdeuGame(){
 
 function salvarPontuacao(pontuacao){
   let data = {};
-  data.pontuacao = pontuacao;
+  data.pontuacao = {alcancado: pontuacao, total: (qtdTurnos * 100)} ;
+  data.jogo = 'Gênio';
   data.idAluno = localStorage.getItem('id');
   axios.put('http://localhost:3003/pontuacao/aluno', data)
   .then(function (response) {
