@@ -41,7 +41,6 @@
     }
     function getPontuacao(){
       axios.get('http://localhost:3003/pontuacao').then((res)=>{
-        console.log(res)
         if(res.data){
           carregarTabela(res.data)
         }
