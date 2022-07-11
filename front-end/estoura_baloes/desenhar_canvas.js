@@ -1,3 +1,4 @@
+//colocar qntd de erro dependendo da dificuldade facil 10, medio 5, dificil 6
 var canvas;//o elemento canvas sobre o qual desenharemos
 var ctx;//o "contexto" da canvas que será utilizado (2D ou 3D)
 const WIDTH = 500;//largura da área retangular
@@ -7,8 +8,8 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
-const alfabeto = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [], pontuacao = 0;
+const alfabeto = ['a','b','c','d','e','f','g','h','i','j','l','m','n','o','p','q','r','s','t','u','v','x','z'];
 var palavras = [];
 //const alfabeto = ['O','I','o','i'];
 //const palavras = [['o','v','o']];
@@ -83,9 +84,8 @@ function checaArquivo(){
 function iniciaCanvas(){
     materia = document.getElementById('materia').value;
     let tema = document.getElementById('tema').value;
-    palavras = conteudo.find(elem => elem.tema == tema).palavras;
-    console.log(palavras)
-    //if(checaArquivo() == true){
+    if(materia == 1)
+        palavras = conteudo.find(elem => elem.tema == tema).palavras;
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         criaTela();
@@ -93,11 +93,6 @@ function iniciaCanvas(){
         canvas.addEventListener('click',estoura,false);
         document.getElementById('reinicia').style.display = 'inline';
         document.getElementById('iniciar').style.display = 'none';
-    /*}
-    else{
-        canvas.style.display = 'none';
-        console.log("bota um arquivo ae")
-    }*/
 }
 
 function criaTela(){
@@ -185,7 +180,18 @@ function limpaTela(){
     maxBaloes = 0;
 }
 
+function calculaTotalPontuacao(){
+    let total = materia == 1 ? (respostaCerta.length * 100) : 100;
+    let data = {};
+    data.pontuacao = {alcancado: pontuacao > 0 ? pontuacao : 0, total:  total};
+    data.jogo = 'Estoura Balões';
+    data.idAluno = localStorage.getItem('id');
+    return data 
+}
+
 function gameOver(){
+    if(pontuacao > 0)
+        salvarPontuacao()
     erro = 0;
     canvas.removeEventListener('click', estoura,false);
     clearInterval(timerBalao);
@@ -315,12 +321,14 @@ function imprimeClique(balaoclicado, cor){
     let h = document.createElement("h2");
     let letra, divClique;
     if(cor == 'red'){
+        pontuacao = pontuacao - 15
         if(erro > 1 || erro == 0)//so não coloca o hífen quando o erro = 1
             balaoclicado = `-${balaoclicado}`;
         divClique = document.getElementById("clique-erros");
     }
     else{
-       divClique = document.getElementById("clique");
+        pontuacao = pontuacao + 100;
+        divClique = document.getElementById("clique");
     }
     letra = document.createTextNode(balaoclicado); 
     h.appendChild(letra);
@@ -345,6 +353,17 @@ function imprimeClique(balaoclicado, cor){
     }
     if(erro == 3)
         gameOver();
+}
+
+function salvarPontuacao(){
+    let pontuacao = calculaTotalPontuacao()
+    axios.put('http://localhost:3003/pontuacao/aluno', pontuacao)
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 function imprimeAcerto(){
@@ -373,9 +392,9 @@ function imprimeErros(){
 
 function insereLetra(){
     let prob = Math.random();
-    let z = Math.floor(Math.random() * (alfabeto.length/2));
+    let z = Math.floor(Math.random() * (11));
     if(prob >= 0.2)
-        z = z + alfabeto.length/2;
+        z = z + 11;
     return alfabeto[z];
 }
 
@@ -452,10 +471,12 @@ function geraResultado(){//olhar essa função, ta bugada
 function comparaNumero(numero){
     if(operacao == 4){
         if((n*m)==numero){
+            pontuacao = 100;
             imprimeAcerto();
             gameOver();
         }
         else{
+            pontuacao = 0;
             gameOver();
             document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
         }
@@ -464,19 +485,23 @@ function comparaNumero(numero){
         if(n >= m){//otimizar aqui
             if((n / m) == numero){
                 imprimeAcerto();
+                pontuacao = 100;
                 gameOver();
             }
             else{
+                pontuacao = 0;
                 gameOver();
                 document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
             }
         }
         else if(m >= n){
             if((m / n) == numero){
+                pontuacao = 100;
                 imprimeAcerto();
                 gameOver();
             }
             else{
+                pontuacao = 0;
                 gameOver();
                 document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
             }
@@ -493,11 +518,13 @@ function comparaNumero(numero){
             else if(operacao == 3)
                 ok = ((numerosClicados[0] * numerosClicados[1]) == resultado);
             if(ok){
+                pontuacao = 100;
                 imprimeAcerto();
                 numerosClicados.length = 0;
                 gameOver();
                 }
             else{
+                pontuacao = 0;
                 document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.'
                 numerosClicados.length = 0;
                 gameOver();
