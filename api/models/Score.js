@@ -4,7 +4,8 @@ const User = require("./User.js");
 const Escola = require("./Escola.js");
 
 const scoreSchema = new Schema({
-    pontuacao: Number,
+    pontuacao: Object,
+    jogo: String,
     escola: {
         type: Schema.Types.ObjectId,
         ref: "Escola"
