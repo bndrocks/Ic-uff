@@ -8,7 +8,7 @@ const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
 var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [];
-const alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+const alfabeto = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 var palavras = [];
 //const alfabeto = ['O','I','o','i'];
 //const palavras = [['o','v','o']];
