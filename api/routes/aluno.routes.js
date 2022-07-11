@@ -18,9 +18,7 @@ alunoRoutes.get('/:id', async (request, response)=>{
   const escola = aluno[0].escola._id
   const turma = aluno[0].turma
   const query = professorModel.find( { escolas : { $elemMatch: {escola : escola, turmas : turma} } } ).populate('arquivos');
-  // verificando o filtro da consulta console.log(query.getFilter())
   const docsArquivos = await query.exec();
-  console.log('aqquii',docsArquivos)
   const resArquivos ={ aluno: aluno, arquivos: docsArquivos.length > 0 ? docsArquivos[0].arquivos : ''}
   return response.status(200).json(resArquivos);
 })
