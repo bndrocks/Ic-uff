@@ -22,58 +22,111 @@
 
     <div id="filtro" class="filtro">
       <b>Filtrar por:</b>
-      <select id="tema" onchange="escolheTema()">
-          <option value="1">Escola</option>
+      <select id="selectFiltro" onchange="escolheFiltro()">
+          <option value="aluno">Aluno</option>
+          <option value="escola">Escola</option>
       </select>
     </div>
 
-    <div class="container">
-        <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
-          <li class="list-group-item w-nome"><h3>Nome</h3></li>
-          <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
-          <li class="list-group-item w-pontuacao"><h3>Data</h3></li>
-        </ul>
+    <div class="container" id="container-tabela">
+      <ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
+        <li class="list-group-item w-nome"><h3>Nome</h3></li>
+        <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
+        <li class="list-group-item w-pontuacao" id="coluna-data"><h3>Data</h3></li>
+      </ul>
     </div>
   <script>
-    function sair(){
-      localStorage.clear();
-      window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+    function escolheFiltro(){
+      let select = document.getElementById('selectFiltro').value
+      getPontuacao(select)
     }
-    function getPontuacao(){
-      axios.get('http://localhost:3003/pontuacao').then((res)=>{
-        if(res.data){
+  function sair(){
+    localStorage.clear();
+    window.location.href = "file:///C:/Users/benne/Desktop/Ic-uff/front-end/index.html";
+  }
+
+  function getPontuacao(filtro = ''){
+    let url = 'http://localhost:3003/pontuacao';
+    if(filtro == 'escola'){
+      url = `${url}/${localStorage.getItem('id')}/${filtro}`
+    }
+    axios.get(url).then((res)=>{
+      if(res.data){
+        limpaTabela()
+        if(filtro == 'escola' ){
+          carregarTabelaComFiltro(res.data)
+        }
+        else{
           carregarTabela(res.data)
         }
-      }).catch(function (error) {
-          console.log(error);
-        });
-    }
-
-    function carregarTabela(pontuacoes){
-      //usando o forEach pois no exemplo o array eh pequeno e sabemos que iremos percorrer todo o array, a longo prazo devemos implementar uma paginacao
-      pontuacoes.forEach(pontuacao => {
-        const dataPontuacao = new Date(pontuacao.data_atualizacao)
-        let stringData = dataPontuacao.getDate() + '/' + (dataPontuacao.getMonth()+1) + '/' + dataPontuacao.getFullYear() + ' - ' + String(dataPontuacao.getHours()).padStart(2, "0") + ':' + String(dataPontuacao.getMinutes()).padStart(2, "0");
-        let ul = document.createElement('ul');
-        ul.id = `pontuacao-${pontuacao._id}`;
-        ul.classList.add('list-group','list-group-horizontal-sm')
-        ul.innerHTML = `
-            <li class="list-group-item w-nome" id="li-nome-${pontuacao._id}">
-              ${pontuacao.aluno.nome}
-            </li>
-            <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
-              ${pontuacao.pontuacao}
-            </li>
-            <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
-              ${stringData}
-            </li>
-        `;
-        let elem = document.getElementById('tabela-pontuacao');
-        elem.insertAdjacentElement("afterEnd",ul );
+      }
+    }).catch(function (error) {
+        console.log(error);
       });
-    }
+  }
+  
+  function carregarTabela(pontuacoes){
+    let tabela = document.getElementById('container-tabela')
+    tabela.innerHTML = `<ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
+        <li class="list-group-item w-nome"><h3>Nome</h3></li>
+        <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
+        <li class="list-group-item w-pontuacao" id="coluna-data"><h3>Data</h3></li>
+      </ul>`
+    //usando o forEach pois no exemplo o array eh pequeno e sabemos que iremos percorrer todo o array, a longo prazo devemos implementar uma paginacao
+    pontuacoes.forEach(pontuacao => {
+      const dataPontuacao = new Date(pontuacao.data_atualizacao)
+      let stringData = dataPontuacao.getDate() + '/' + (dataPontuacao.getMonth()+1) + '/' + dataPontuacao.getFullYear() + ' - ' + String(dataPontuacao.getHours()).padStart(2, "0") + ':' + String(dataPontuacao.getMinutes()).padStart(2, "0");
+      let ul = document.createElement('ul');
+      ul.id = `pontuacao-${pontuacao._id}`;
+      ul.classList.add('list-group','list-group-horizontal-sm')
+      ul.innerHTML = `
+          <li class="list-group-item w-nome" id="li-nome-${pontuacao._id}">
+            ${pontuacao.aluno.nome}
+          </li>
+          <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
+            ${pontuacao.pontuacao.alcancado}  de  ${pontuacao.pontuacao.total} - ${pontuacao.jogo}
+          </li>
+          <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
+            ${stringData}
+          </li>
+      `;
+      let elem = document.getElementById('tabela-pontuacao');
+      elem.insertAdjacentElement("afterEnd",ul );
+    });
+  }
+  
+  function carregarTabelaComFiltro(pontuacoes){
+    let tabela = document.getElementById('container-tabela')
+    tabela.innerHTML = `<ul class="list-group list-group-horizontal-sm pt-3" id="tabela-pontuacao">
+        <li class="list-group-item w-nome"><h3>Nome</h3></li>
+        <li class="list-group-item w-pontuacao"><h3>Pontuacao</h3></li>
+      </ul>`
+    pontuacoes.forEach(pontuacao => {
+      let ul = document.createElement('ul');
+      ul.id = `pontuacao-${pontuacao._id.escola._id}`;
+      ul.classList.add('list-group','list-group-horizontal-sm')
+      ul.innerHTML = `
+          <li class="list-group-item w-nome" id="li-nome-${pontuacao._id.escola._id}">
+            ${pontuacao._id.escola.nome}
+          </li>
+          <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id.escola._id}">
+            ${pontuacao.score} - ${pontuacao._id.jogo}
+          </li>
+      `;
+      let elem = document.getElementById('tabela-pontuacao');
+      elem.insertAdjacentElement("afterEnd",ul );
+    });
+  }
+  
+  function limpaTabela(){
+    let elem = document.getElementById('tabela-pontuacao');
+    console.log(elem)
+  }
   </script>
 <style>
+  body {
+    overflow: scroll;
+  }
       .w-nome{
           width: 250px;
       }
