@@ -83,7 +83,7 @@
               ${pontuacao.aluno.nome}
             </li>
             <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
-              ${pontuacao.pontuacao}
+              ${pontuacao.pontuacao.alcancado}  de  ${pontuacao.pontuacao.total} - ${pontuacao.jogo}
             </li>
             <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
               ${stringData}
@@ -102,14 +102,14 @@
         </ul>`
       pontuacoes.forEach(pontuacao => {
         let ul = document.createElement('ul');
-        ul.id = `pontuacao-${pontuacao._id}`;
+        ul.id = `pontuacao-${pontuacao._id.escola._id}`;
         ul.classList.add('list-group','list-group-horizontal-sm')
         ul.innerHTML = `
-            <li class="list-group-item w-nome" id="li-nome-${pontuacao._id._id}">
-              ${pontuacao._id.nome}
+            <li class="list-group-item w-nome" id="li-nome-${pontuacao._id.escola._id}">
+              ${pontuacao._id.escola.nome}
             </li>
-            <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id}">
-              ${pontuacao.score}
+            <li class="list-group-item w-pontuacao" id="li-pontuacao-${pontuacao._id.escola._id}">
+              ${pontuacao.score} - ${pontuacao._id.jogo}
             </li>
         `;
         let elem = document.getElementById('tabela-pontuacao');
@@ -123,6 +123,9 @@
     }
   </script>
 <style>
+  body {
+    overflow: scroll;
+  }
       .w-nome{
           width: 250px;
       }
