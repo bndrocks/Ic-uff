@@ -5,33 +5,38 @@ const { alunoModel } = require('../models/Aluno.js');
 const escolaModel = require('../models/Escola.js');
 
 const scoreRoutes = Router();
-
+//adicionar o tipo de jogo
 scoreRoutes.put('/aluno', async (request, response) => {
-  const { pontuacao, idAluno } = request.body;
-  const collection = await scoreModel.find({aluno: idAluno});
+  const { pontuacao, jogo, idAluno } = request.body;
+  const collection = await scoreModel.find({
+    aluno: idAluno,
+    jogo: jogo
+  });
+  
   var res = '';
   const alunoDoc = await alunoModel.find({usuario: idAluno});
   const tamanhoCollection = collection.length
   if(tamanhoCollection > 0){
     var docScore = collection[0]
-    if(docScore.pontuacao < pontuacao){//aqui salvo só o recorde
+    // pra ser recorde precisa ter a mesma pontuação total e a nova pontuação alcançada ser maior que a antiga pontuação alcançada
+    if((docScore.pontuacao.total == pontuacao.total) && (docScore.pontuacao.alcancado < pontuacao.alcancado)){//aqui salvo só o recorde
       console.log('pont')
       docScore.pontuacao = pontuacao;
       docScore.escola = alunoDoc[0].escola;
-      docScore.save();
+      await docScore.save();
     }
     res = docScore;
   }
   if(tamanhoCollection < 3){
-    console.log(tamanhoCollection)
-    res = novaPontuacao({pontuacao: pontuacao, escola: alunoDoc[0].escola, aluno: idAluno })
+    console.log(tamanhoCollection, collection)
+    res = await novaPontuacao({pontuacao: pontuacao, jogo: jogo, escola: alunoDoc[0].escola, aluno: idAluno })
   }
   else{
     //esta salvando mais de 10 pontuacoes
     console.log('antes',collection.length)
     collection.splice(2,1)
     console.log('splice',collection.length)
-    res = await novaPontuacao({pontuacao: pontuacao, escola: alunoDoc[0].escola, aluno: idAluno })
+    res = await novaPontuacao({pontuacao: pontuacao, jogo: jogo, escola: alunoDoc[0].escola, aluno: idAluno })
     console.log('depoius',collection.length)
   }
   return response.status(201).json({ res });
@@ -51,18 +56,16 @@ scoreRoutes.get('/:id?/:filtro?', async (request, response)=>{
   if(filtro){
     var score = await scoreModel.aggregate([
       {
-        $group: { 
-          _id: "$escola",
-          score: { $avg: "$pontuacao"}
-        }
-      },
-      {
-        $addFields: {
-          score: { $round: ["$score"] }
-        }
+        $group: {
+          "_id": {
+            escola: "$escola",
+            jogo: "$jogo"
+          },
+          score: { $avg: "$pontuacao.alcancado"}
       }
+      },
     ])
-    await escolaModel.populate(score, {path: "_id"})
+    await escolaModel.populate(score, {path: "_id.escola"})
   }
   else
     var score = await scoreModel.find(id ? {escola: docAluno.escola} : {}).populate('aluno', 'nome');
