@@ -121,9 +121,14 @@ function removerArquivo(id, novo = false){
   }
 }
 
-function salvarArquivo(id, conteudo){
+function salvarArquivo(id, conteudo = null){
     let temaValue = document.getElementById(`input-tema-${id}`).value;
-    axios.patch('http://localhost:3003/professor/arquivo/'+id, {tema: temaValue, conteudo: conteudo}).then((response) =>{
+    let data = {
+      tema: temaValue
+    }
+    if(conteudo)
+      data.conteudo = conteudo
+    axios.patch('http://localhost:3003/professor/arquivo/'+id, data).then((response) =>{
       let tema = document.getElementById(`li-tema-${id}`);
       tema.innerHTML = temaValue;
       tema.classList.remove('new-tema')
@@ -135,6 +140,7 @@ function salvarArquivo(id, conteudo){
 }
 function lerArquivo(id, call){
   let arquivoValue = document.getElementById(`input-arquivo-${id}`);
+  if(arquivoValue.files.length > 0){
     let palavras = [];
     const file = arquivoValue.files[0];
     let reader = new FileReader();
@@ -151,6 +157,10 @@ function lerArquivo(id, call){
     };
     reader.onerror = (e) => alert(e.target.error.name);
     reader.readAsText(file);
+  }
+  else{
+    call(id)
+  }
 }
 
 function criarArquivo(id,conteudo){

@@ -26,8 +26,12 @@ professorRoutes.post('/arquivo', async (request, response)=>{
   return response.status(200).json('Arquivo criado com sucesso');
 })
 professorRoutes.patch('/arquivo/:id', async (request, response)=>{
-  const { tema, conteudo } = request.body;
-  await arquivo.updateOne({_id: request.params.id}, {tema: tema, conteudo: conteudo});
+  let dadosArquivo = {};
+  dadosArquivo.tema = request.body.tema;
+  if(request.body.conteudo){
+    dadosArquivo.conteudo = request.body.conteudo;
+  }
+  await arquivo.updateOne({_id: request.params.id}, dadosArquivo);
   return response.status(200).json('Arquivo atualizado com sucesso');
 })
 
