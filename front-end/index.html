@@ -18,16 +18,16 @@
     <div id = "formLogin">
       <div><input class="email" type="text" name="email" id="email-login" placeholder="Digite seu e-mail"></div>
       <div><input class="senha" type="password" name="senha" id="senha-login" placeholder="Digite sua senha"></div>
-      <div><button class="button" onclick="login()" style="margin:15px 0 14px 0;">Logar</button></div>
+      <div><button id="btn-login" class="button" onclick="login()" style="margin:15px 0 14px 0;">Logar</button></div>
     </div>
   </div>
   <script>
     var idContainerColegio = 0
     var idElementoTurma = 0
+    var contErroLogin = 0;
 
     function login(){
       let data = {};
-      let contErroLogin = 0;
       data.email = getElementValue('email-login');
       data.senha = getElementValue('senha-login');
       axios.post('http://localhost:3003/usuario/login', data)
@@ -44,18 +44,12 @@
             window.location.href = response.data.user.tipo == 'aluno' ? "file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginAluno/loginAluno.html": "file:///C:/Users/benne/Desktop/Ic-uff/front-end/loginProf/opcoes.html";
           }
           else {
-            console.log(response)
             contErroLogin++;
-            if (contErroLogin > 1) {
-              removerElemento('erro-login');
-              criarElementoErroLogin(response.data.data);
-            }
-            else
               criarElementoErroLogin(response.data.data);
           }
         })
         .catch(function (error) {
-          console.log(error);
+          criarElementoErroLogin('Desculpe, houve um problema inesperado.');
         });
     }
 
@@ -64,11 +58,15 @@
     }
     
     function removerElemento(element){
+      contErroLogin = 0
       let elem =  document.getElementById(element);
       elem.remove();
     }
     
     function criarElementoErroLogin(mensagemErro) {
+      if (contErroLogin > 1) {
+        removerElemento('erro-login');
+      }
       let elem = document.getElementById('btn-login');
       let refElem = elem.parentNode;
       let erro = document.createElement('span');
@@ -76,6 +74,7 @@
       erro.className = 'erroLogin';
       erro.setAttribute('id', 'erro-login');
       refElem.insertBefore(erro, elem);
+      contErroLogin = 1
     }
   </script>
 </body>
