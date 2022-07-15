@@ -224,7 +224,7 @@ async function perdeuGame(){
 
 function salvarPontuacao(pontuacao){
   let data = {};
-  data.pontuacao = {alcancado: pontuacao, total: (qtdTurnos * 100)} ;
+  data.pontuacao = {alcancada: pontuacao, total: (qtdTurnos * 100)} ;
   data.jogo = 'Gênio';
   data.idAluno = localStorage.getItem('id');
   axios.put('http://localhost:3003/pontuacao/aluno', data)

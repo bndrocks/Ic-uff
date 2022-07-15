@@ -19,8 +19,7 @@ scoreRoutes.put('/aluno', async (request, response) => {
   if(tamanhoCollection > 0){
     var docScore = collection[0]
     // pra ser recorde precisa ter a mesma pontuação total e a nova pontuação alcançada ser maior que a antiga pontuação alcançada
-    if((docScore.pontuacao.total == pontuacao.total) && (docScore.pontuacao.alcancado < pontuacao.alcancado)){//aqui salvo só o recorde
-      console.log('pont')
+    if((docScore.pontuacao.total == pontuacao.total) && (docScore.pontuacao.alcancada < pontuacao.alcancada)){//aqui salvo só o recorde
       docScore.pontuacao = pontuacao;
       docScore.escola = alunoDoc[0].escola;
       await docScore.save();
@@ -28,16 +27,12 @@ scoreRoutes.put('/aluno', async (request, response) => {
     res = docScore;
   }
   if(tamanhoCollection < 3){
-    console.log(tamanhoCollection, collection)
     res = await novaPontuacao({pontuacao: pontuacao, jogo: jogo, escola: alunoDoc[0].escola, aluno: idAluno })
   }
   else{
     //esta salvando mais de 10 pontuacoes
-    console.log('antes',collection.length)
     collection.splice(2,1)
-    console.log('splice',collection.length)
     res = await novaPontuacao({pontuacao: pontuacao, jogo: jogo, escola: alunoDoc[0].escola, aluno: idAluno })
-    console.log('depoius',collection.length)
   }
   return response.status(201).json({ res });
 });
@@ -61,7 +56,7 @@ scoreRoutes.get('/:id?/:filtro?', async (request, response)=>{
             escola: "$escola",
             jogo: "$jogo"
           },
-          score: { $avg: "$pontuacao.alcancado"}
+          score: { $avg: "$pontuacao.alcancada"}
       }
       },
     ])

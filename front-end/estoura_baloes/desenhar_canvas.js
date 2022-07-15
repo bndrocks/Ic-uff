@@ -8,7 +8,7 @@ const imagemCenario = document.getElementById('cenario');
 const imagemBalaoEstourado = document.getElementById('balaoEstourado');
 var timerBalao = 0;
 var timerTela = 0;
-var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, separaResposta, listaCoord = [], pontuacao = 0;
+var bool = 0, click = 0, maxBaloes = 0, auxBaloes = 0, erro = 0, n, m, materia, operacao, simbolo, resultado, respostaCerta, palavraSorteada, listaCoord = [], pontuacao = 0;
 const alfabeto = ['a','b','c','d','e','f','g','h','i','j','l','m','n','o','p','q','r','s','t','u','v','x','z'];
 var palavras = [];
 //const alfabeto = ['O','I','o','i'];
@@ -183,7 +183,7 @@ function limpaTela(){
 function calculaTotalPontuacao(){
     let total = materia == 1 ? (respostaCerta.length * 100) : 100;
     let data = {};
-    data.pontuacao = {alcancado: pontuacao > 0 ? pontuacao : 0, total:  total};
+    data.pontuacao = {alcancada: pontuacao > 0 ? pontuacao : 0, total:  total};
     data.jogo = 'Estoura Balões';
     data.idAluno = localStorage.getItem('id');
     return data 
@@ -400,18 +400,18 @@ function insereLetra(){
 
 function escolhePalavra(){
     let z = Math.floor(Math.random() * (palavras.length));
-    separaResposta = palavras[z];
-    respostaCerta = separaResposta.join('');
+    palavraSorteada = palavras[z];
+    respostaCerta = palavraSorteada.join('');
 }
 
 //retornando a cor, imprime acerto ou erro, preenche letras acertadas
 function comparaLetra(letra){
     let indice = letrasCertas.length;
     let cor;
-    if(separaResposta[indice] == letra){
+    if(palavraSorteada[indice] == letra){
         letrasCertas.push(letra);
         cor = 'snow';
-        if(letrasCertas.length == separaResposta.length){
+        if(letrasCertas.length == palavraSorteada.length){
             imprimeAcerto();
             gameOver();
         }
