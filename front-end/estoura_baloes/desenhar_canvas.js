@@ -84,8 +84,9 @@ function checaArquivo(){
 function iniciaCanvas(){
     materia = document.getElementById('materia').value;
     let tema = document.getElementById('tema').value;
-    if(materia == 1)
+    if(materia == 1){
         palavras = conteudo.find(elem => elem.tema == tema).palavras;
+    }
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         criaTela();
@@ -146,7 +147,10 @@ function reiniciaJogo(){
     limpaVar()
     limpaTela();
     materia = document.getElementById('materia').value;
-    console.log(materia)
+    let tema = document.getElementById('tema').value;
+    if(materia == 1){
+        palavras = conteudo.find(elem => elem.tema == tema).palavras;
+    }
     //if(materia == 2 || bool){
         canvas.style.display = 'block';
         iniciaJogo();
