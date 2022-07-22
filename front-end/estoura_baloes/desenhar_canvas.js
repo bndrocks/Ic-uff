@@ -171,6 +171,8 @@ function limpaVar(){
     document.getElementById("clique-erros").innerHTML =  null;
     document.getElementById("feedback").innerHTML =  null;
     document.getElementById("erro").innerHTML = null;
+    document.getElementById("pontuacao").innerHTML = null;
+    document.getElementById("vidas").innerHTML = null;
 }
 
 function limpaTela(){
@@ -338,6 +340,9 @@ function imprimeClique(balaoclicado, cor){
     h.appendChild(letra);
     h.style.color = cor;
     divClique.insertAdjacentElement("beforeend", h);
+    if(pontuacao > 0)
+        imprimePontuacao()
+    imprimeVidas()
     }
     else{
         if(operacao == 4 || operacao == 5){
@@ -370,11 +375,24 @@ function salvarPontuacao(){
     });
 }
 
+function imprimePontuacao(){
+    document.getElementById("pontuacao").style.color = 'snow';
+    document.getElementById("pontuacao").style.textAlign = 'center';
+    document.getElementById("pontuacao").innerHTML = `Pontuação - ${pontuacao}`;
+}
+
+function imprimeVidas(){
+    document.getElementById("vidas").style.color = 'snow';
+    document.getElementById("vidas").style.textAlign = 'center';
+    document.getElementById("vidas").innerHTML = `Vidas - ${3 - erro}`; ;
+}
+
 function imprimeAcerto(){
     document.getElementById("feedback").style.color = 'snow';
     document.getElementById("feedback").style.textAlign = 'center';
     document.getElementById("feedback").innerHTML =  'Parabéns!!! Você acertou! Clique no botão de PLAY para jogar novamente';
     document.getElementById("erro").innerHTML = null;
+    document.getElementById("vidas").innerHTML = ``;
 }
 
 function imprimeErros(){
@@ -383,6 +401,7 @@ function imprimeErros(){
         document.getElementById("feedback").style.textAlign = 'center';
         document.getElementById("feedback").innerHTML =  'Você errou. Se quiser voltar a jogar aperte o botão de PLAY para reiniciar o jogo.';
         document.getElementById("erro").innerHTML = null;
+        document.getElementById("vidas").innerHTML = `Vidas - 0`; ;
     }
     else{
         document.getElementById("erro").style.color = 'red';
@@ -399,7 +418,15 @@ function insereLetra(){
     let z = Math.floor(Math.random() * (11));
     if(prob >= 0.2)
         z = z + 11;
-    return alfabeto[z];
+    let letra = alfabeto[z]
+    console.log(auxBaloes, auxBaloes == 10)
+    if(auxBaloes == 10){
+        let indice = letrasCertas.length;
+        letra = palavraSorteada[indice]
+        auxBaloes = 0
+        console.log(letra)
+    }
+    return letra;
 }
 
 function escolhePalavra(){

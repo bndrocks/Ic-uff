@@ -12,8 +12,24 @@ professorRoutes.get('/:id', async (request, response)=>{
 })
 
 professorRoutes.delete('/arquivo/:id', async (request, response)=>{
-  await arquivo.deleteOne({ _id: request.params.id });
-  return response.status(200).json('Arquivo deletado com sucesso');
+  let message = '';
+  let docArquivo = await arquivo.findOne({ _id: request.params.id });
+  if(docArquivo){
+    let idProfessor = docArquivo.professor;
+    let docArquivosProfessor = await professorModel.findOne({usuario: idProfessor});
+    let num = docArquivosProfessor.arquivos.findIndex((id)=>{
+      return id == request.params.id;
+    })
+    console.log(num);
+    docArquivosProfessor.arquivos.splice(num, 1);
+    await docArquivosProfessor.save();
+    console.log(docArquivosProfessor)
+    await arquivo.deleteOne({ _id: request.params.id });
+    message = 'Arquivo deletado com sucesso'
+  }
+  else
+    message = 'Erro ao deletar arquivo'
+  return response.status(200).json(message);
 })
 
 //cria novo arquivo
@@ -23,7 +39,7 @@ professorRoutes.post('/arquivo', async (request, response)=>{
   docArquivo.save();
   const  novoArquivo = docArquivo;
   await professorModel.updateOne({usuario: professor}, { $push: { arquivos: novoArquivo._id }});
-  return response.status(200).json('Arquivo criado com sucesso');
+  return response.status(200).json(novoArquivo);
 })
 professorRoutes.patch('/arquivo/:id', async (request, response)=>{
   let dadosArquivo = {};
